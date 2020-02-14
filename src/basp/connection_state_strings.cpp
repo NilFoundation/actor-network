@@ -4,7 +4,7 @@
 
 namespace nil {
     namespace actor {
-        namespace net {
+        namespace network {
             namespace basp {
 
                 std::string to_string(connection_state x) {

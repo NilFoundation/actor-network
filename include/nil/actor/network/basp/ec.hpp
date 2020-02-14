@@ -14,7 +14,6 @@
 #include <cstdint>
 #include <string>
 
-
 #include <nil/actor/error_category.hpp>
 
 namespace nil {

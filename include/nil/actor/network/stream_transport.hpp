@@ -95,7 +95,8 @@ namespace nil {
                 }
 
                 bool handle_write_event(endpoint_manager &manager) override {
-                    ACTOR_LOG_TRACE(ACTOR_ARG2("handle", this->handle_.id) << ACTOR_ARG2("queue-size", write_queue_.size()));
+                    ACTOR_LOG_TRACE(ACTOR_ARG2("handle", this->handle_.id)
+                                    << ACTOR_ARG2("queue-size", write_queue_.size()));
                     auto drain_write_queue = [this]() -> error_code<sec> {
                         // Helper function to sort empty buffers back into the right caches.
                         auto recycle = [this]() {

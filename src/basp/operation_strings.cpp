@@ -4,7 +4,7 @@
 
 namespace nil {
     namespace actor {
-        namespace net {
+        namespace network {
 
             std::string to_string(operation x) {
                 switch (x) {
