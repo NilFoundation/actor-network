@@ -27,7 +27,7 @@
 #ifndef ACTOR_WINDOWS
 #include <poll.h>
 #else
-#include "caf/detail/socket_sys_includes.hpp"
+#include <nil/actor/detail/socket_sys_includes.hpp>
 #endif    // ACTOR_WINDOWS
 
 namespace nil {
