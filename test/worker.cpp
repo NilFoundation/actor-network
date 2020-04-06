@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -18,12 +17,30 @@
 #include <nil/actor/actor_cast.hpp>
 #include <nil/actor/actor_control_block.hpp>
 #include <nil/actor/spawner.hpp>
-#include <nil/actor/serialization/binary_serializer.hpp>
+#include <nil/actor/binary_serializer.hpp>
 #include <nil/actor/make_actor.hpp>
 #include <nil/actor/network/basp/message_queue.hpp>
 #include <nil/actor/proxy_registry.hpp>
 
 using namespace nil::actor;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class P, typename... T>
+            struct print_log_value<P<T...>> {
+                void operator()(std::ostream &, P<T...> const &) {
+                }
+            };
+
+            template<template<typename, std::size_t> class P, typename T, std::size_t S>
+            struct print_log_value<P<T, S>> {
+                void operator()(std::ostream &, P<T, S> const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -93,11 +110,11 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(worker_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(deliver serialized message) {
+BOOST_AUTO_TEST_CASE(deliver_serialized_message) {
     BOOST_TEST_MESSAGE("create the BASP worker");
     BOOST_REQUIRE_EQUAL(hub.peek(), nullptr);
     hub.add_new_worker(queue, proxies);
-    ACTOR_REQUIRE_NOT_EQUAL(hub.peek(), nullptr);
+    BOOST_REQUIRE_NE(hub.peek(), nullptr);
     auto w = hub.pop();
     BOOST_TEST_MESSAGE("create a fake message + BASP header");
     std::vector<byte> payload;
@@ -106,7 +123,7 @@ BOOST_AUTO_TEST_CASE(deliver serialized message) {
     if (auto err = sink(node_id {}, self->id(), testee.id(), stages, make_message(ok_atom_v)))
         BOOST_FAIL("unable to serialize message: " << sys.render(err));
     network::basp::header hdr {network::basp::message_type::actor_message, static_cast<uint32_t>(payload.size()),
-                           make_message_id().integer_value()};
+                               make_message_id().integer_value()};
     BOOST_TEST_MESSAGE("launch worker");
     w->launch(last_hop, hdr, payload);
     sched.run_once();

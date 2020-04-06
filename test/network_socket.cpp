@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,15 +12,31 @@
 
 #include <nil/actor/network/network_socket.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
 
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
+
 BOOST_FIXTURE_TEST_SUITE(network_socket_tests, host_fixture)
 
-BOOST_AUTO_TEST_CASE(invalid socket) {
+BOOST_AUTO_TEST_CASE(invalid_socket) {
     network_socket x;
     BOOST_CHECK_EQUAL(allow_udp_connreset(x, true), sec::network_syscall_failed);
     BOOST_CHECK_EQUAL(send_buffer_size(x), sec::network_syscall_failed);

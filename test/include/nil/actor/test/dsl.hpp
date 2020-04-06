@@ -4,7 +4,10 @@
 
 #include <nil/actor/all.hpp>
 #include <nil/actor/config.hpp>
+
 #include <nil/actor/meta/annotation.hpp>
+
+#include <nil/actor/test/network_test.hpp>
 
 ACTOR_PUSH_WARNINGS
 
@@ -107,13 +110,13 @@ private:
 
     template<size_t X, class T, class... Ts>
     typename std::enable_if<nil::actor::meta::is_annotation<T>::value, bool>::type iterate(pos<X> pos, const T &,
-                                                                                         const Ts &... ys) {
+                                                                                           const Ts &... ys) {
         return iterate(pos, ys...);
     }
 
     template<size_t X, class T, class... Ts>
     typename std::enable_if<!nil::actor::meta::is_annotation<T>::value, bool>::type iterate(pos<X>, const T &y,
-                                                                                          const Ts &... ys) {
+                                                                                            const Ts &... ys) {
         std::integral_constant<size_t, X + 1> next;
         check(y, get<X>(xs_));
         return iterate(next, ys...);
@@ -134,30 +137,47 @@ private:
 
 // -- unified access to all actor handles in ACTOR -------------------------------
 
-/// Reduces any of ACTOR's handle types to an `abstract_actor` pointer.
-class mtl_handle : nil::actor::detail::comparable<mtl_handle>, nil::actor::detail::comparable<mtl_handle, std::nullptr_t> {
+/// Reduces any of CAF's handle types to an `abstract_actor` pointer.
+class mtl_handle : nil::actor::detail::comparable<mtl_handle>,
+                   nil::actor::detail::comparable<mtl_handle, std::nullptr_t> {
 public:
     using pointer = nil::actor::abstract_actor *;
 
-    constexpr mtl_handle() : ptr_(nullptr) {
+    constexpr mtl_handle(pointer ptr = nullptr) : ptr_(ptr) {
         // nop
     }
 
-    template<class T>
-    mtl_handle(const T &x) {
-        *this = x;
+    mtl_handle(const nil::actor::strong_actor_ptr &x) {
+        set(x);
+    }
+
+    mtl_handle(const nil::actor::actor &x) {
+        set(x);
+    }
+
+    mtl_handle(const nil::actor::actor_addr &x) {
+        set(x);
+    }
+
+    mtl_handle(const nil::actor::scoped_actor &x) {
+        set(x);
+    }
+
+    template<class... Ts>
+    mtl_handle(const nil::actor::typed_actor<Ts...> &x) {
+        set(x);
     }
 
     mtl_handle(const mtl_handle &) = default;
 
-    inline mtl_handle &operator=(nil::actor::abstract_actor *x) {
+    mtl_handle &operator=(pointer x) {
         ptr_ = x;
         return *this;
     }
 
-    template<class T, class E = typename std::enable_if_t<!std::is_pointer<T>::value>::type>
+    template<class T, class E = nil::actor::detail::enable_if_t<!std::is_pointer<T>::value>>
     mtl_handle &operator=(const T &x) {
-        ptr_ = nil::actor::actor_cast<pointer>(x);
+        set(x);
         return *this;
     }
 
@@ -165,6 +185,10 @@ public:
 
     pointer get() const {
         return ptr_;
+    }
+
+    pointer operator->() const {
+        return get();
     }
 
     ptrdiff_t compare(const mtl_handle &other) const {
@@ -176,6 +200,11 @@ public:
     }
 
 private:
+    template<class T>
+    void set(const T &x) {
+        ptr_ = nil::actor::actor_cast<pointer>(x);
+    }
+
     nil::actor::abstract_actor *ptr_;
 };
 
@@ -200,20 +229,20 @@ inline nil::actor::mailbox_element *next_mailbox_element(mtl_handle x) {
 /// @private
 template<class... Ts>
 nil::actor::optional<std::tuple<Ts...>> default_extract(mtl_handle x) {
-    auto ptr = next_mailbox_element(x);
-    if (ptr == nullptr || !ptr->content().template match_elements<Ts...>()) {
+    auto ptr = x->peek_at_next_mailbox_element();
+    if (ptr == nullptr)
         return nil::actor::none;
-    }
-    return ptr->content().template get_as_tuple<Ts...>();
+    if (auto view = nil::actor::make_const_typed_message_view<Ts...>(ptr->content()))
+        return to_tuple(view);
+    return nil::actor::none;
 }
 
 /// @private
 template<class T>
 nil::actor::optional<std::tuple<T>> unboxing_extract(mtl_handle x) {
     auto tup = default_extract<typename T::outer_type>(x);
-    if (tup == nil::actor::none || !is<T>(get<0>(*tup))) {
+    if (tup == nil::actor::none || !is<T>(get<0>(*tup)))
         return nil::actor::none;
-    }
     return std::make_tuple(get<T>(get<0>(*tup)));
 }
 
@@ -267,7 +296,7 @@ bool received(mtl_handle x) {
 template<class... Ts>
 class expect_clause {
 public:
-    expect_clause(nil::actor::scheduler::test_coordinator &sched) : sched_(sched), dest_(nullptr) {
+    explicit expect_clause(nil::actor::scheduler::test_coordinator &sched) : sched_(sched), dest_(nullptr) {
         peek_ = [=] {
             /// The extractor will call BOOST_FAIL on a type mismatch, essentially
             /// performing a type check when ignoring the result.
@@ -297,12 +326,11 @@ public:
     template<class Handle>
     expect_clause &to(const Handle &whom) {
         BOOST_REQUIRE(sched_.prioritize(whom));
-        dest_ = &sched_.next_job<nil::actor::scheduled_actor>();
-        auto ptr = next_mailbox_element(dest_);
+        dest_ = &sched_.next_job<nil::actor::abstract_actor>();
+        auto ptr = dest_->peek_at_next_mailbox_element();
         BOOST_REQUIRE(ptr != nullptr);
-        if (src_) {
+        if (src_)
             BOOST_REQUIRE_EQUAL(ptr->sender, src_);
-        }
         return *this;
     }
 
@@ -330,17 +358,139 @@ public:
 protected:
     void run_once() {
         auto dptr = dynamic_cast<nil::actor::blocking_actor *>(dest_);
-        if (dptr == nullptr) {
+        if (dptr == nullptr)
             sched_.run_once();
-        } else {
-            dptr->dequeue();
-        }    // Drop message.
+        else
+            dptr->dequeue();    // Drop message.
     }
 
     nil::actor::scheduler::test_coordinator &sched_;
     nil::actor::strong_actor_ptr src_;
-    nil::actor::local_actor *dest_;
+    nil::actor::abstract_actor *dest_;
     std::function<void()> peek_;
+};
+
+template<>
+class expect_clause<void> {
+public:
+    explicit expect_clause(nil::actor::scheduler::test_coordinator &sched) : sched_(sched), dest_(nullptr) {
+        // nop
+    }
+
+    expect_clause(expect_clause &&other) = default;
+
+    ~expect_clause() {
+        auto ptr = dest_->peek_at_next_mailbox_element();
+        if (ptr == nullptr)
+            BOOST_FAIL("no message found");
+        if (!ptr->content().empty())
+            BOOST_FAIL("non-empty message found: " << to_string(ptr->content()));
+        run_once();
+    }
+
+    expect_clause &from(const wildcard &) {
+        return *this;
+    }
+
+    template<class Handle>
+    expect_clause &from(const Handle &whom) {
+        src_ = nil::actor::actor_cast<nil::actor::strong_actor_ptr>(whom);
+        return *this;
+    }
+
+    template<class Handle>
+    expect_clause &to(const Handle &whom) {
+        BOOST_REQUIRE(sched_.prioritize(whom));
+        dest_ = &sched_.next_job<nil::actor::abstract_actor>();
+        auto ptr = dest_->peek_at_next_mailbox_element();
+        BOOST_REQUIRE(ptr != nullptr);
+        if (src_)
+            BOOST_REQUIRE_EQUAL(ptr->sender, src_);
+        return *this;
+    }
+
+    expect_clause &to(const nil::actor::scoped_actor &whom) {
+        dest_ = whom.ptr();
+        return *this;
+    }
+
+protected:
+    void run_once() {
+        auto dptr = dynamic_cast<nil::actor::blocking_actor *>(dest_);
+        if (dptr == nullptr)
+            sched_.run_once();
+        else
+            dptr->dequeue();    // Drop message.
+    }
+
+    nil::actor::scheduler::test_coordinator &sched_;
+    nil::actor::strong_actor_ptr src_;
+    nil::actor::abstract_actor *dest_;
+};
+
+template<class... Ts>
+class inject_clause {
+public:
+    explicit inject_clause(nil::actor::scheduler::test_coordinator &sched) : sched_(sched), dest_(nullptr) {
+        // nop
+    }
+
+    inject_clause(inject_clause &&other) = default;
+
+    template<class Handle>
+    inject_clause &from(const Handle &whom) {
+        src_ = nil::actor::actor_cast<nil::actor::strong_actor_ptr>(whom);
+        return *this;
+    }
+
+    template<class Handle>
+    inject_clause &to(const Handle &whom) {
+        dest_ = nil::actor::actor_cast<nil::actor::strong_actor_ptr>(whom);
+        return *this;
+    }
+
+    inject_clause &to(const nil::actor::scoped_actor &whom) {
+        dest_ = whom.ptr();
+        return *this;
+    }
+
+    void with(Ts... xs) {
+        if (dest_ == nullptr)
+            BOOST_FAIL("missing .to() in inject() statement");
+        if (src_ == nullptr)
+            nil::actor::anon_send(nil::actor::actor_cast<nil::actor::actor>(dest_), xs...);
+        else
+            nil::actor::send_as(nil::actor::actor_cast<nil::actor::actor>(src_),
+                                nil::actor::actor_cast<nil::actor::actor>(dest_), xs...);
+        BOOST_REQUIRE(sched_.prioritize(dest_));
+        auto dest_ptr = &sched_.next_job<nil::actor::abstract_actor>();
+        auto ptr = dest_ptr->peek_at_next_mailbox_element();
+        BOOST_REQUIRE(ptr != nullptr);
+        BOOST_REQUIRE_EQUAL(ptr->sender, src_);
+        // TODO: replace this workaround with the make_tuple() line when dropping
+        //       support for GCC 4.8.
+        std::tuple<Ts...> tmp {std::move(xs)...};
+        using namespace nil::actor::detail;
+        elementwise_compare_inspector<decltype(tmp)> inspector {tmp};
+        auto ys = extract<Ts...>(dest_);
+        auto ys_indices = get_indices(ys);
+        BOOST_REQUIRE(apply_args(inspector, ys_indices, ys));
+        run_once();
+    }
+
+protected:
+    void run_once() {
+        auto ptr = nil::actor::actor_cast<nil::actor::abstract_actor *>(dest_);
+        auto dptr = dynamic_cast<nil::actor::blocking_actor *>(ptr);
+        if (dptr == nullptr)
+            sched_.run_once();
+        else
+            dptr->dequeue();    // Drop message.
+    }
+
+    nil::actor::scheduler::test_coordinator &sched_;
+    nil::actor::strong_actor_ptr src_;
+    nil::actor::strong_actor_ptr dest_;
 };
 
 template<class... Ts>
@@ -486,7 +636,7 @@ public:
                 auto &ys = *res;
                 auto ys_indices = get_indices(ys);
                 if (apply_args(inspector, ys_indices, ys)) {
-                    BOOST_FAIL("received disallowed message: " << ACTOR_ARG(*res));
+                    BOOST_FAIL("received disallowed message");
                 }
             }
         };
@@ -500,8 +650,8 @@ protected:
 
 template<class... Ts>
 struct test_coordinator_fixture_fetch_helper {
-    template<class Self, class Interface>
-    std::tuple<Ts...> operator()(nil::actor::response_handle<Self, Interface, true> &from) const {
+    template<class Self, template<class> class Policy, class Interface>
+    std::tuple<Ts...> operator()(nil::actor::response_handle<Self, Policy<Interface>> &from) const {
         std::tuple<Ts...> result;
         from.receive([&](Ts &... xs) { result = std::make_tuple(std::move(xs)...); },
                      [&](nil::actor::error &err) { FAIL(from.self()->system().render(err)); });
@@ -511,8 +661,8 @@ struct test_coordinator_fixture_fetch_helper {
 
 template<class T>
 struct test_coordinator_fixture_fetch_helper<T> {
-    template<class Self, class Interface>
-    T operator()(nil::actor::response_handle<Self, Interface, true> &from) const {
+    template<class Self, template<class> class Policy, class Interface>
+    T operator()(nil::actor::response_handle<Self, Policy<Interface>> &from) const {
         T result;
         from.receive([&](T &x) { result = std::move(x); },
                      [&](nil::actor::error &err) { FAIL(from.self()->system().render(err)); });
@@ -520,18 +670,16 @@ struct test_coordinator_fixture_fetch_helper<T> {
     }
 };
 
+struct meta_initializer {
+    meta_initializer() {
+        nil::actor::init_global_meta_objects<nil::actor::id_block::incubator_test>();
+        nil::actor::init_global_meta_objects<nil::actor::id_block::core_module>();
+    }
+};
+
 /// A fixture with a deterministic scheduler setup.
 template<class Config = nil::actor::spawner_config>
 class test_coordinator_fixture {
-    static inline nil::actor::spawner_config &config(nil::actor::spawner_config &cfg) {
-        cfg.scheduler_policy = nil::actor::atom("testing");
-        cfg.middleman_network_backend = nil::actor::atom("testing");
-        cfg.middleman_manual_multiplexing = true;
-        cfg.middleman_workers = size_t {0};
-        cfg.logger_file_verbosity = nil::actor::atom("quiet");
-        return cfg;
-    }
-
 public:
     // -- member types -----------------------------------------------------------
 
@@ -540,12 +688,24 @@ public:
 
     // -- constructors, destructors, and assignment operators --------------------
 
+    static Config &init_config(Config &cfg) {
+        cfg.set("logger.file-verbosity", "quiet");
+        if (auto err = cfg.parse(boost::unit_test::framework::master_test_suite().argc,
+                                 boost::unit_test::framework::master_test_suite().argv))
+            BOOST_FAIL("failed to parse config");
+        cfg.set("scheduler.policy", "testing");
+        cfg.set("logger.inline-output", true);
+        cfg.set("middleman.network-backend", "testing");
+        cfg.set("middleman.manual-multiplexing", true);
+        cfg.set("middleman.workers", size_t {0});
+        cfg.set("stream.credit-policy", "testing");
+        return cfg;
+    }
+
     template<class... Ts>
     explicit test_coordinator_fixture(Ts &&... xs) :
-        cfg(std::forward<Ts>(xs)...), sys(config(cfg)), self(sys, true),
+        mi(), cfg(std::forward<Ts>(xs)...), sys(init_config(cfg)), self(sys, true),
         sched(dynamic_cast<scheduler_type &>(sys.scheduler())) {
-        // Configure the clock to measure each batch item with 1us.
-        sched.clock().time_per_unit.emplace(nil::actor::atom("batch"), nil::actor::timespan {1000});
         // Make sure the current time isn't 0.
         sched.clock().current_time += std::chrono::hours(1);
     }
@@ -567,9 +727,8 @@ public:
     /// @returns The number of consumed messages.
     size_t consume_messages() {
         size_t result = 0;
-        while (consume_message()) {
+        while (consume_message())
             ++result;
-        }
         return result;
     }
 
@@ -581,9 +740,8 @@ public:
     /// Allows each simulated I/O device to handle all events.
     size_t handle_io_events() {
         size_t result = 0;
-        while (handle_io_event()) {
+        while (handle_io_event())
             ++result;
-        }
         return result;
     }
 
@@ -595,9 +753,8 @@ public:
     /// Triggers all pending timeouts.
     size_t trigger_timeouts() {
         size_t timeouts = 0;
-        while (trigger_timeout()) {
+        while (trigger_timeout())
             ++timeouts;
-        }
         return timeouts;
     }
 
@@ -608,9 +765,16 @@ public:
 
     /// Consume messages and trigger timeouts until no activity remains.
     /// @returns The total number of events, i.e., messages consumed and
-    ///          timeouts triggerd.
+    ///          timeouts triggered.
     size_t run() {
         return run_until([] { return false; });
+    }
+
+    /// Consume ones message or triggers the next timeout.
+    /// @returns `true` if a message was consumed or timeouts was triggered,
+    ///          `false` otherwise.
+    bool run_once() {
+        return run_until([] { return true; }) > 0;
     }
 
     /// Consume messages and trigger timeouts until `pred` becomes `true` or
@@ -639,9 +803,8 @@ public:
                     return events;
                 }
             }
-            if (trigger_timeout()) {
+            if (trigger_timeout())
                 ++progress;
-            }
             if (progress == 0) {
                 ACTOR_LOG_DEBUG("no activity left:" << ACTOR_ARG(events));
                 return events;
@@ -685,7 +848,32 @@ public:
         return dynamic_cast<T &>(*ptr);
     }
 
+    template<class... Ts>
+    nil::actor::byte_buffer serialize(const Ts &... xs) {
+        nil::actor::byte_buffer buf;
+        nil::actor::binary_serializer sink {sys, buf};
+        if (auto err = sink(xs...))
+            BOOST_FAIL("serialization failed: " << sys.render(err));
+        return buf;
+    }
+
+    template<class... Ts>
+    void deserialize(const nil::actor::byte_buffer &buf, Ts &... xs) {
+        nil::actor::binary_deserializer source {sys, buf};
+        if (auto err = source(xs...))
+            BOOST_FAIL("deserialization failed: " << sys.render(err));
+    }
+
+    template<class T>
+    T roundtrip(const T &x) {
+        T result;
+        deserialize(serialize(x), result);
+        return result;
+    }
+
     // -- member variables -------------------------------------------------------
+
+    meta_initializer mi;
 
     /// The user-generated system config.
     Config cfg;
@@ -725,26 +913,32 @@ T unbox(nil::actor::optional<T> x) {
 #define ACTOR_DSL_LIST(...) __VA_ARGS__
 
 /// Convenience macro for defining expect clauses.
-#define expect(types, fields)                                         \
-    do {                                                              \
-        BOOST_TEST_MESSAGE("expect" << #types << "." << #fields);     \
+#define expect(types, fields)                                             \
+    do {                                                                  \
+        BOOST_TEST_MESSAGE("expect" << #types << "." << #fields);         \
         expect_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> {sched}.fields; \
     } while (false)
 
+#define inject(types, fields)                                             \
+    do {                                                                  \
+        BOOST_TEST_MESSAGE("inject" << #types << "." << #fields);         \
+        inject_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> {sched}.fields; \
+    } while (false)
+
 /// Convenience macro for defining allow clauses.
-#define allow(types, fields)                                     \
-    ([&] {                                                       \
-        BOOST_TEST_MESSAGE("allow" << #types << "." << #fields); \
-        allow_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> x {sched};  \
-        x.fields;                                                \
-        return x.eval();                                         \
+#define allow(types, fields)                                        \
+    ([&] {                                                          \
+        BOOST_TEST_MESSAGE("allow" << #types << "." << #fields);    \
+        allow_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> x {sched}; \
+        x.fields;                                                   \
+        return x.eval();                                            \
     })()
 
 /// Convenience macro for defining disallow clauses.
-#define disallow(types, fields)                                     \
-    do {                                                            \
-        BOOST_TEST_MESSAGE("disallow" << #types << "." << #fields); \
-        disallow_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> {}.fields;  \
+#define disallow(types, fields)                                        \
+    do {                                                               \
+        BOOST_TEST_MESSAGE("disallow" << #types << "." << #fields);    \
+        disallow_clause<ACTOR_EXPAND(ACTOR_DSL_LIST types)> {}.fields; \
     } while (false)
 
 /// Defines the required base type for testee states in the current namespace.
@@ -759,7 +953,7 @@ T unbox(nil::actor::optional<T> x) {
     struct testee_state_base<tname##_state>
 
 /// Implementation detail for `TESTEE` and `VARARGS_TESTEE`.
-#define TESTEE_SACTORFOLD(tname)                                \
+#define TESTEE_SACTORFOLD(tname)                              \
     struct tname##_state : testee_state_base<tname##_state> { \
         static const char *name;                              \
     };                                                        \
@@ -767,14 +961,14 @@ T unbox(nil::actor::optional<T> x) {
     using tname##_actor = stateful_actor<tname##_state>
 
 /// Convenience macro for defining an actor named `tname`.
-#define TESTEE(tname)       \
+#define TESTEE(tname)         \
     TESTEE_SACTORFOLD(tname); \
     behavior tname(tname##_actor *self)
 
 /// Convenience macro for defining an actor named `tname` with any number of
 /// initialization arguments.
 #define VARARGS_TESTEE(tname, ...) \
-    TESTEE_SACTORFOLD(tname);        \
+    TESTEE_SACTORFOLD(tname);      \
     behavior tname(tname##_actor *self, __VA_ARGS__)
 
 ACTOR_POP_WARNINGS

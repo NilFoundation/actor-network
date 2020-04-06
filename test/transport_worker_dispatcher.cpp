@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,7 +12,6 @@
 
 #include <nil/actor/network/transport_worker_dispatcher.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <nil/actor/ip_endpoint.hpp>
@@ -24,6 +22,28 @@
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+            template<>
+            struct print_log_value<byte> {
+                void operator()(std::ostream &, byte const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -83,7 +103,7 @@ namespace {
             rec_buf_->push_back(static_cast<byte>(id_));
         }
 
-        static expected<buffer_type> serialize(spawner &, const type_erased_tuple &) {
+        static expected<buffer_type> serialize(spawner &, const message &) {
             return buffer_type {};
         }
 
@@ -157,7 +177,7 @@ namespace {
         ip_endpoint ep;
         string_view str(cstr, cstr_len);
         if (auto err = parse(str, ep))
-            BOOST_FAIL("parse returned error: " << err);
+            BOOST_FAIL("parse returned error");
         return ep;
     }
 
@@ -199,7 +219,7 @@ namespace {
             for (auto &data : test_data) {
                 auto worker = dispatcher.add_new_worker(dummy, data.nid, data.ep);
                 if (!worker)
-                    BOOST_FAIL("add_new_worker returned an error: " << worker.error());
+                    BOOST_FAIL("add_new_worker returned an error");
             }
             buf->clear();
         }
@@ -262,7 +282,7 @@ BOOST_AUTO_TEST_CASE(handle_data) {
     CHECK_HANDLE_DATA(test_data.at(3));
 }
 
-BOOST_AUTO_TEST_CASE(write_message write_packet) {
+BOOST_AUTO_TEST_CASE(write_message_write_packet) {
     CHECK_WRITE_MESSAGE(test_data.at(0));
     CHECK_WRITE_MESSAGE(test_data.at(1));
     CHECK_WRITE_MESSAGE(test_data.at(2));

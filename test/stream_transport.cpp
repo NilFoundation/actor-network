@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,11 +12,10 @@
 
 #include <nil/actor/network/stream_transport.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
-#include <nil/actor/serialization/binary_deserializer.hpp>
-#include <nil/actor/serialization/binary_serializer.hpp>
+#include <nil/actor/binary_deserializer.hpp>
+#include <nil/actor/binary_serializer.hpp>
 #include <nil/actor/byte.hpp>
 #include <nil/actor/detail/scope_guard.hpp>
 #include <nil/actor/make_actor.hpp>
@@ -32,6 +30,33 @@
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class T, typename... P>
+            struct print_log_value<T<P...>> {
+                void operator()(std::ostream &, T<P...> const &) {
+                }
+            };
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
     constexpr string_view hello_manager = "hello manager!";
@@ -51,7 +76,7 @@ namespace {
             send_socket_guard.reset(sockets.first);
             recv_socket_guard.reset(sockets.second);
             if (auto err = nonblocking(recv_socket_guard.socket(), true))
-                BOOST_FAIL("nonblocking returned an error: " << err);
+                BOOST_FAIL("nonblocking returned an error");
         }
 
         bool handle_io_event() override {
@@ -98,7 +123,7 @@ namespace {
         template<class Parent>
         void resolve(Parent &parent, string_view path, const actor &listener) {
             actor_id aid = 42;
-            auto hid = "0011223344556677889900112233445566778899";
+            auto hid = string_view("0011223344556677889900112233445566778899");
             auto nid = unbox(make_node_id(42, hid));
             actor_config cfg;
             endpoint_manager_ptr ptr {&parent.manager()};
@@ -125,10 +150,10 @@ namespace {
             // nop
         }
 
-        static expected<buffer_type> serialize(spawner &sys, const type_erased_tuple &x) {
+        static expected<buffer_type> serialize(spawner &sys, const message &x) {
             buffer_type result;
             binary_serializer sink {sys, result};
-            if (auto err = message::save(sink, x))
+            if (auto err = x.save(sink))
                 return err.value();
             return result;
         }
@@ -151,13 +176,14 @@ BOOST_AUTO_TEST_CASE(receive) {
     auto &transport = mgr_impl->transport();
     transport.configure_read(receive_policy::exactly(hello_manager.size()));
     BOOST_CHECK_EQUAL(mpx->num_socket_managers(), 2u);
-    BOOST_CHECK_EQUAL(write(send_socket_guard.socket(), as_bytes(make_span(hello_manager))), hello_manager.size());
+    BOOST_CHECK_EQUAL(get<std::size_t>(write(send_socket_guard.socket(), as_bytes(make_span(hello_manager)))),
+                      hello_manager.size());
     BOOST_TEST_MESSAGE("wrote " << hello_manager.size() << " bytes.");
     run();
     BOOST_CHECK_EQUAL(string_view(reinterpret_cast<char *>(shared_buf->data()), shared_buf->size()), hello_manager);
 }
 
-BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
+BOOST_AUTO_TEST_CASE(resolve_and_proxy_communication) {
     using transport_type = stream_transport<dummy_application>;
     auto mgr =
         make_endpoint_manager(mpx, sys, transport_type {send_socket_guard.release(), dummy_application {shared_buf}});
@@ -183,7 +209,7 @@ BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
     if (msg.match_elements<std::string>())
         BOOST_CHECK_EQUAL(msg.get_as<std::string>(0), "hello proxy!");
     else
-        ACTOR_ERROR("expected a string, got: " << to_string(msg));
+        BOOST_ERROR("expected a string, got: " << to_string(msg));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

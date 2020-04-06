@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,6 +11,10 @@
 #define BOOST_TEST_MODULE basp.application
 
 #include <nil/actor/network/basp/application.hpp>
+#include <nil/actor/network/basp/connection_state.hpp>
+#include <nil/actor/network/basp/constants.hpp>
+#include <nil/actor/network/basp/ec.hpp>
+#include <nil/actor/network/packet_writer.hpp>
 
 #include <nil/actor/test/dsl.hpp>
 
@@ -19,15 +22,59 @@
 
 #include <nil/actor/byte.hpp>
 #include <nil/actor/forwarding_actor_proxy.hpp>
-#include <nil/actor/network/basp/connection_state.hpp>
-#include <nil/actor/network/basp/constants.hpp>
-#include <nil/actor/network/basp/ec.hpp>
-#include <nil/actor/network/packet_writer.hpp>
 #include <nil/actor/none.hpp>
 #include <nil/actor/uri.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class P, typename... T>
+            struct print_log_value<P<T...>> {
+                void operator()(std::ostream &, P<T...> const &) {
+                }
+            };
+
+            template<template<typename, std::size_t> class P, typename T, std::size_t S>
+            struct print_log_value<P<T, S>> {
+                void operator()(std::ostream &, P<T, S> const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<basp::connection_state> {
+                void operator()(std::ostream &, basp::connection_state const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<basp::message_type> {
+                void operator()(std::ostream &, basp::message_type const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<basp::ec> {
+                void operator()(std::ostream &, basp::ec const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 #define REQUIRE_OK(statement) \
     if (auto err = statement) \
@@ -301,7 +348,7 @@ BOOST_AUTO_TEST_CASE(resolve_response_with_valid_actor_handle) {
     std::set<std::string> ifs;
     MOCK(basp::message_type::resolve_response, 1u, aid, ifs);
     self->receive([&](strong_actor_ptr &hdl, std::set<std::string> &hdl_ifs) {
-        ACTOR_REQUIRE(hdl != nullptr);
+        BOOST_REQUIRE(hdl != nullptr);
         BOOST_CHECK_EQUAL(ifs, hdl_ifs);
         BOOST_CHECK_EQUAL(hdl->id(), aid);
     });

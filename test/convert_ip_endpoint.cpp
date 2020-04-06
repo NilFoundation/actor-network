@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,18 +11,44 @@
 #define BOOST_TEST_MODULE convert_ip_endpoint
 
 #include <nil/actor/detail/convert_ip_endpoint.hpp>
+#include <nil/actor/detail/socket_sys_includes.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <cstring>
 
-#include <nil/actor/detail/socket_sys_includes.hpp>
 #include <nil/actor/ipv4_endpoint.hpp>
 #include <nil/actor/ipv6_endpoint.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::detail;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+            template<>
+            struct print_log_value<ipv4_endpoint> {
+                void operator()(std::ostream &, ipv4_endpoint const &) {
+                }
+            };
+            template<>
+            struct print_log_value<ipv6_endpoint> {
+                void operator()(std::ostream &, ipv6_endpoint const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -52,7 +77,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(convert_ip_endpoint_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(sockaddr_in6 roundtrip) {
+BOOST_AUTO_TEST_CASE(sockaddr_in6_roundtrip) {
     ip_endpoint tmp;
     BOOST_TEST_MESSAGE("converting sockaddr_in6 to ip_endpoint");
     BOOST_CHECK_EQUAL(convert(sockaddr6_src, tmp), none);
@@ -61,10 +86,10 @@ BOOST_AUTO_TEST_CASE(sockaddr_in6 roundtrip) {
     BOOST_CHECK_EQUAL(memcmp(&sockaddr6_src, &dst, sizeof(sockaddr_storage)), 0);
 }
 
-BOOST_AUTO_TEST_CASE(ipv6_endpoint roundtrip) {
+BOOST_AUTO_TEST_CASE(ipv6_endpoint_roundtrip) {
     sockaddr_storage tmp = {};
     if (auto err = detail::parse("[::1]:55555", ep_src))
-        BOOST_FAIL("unable to parse input: " << err);
+        BOOST_FAIL("unable to parse input");
     BOOST_TEST_MESSAGE("converting ip_endpoint to sockaddr_in6");
     convert(ep_src, tmp);
     BOOST_TEST_MESSAGE("converting sockaddr_in6 to ip_endpoint");
@@ -72,7 +97,7 @@ BOOST_AUTO_TEST_CASE(ipv6_endpoint roundtrip) {
     BOOST_CHECK_EQUAL(ep_src, ep_dst);
 }
 
-BOOST_AUTO_TEST_CASE(sockaddr_in4 roundtrip) {
+BOOST_AUTO_TEST_CASE(sockaddr_in4_roundtrip) {
     ip_endpoint tmp;
     BOOST_TEST_MESSAGE("converting sockaddr_in to ip_endpoint");
     BOOST_CHECK_EQUAL(convert(sockaddr4_src, tmp), none);
@@ -81,10 +106,10 @@ BOOST_AUTO_TEST_CASE(sockaddr_in4 roundtrip) {
     BOOST_CHECK_EQUAL(memcmp(&sockaddr4_src, &dst, sizeof(sockaddr_storage)), 0);
 }
 
-BOOST_AUTO_TEST_CASE(ipv4_endpoint roundtrip) {
+BOOST_AUTO_TEST_CASE(ipv4_endpoint_roundtrip) {
     sockaddr_storage tmp = {};
     if (auto err = detail::parse("127.0.0.1:55555", ep_src))
-        BOOST_FAIL("unable to parse input: " << err);
+        BOOST_FAIL("unable to parse input");
     BOOST_TEST_MESSAGE("converting ip_endpoint to sockaddr_in");
     convert(ep_src, tmp);
     BOOST_TEST_MESSAGE("converting sockaddr_in to ip_endpoint");

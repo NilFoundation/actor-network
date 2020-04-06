@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,7 +12,6 @@
 
 #include <nil/actor/network/multiplexer.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <new>
@@ -27,6 +25,28 @@
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -71,7 +91,7 @@ namespace {
         }
 
         void handle_error(sec code) override {
-            BOOST_FAIL("handle_error called with code " << code);
+            BOOST_FAIL("handle_error called with code");
         }
 
         void send(string_view x) {
@@ -133,7 +153,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(multiplexer_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(default construction) {
+BOOST_AUTO_TEST_CASE(default_construction) {
     BOOST_CHECK_EQUAL(mpx->num_socket_managers(), 0u);
 }
 
@@ -148,7 +168,7 @@ BOOST_AUTO_TEST_CASE(init) {
     mpx->run();
 }
 
-BOOST_AUTO_TEST_CASE(send and receive) {
+BOOST_AUTO_TEST_CASE(send_and_receive) {
     BOOST_REQUIRE_EQUAL(mpx->init(), none);
     auto sockets = unbox(make_stream_socket_pair());
     auto alice = make_counted<dummy_manager>(manager_count, sockets.first, mpx);

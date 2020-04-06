@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,13 +12,12 @@
 
 #include <nil/actor/network/stream_transport.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <vector>
 
-#include <nil/actor/serialization/binary_deserializer.hpp>
-#include <nil/actor/serialization/binary_serializer.hpp>
+#include <nil/actor/binary_deserializer.hpp>
+#include <nil/actor/binary_serializer.hpp>
 #include <nil/actor/byte.hpp>
 #include <nil/actor/detail/scope_guard.hpp>
 #include <nil/actor/make_actor.hpp>
@@ -33,6 +31,28 @@
 using namespace nil::actor;
 using namespace nil::actor::network;
 using namespace nil::actor::policy;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -81,9 +101,9 @@ namespace {
             binary_deserializer source {sys_, payload};
             message msg;
             if (auto err = msg.load(source))
-                BOOST_FAIL("unable to deserialize message: " << err);
+                BOOST_FAIL("unable to deserialize message");
             if (!msg.match_elements<std::string>())
-                BOOST_FAIL("unexpected message: " << msg);
+                BOOST_FAIL("unexpected message");
             auto &str = msg.get_as<std::string>(0);
             auto bytes = as_bytes(make_span(str));
             buf_->insert(buf_->end(), bytes.begin(), bytes.end());
@@ -98,14 +118,14 @@ namespace {
             binary_serializer sink {sys_, header_buf};
             header_type header {static_cast<uint32_t>(ptr->payload.size())};
             if (auto err = sink(header))
-                BOOST_FAIL("serializing failed: " << err);
+                BOOST_FAIL("serializing failed");
             parent.write_packet(header_buf, ptr->payload);
         }
 
-        static expected<std::vector<byte>> serialize(spawner &sys, const type_erased_tuple &x) {
+        static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
             std::vector<byte> result;
             binary_serializer sink {sys, result};
-            if (auto err = message::save(sink, x))
+            if (auto err = x.save(sink))
                 return err.value();
             return result;
         }
@@ -141,7 +161,7 @@ namespace {
                     BOOST_FAIL("");
                 binary_deserializer source {nullptr, data};
                 if (auto err = source(header_))
-                    BOOST_FAIL("serializing failed: " << err);
+                    BOOST_FAIL("serializing failed");
                 if (header_.payload == 0)
                     Base::handle_packet(parent, header_, span<const byte> {});
                 else
@@ -154,7 +174,7 @@ namespace {
         template<class Parent>
         void resolve(Parent &parent, string_view path, actor listener) {
             actor_id aid = 42;
-            auto hid = "0011223344556677889900112233445566778899";
+            auto hid = string_view("0011223344556677889900112233445566778899");
             auto nid = unbox(make_node_id(aid, hid));
             actor_config cfg;
             auto sys = &parent.system();
@@ -179,7 +199,7 @@ namespace {
         }
 
         void handle_error(sec sec) {
-            BOOST_FAIL("handle_error called: " << ACTOR_ARG(sec));
+            BOOST_FAIL("handle_error called");
         }
 
     private:
@@ -199,7 +219,7 @@ BOOST_AUTO_TEST_CASE(receive) {
     auto buf = std::make_shared<std::vector<byte>>();
     auto sockets = unbox(make_stream_socket_pair());
     nonblocking(sockets.second, true);
-    BOOST_CHECK_EQUAL(read(sockets.second, read_buf), sec::unavailable_or_would_block);
+    BOOST_CHECK_EQUAL(get<sec>(read(sockets.second, read_buf)), sec::unavailable_or_would_block);
     BOOST_TEST_MESSAGE("adding both endpoint managers");
     auto mgr1 = make_endpoint_manager(mpx, sys, transport_type {sockets.first, application_type {sys, buf}});
     BOOST_CHECK_EQUAL(mgr1->init(), none);

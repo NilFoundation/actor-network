@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -10,29 +9,30 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/network/basp/application.hpp>
+#include <nil/actor/network/basp/constants.hpp>
+#include <nil/actor/network/basp/ec.hpp>
+
+#include <nil/actor/network/packet_writer.hpp>
 
 #include <vector>
 
-#include <nil/actor/spawner.hpp>
-#include <nil/actor/spawner_config.hpp>
-#include <nil/actor/serialization/binary_deserializer.hpp>
-#include <nil/actor/serialization/binary_serializer.hpp>
-#include <nil/actor/byte.hpp>
-#include <nil/actor/defaults.hpp>
 #include <nil/actor/detail/network_order.hpp>
 #include <nil/actor/detail/parse.hpp>
+
+#include <nil/actor/spawner.hpp>
+#include <nil/actor/spawner_config.hpp>
+#include <nil/actor/binary_deserializer.hpp>
+#include <nil/actor/binary_serializer.hpp>
+#include <nil/actor/byte.hpp>
+#include <nil/actor/defaults.hpp>
 #include <nil/actor/error.hpp>
 #include <nil/actor/expected.hpp>
 #include <nil/actor/logger.hpp>
-#include <nil/actor/network/basp/constants.hpp>
-#include <nil/actor/network/basp/ec.hpp>
-#include <nil/actor/network/packet_writer.hpp>
 #include <nil/actor/no_stages.hpp>
 #include <nil/actor/none.hpp>
 #include <nil/actor/sec.hpp>
 #include <nil/actor/send.hpp>
 #include <nil/actor/string_algorithms.hpp>
-#include <nil/actor/type_erased_tuple.hpp>
 
 namespace nil {
     namespace actor {
@@ -110,10 +110,10 @@ namespace nil {
                     writer.write_packet(hdr, payload);
                 }
 
-                expected<std::vector<byte>> application::serialize(spawner &sys, const type_erased_tuple &x) {
+                expected<std::vector<byte>> application::serialize(spawner &sys, const message &x) {
                     std::vector<byte> result;
                     binary_serializer sink {sys, result};
-                    if (auto err = message::save(sink, x))
+                    if (auto err = x.save(sink))
                         return err.value();
                     return result;
                 }

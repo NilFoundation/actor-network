@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,17 +12,19 @@
 
 #include <vector>
 
-#include <nil/actor/actor_control_block.hpp>
-#include <nil/actor/actor_proxy.hpp>
-#include <nil/actor/serialization/binary_deserializer.hpp>
-#include <nil/actor/config.hpp>
+#include <nil/actor/network/basp/header.hpp>
+
 #include <nil/actor/detail/scope_guard.hpp>
 #include <nil/actor/detail/sync_request_bouncer.hpp>
+
+#include <nil/actor/actor_control_block.hpp>
+#include <nil/actor/actor_proxy.hpp>
+#include <nil/actor/binary_deserializer.hpp>
+#include <nil/actor/config.hpp>
 #include <nil/actor/execution_unit.hpp>
 #include <nil/actor/logger.hpp>
 #include <nil/actor/message.hpp>
 #include <nil/actor/message_id.hpp>
-#include <nil/actor/network/basp/header.hpp>
 #include <nil/actor/node_id.hpp>
 
 namespace nil {
@@ -72,7 +73,6 @@ namespace nil {
                         dref.queue_->push(ctx, dref.msg_id_, std::move(dst_hdl), std::move(ptr));
                     }
                 };
-
             }    // namespace basp
         }        // namespace network
     }            // namespace actor

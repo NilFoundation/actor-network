@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,21 +11,63 @@
 #define BOOST_TEST_MODULE transport_worker
 
 #include <nil/actor/network/transport_worker.hpp>
-
-#include <nil/actor/test/host_fixture.hpp>
-#include <nil/actor/test/dsl.hpp>
-
-#include <nil/actor/serialization/binary_serializer.hpp>
-#include <nil/actor/byte.hpp>
-#include <nil/actor/detail/scope_guard.hpp>
-#include <nil/actor/ip_endpoint.hpp>
-#include <nil/actor/make_actor.hpp>
 #include <nil/actor/network/actor_proxy_impl.hpp>
 #include <nil/actor/network/multiplexer.hpp>
+
+#include <nil/actor/detail/scope_guard.hpp>
+
+#include <nil/actor/test/dsl.hpp>
+
+#include <nil/actor/binary_serializer.hpp>
+#include <nil/actor/byte.hpp>
+#include <nil/actor/ip_endpoint.hpp>
+#include <nil/actor/make_actor.hpp>
 #include <nil/actor/span.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<actor> {
+                void operator()(std::ostream &, actor const &) {
+                }
+            };
+            template<>
+            struct print_log_value<scoped_actor> {
+                void operator()(std::ostream &, scoped_actor const &) {
+                }
+            };
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+            template<>
+            struct print_log_value<ipv4_endpoint> {
+                void operator()(std::ostream &, ipv4_endpoint const &) {
+                }
+            };
+            template<>
+            struct print_log_value<ipv6_endpoint> {
+                void operator()(std::ostream &, ipv6_endpoint const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -94,10 +135,10 @@ namespace {
             res_->err = err;
         }
 
-        static expected<std::vector<byte>> serialize(spawner &sys, const type_erased_tuple &x) {
+        static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
             std::vector<byte> result;
             binary_serializer sink {sys, result};
-            if (auto err = message::save(sink, x))
+            if (auto err = x.save(sink))
                 return err.value();
             return result;
         }
@@ -151,7 +192,7 @@ namespace {
             if (auto err = mpx->init())
                 BOOST_FAIL("mpx->init failed: " << sys.render(err));
             if (auto err = parse("[::1]:12345", ep))
-                BOOST_FAIL("parse returned an error: " << err);
+                BOOST_FAIL("parse returned an error");
             worker = worker_type {dummy_application {application_results}, ep};
         }
 
@@ -171,7 +212,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(endpoint_manager_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(construction and initialization) {
+BOOST_AUTO_TEST_CASE(construction_and_initialization) {
     BOOST_CHECK_EQUAL(worker.init(transport), none);
     BOOST_CHECK_EQUAL(application_results->initialized, true);
 }

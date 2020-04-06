@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,22 +11,54 @@
 #define BOOST_TEST_MODULE endpoint_manager
 
 #include <nil/actor/network/endpoint_manager.hpp>
-
-#include <nil/actor/test/host_fixture.hpp>
-#include <nil/actor/test/dsl.hpp>
-
-#include <nil/actor/serialization/binary_serializer.hpp>
-#include <nil/actor/byte.hpp>
-#include <nil/actor/detail/scope_guard.hpp>
-#include <nil/actor/make_actor.hpp>
 #include <nil/actor/network/actor_proxy_impl.hpp>
 #include <nil/actor/network/make_endpoint_manager.hpp>
 #include <nil/actor/network/multiplexer.hpp>
 #include <nil/actor/network/stream_socket.hpp>
+
+#include <nil/actor/test/dsl.hpp>
+
+#include <nil/actor/detail/scope_guard.hpp>
+
+#include <nil/actor/binary_serializer.hpp>
+#include <nil/actor/byte.hpp>
+#include <nil/actor/make_actor.hpp>
 #include <nil/actor/span.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class T, typename... P>
+            struct print_log_value<T<P...>> {
+                void operator()(std::ostream &, T<P...> const &) {
+                }
+            };
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+            template<>
+            struct print_log_value<operation> {
+                void operator()(std::ostream &, operation const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -54,10 +85,10 @@ namespace {
 
     class dummy_application {
     public:
-        static expected<std::vector<byte>> serialize(spawner &sys, const type_erased_tuple &x) {
+        static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
             std::vector<byte> result;
             binary_serializer sink {sys, result};
-            if (auto err = message::save(sink, x))
+            if (auto err = x.save(sink))
                 return err.value();
             return result;
         }
@@ -115,7 +146,7 @@ namespace {
         template<class Manager>
         void resolve(Manager &mgr, const uri &locator, const actor &listener) {
             actor_id aid = 42;
-            auto hid = "0011223344556677889900112233445566778899";
+            auto hid = string_view("0011223344556677889900112233445566778899");
             auto nid = unbox(make_node_id(42, hid));
             actor_config cfg;
             auto p = make_actor<actor_proxy_impl, strong_actor_ptr>(aid, nid, &mgr.system(), cfg, &mgr);
@@ -152,26 +183,27 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(endpoint_manager_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(send and receive) {
+BOOST_AUTO_TEST_CASE(send_and_receive) {
     std::vector<byte> read_buf(1024);
     auto buf = std::make_shared<std::vector<byte>>();
     auto sockets = unbox(make_stream_socket_pair());
     nonblocking(sockets.second, true);
-    BOOST_CHECK_EQUAL(read(sockets.second, read_buf), sec::unavailable_or_would_block);
+    BOOST_CHECK_EQUAL(get<sec>(read(sockets.second, read_buf)), sec::unavailable_or_would_block);
     auto guard = detail::make_scope_guard([&] { close(sockets.second); });
     auto mgr = make_endpoint_manager(mpx, sys, dummy_transport {sockets.first, buf});
     BOOST_CHECK_EQUAL(mgr->mask(), operation::none);
     BOOST_CHECK_EQUAL(mgr->init(), none);
     BOOST_CHECK_EQUAL(mgr->mask(), operation::read_write);
     BOOST_CHECK_EQUAL(mpx->num_socket_managers(), 2u);
-    BOOST_CHECK_EQUAL(write(sockets.second, as_bytes(make_span(hello_manager))), hello_manager.size());
+    BOOST_CHECK_EQUAL(get<std::size_t>(write(sockets.second, as_bytes(make_span(hello_manager)))),
+                      hello_manager.size());
     run();
     BOOST_CHECK_EQUAL(string_view(reinterpret_cast<char *>(buf->data()), buf->size()), hello_manager);
-    BOOST_CHECK_EQUAL(read(sockets.second, read_buf), hello_test.size());
+    BOOST_CHECK_EQUAL(get<std::size_t>(read(sockets.second, read_buf)), hello_test.size());
     BOOST_CHECK_EQUAL(string_view(reinterpret_cast<char *>(read_buf.data()), hello_test.size()), hello_test);
 }
 
-BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
+BOOST_AUTO_TEST_CASE(resolve_and_proxy_communication) {
     std::vector<byte> read_buf(1024);
     auto buf = std::make_shared<std::vector<byte>>();
     auto sockets = unbox(make_stream_socket_pair());
@@ -181,7 +213,7 @@ BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
     BOOST_CHECK_EQUAL(mgr->init(), none);
     BOOST_CHECK_EQUAL(mgr->mask(), operation::read_write);
     run();
-    BOOST_CHECK_EQUAL(read(sockets.second, read_buf), hello_test.size());
+    BOOST_CHECK_EQUAL(get<std::size_t>(read(sockets.second, read_buf)), hello_test.size());
     mgr->resolve(unbox(make_uri("test:id/42")), self);
     run();
     self->receive(
@@ -193,7 +225,7 @@ BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
     run();
     auto read_res = read(sockets.second, read_buf);
     if (!holds_alternative<size_t>(read_res)) {
-        ACTOR_ERROR("read() returned an error: " << sys.render(get<sec>(read_res)));
+        BOOST_ERROR("read() returned an error: " << sys.render(get<sec>(read_res)));
         return;
     }
     read_buf.resize(get<size_t>(read_res));
@@ -204,7 +236,7 @@ BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
     if (msg.match_elements<std::string>())
         BOOST_CHECK_EQUAL(msg.get_as<std::string>(0), "hello proxy!");
     else
-        ACTOR_ERROR("expected a string, got: " << to_string(msg));
+        BOOST_ERROR("expected a string, got: " << to_string(msg));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,26 +11,53 @@
 #define BOOST_TEST_MODULE basp.stream_application
 
 #include <nil/actor/network/basp/application.hpp>
-
-#include <nil/actor/test/host_fixture.hpp>
-#include <nil/actor/test/dsl.hpp>
-
-#include <vector>
-
-#include <nil/actor/byte.hpp>
-#include <nil/actor/network/backend/test.hpp>
 #include <nil/actor/network/basp/connection_state.hpp>
 #include <nil/actor/network/basp/constants.hpp>
-#include <nil/actor/network/basp/ec.hpp>
+#include <nil/actor/network/backend/test.hpp>
 #include <nil/actor/network/make_endpoint_manager.hpp>
 #include <nil/actor/network/middleman.hpp>
 #include <nil/actor/network/multiplexer.hpp>
 #include <nil/actor/network/stream_socket.hpp>
 #include <nil/actor/network/stream_transport.hpp>
+
+#include <nil/actor/test/dsl.hpp>
+
+#include <vector>
+
+#include <nil/actor/byte.hpp>
 #include <nil/actor/uri.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class P, typename... T>
+            struct print_log_value<P<T...>> {
+                void operator()(std::ostream &, P<T...> const &) {
+                }
+            };
+
+            template<template<typename, std::size_t> class P, typename T, std::size_t S>
+            struct print_log_value<P<T, S>> {
+                void operator()(std::ostream &, P<T, S> const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<basp::connection_state> {
+                void operator()(std::ostream &, basp::connection_state const &) {
+                }
+            };
+            template<>
+            struct print_log_value<basp::message_type> {
+                void operator()(std::ostream &, basp::message_type const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 #define REQUIRE_OK(statement) \
     if (auto err = statement) \
@@ -134,7 +160,7 @@ namespace {
 
 #define MOCK(kind, op, ...)                                                                     \
     do {                                                                                        \
-        BOOST_TEST_MESSAGE("mock " << kind);                                                    \
+        BOOST_TEST_MESSAGE("mock");                                                    \
         if (!std::is_same<decltype(std::make_tuple(__VA_ARGS__)), std::tuple<unit_t>>::value) { \
             auto payload = to_buf(__VA_ARGS__);                                                 \
             mock(basp::header {kind, static_cast<uint32_t>(payload.size()), op});               \
@@ -147,7 +173,7 @@ namespace {
 
 #define RECEIVE(msg_type, op_data, ...)                                                         \
     do {                                                                                        \
-        BOOST_TEST_MESSAGE("receive " << msg_type);                                             \
+        BOOST_TEST_MESSAGE("receive");                                             \
         buffer_type buf(basp::header_size);                                                     \
         if (fetch_size(read(sock, buf)) != basp::header_size)                                   \
             BOOST_FAIL("unable to read " << basp::header_size << " bytes");                     \
@@ -169,7 +195,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(application_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(actor message and down message) {
+BOOST_AUTO_TEST_CASE(actor_message_and_down_message) {
     handle_handshake();
     consume_handshake();
     sys.registry().put(self->id(), self);
@@ -181,14 +207,14 @@ BOOST_AUTO_TEST_CASE(actor message and down message) {
     self->receive([&](const std::string &str) {
         BOOST_CHECK_EQUAL(str, "hello world!");
         proxy = self->current_sender();
-        ACTOR_REQUIRE_NOT_EQUAL(proxy, nullptr);
+        BOOST_REQUIRE_NE(proxy, nullptr);
         self->monitor(proxy);
     });
     MOCK(basp::message_type::down_message, 42u, error {exit_reason::user_shutdown});
     expect((down_msg), from(_).to(self).with(down_msg {actor_cast<actor_addr>(proxy), exit_reason::user_shutdown}));
 }
 
-BOOST_AUTO_TEST_CASE(resolve request without result) {
+BOOST_AUTO_TEST_CASE(resolve_request_without_result) {
     handle_handshake();
     consume_handshake();
     BOOST_CHECK_EQUAL(app->state(), basp::connection_state::await_header);
@@ -201,7 +227,7 @@ BOOST_AUTO_TEST_CASE(resolve request without result) {
     BOOST_CHECK(ifs.empty());
 }
 
-BOOST_AUTO_TEST_CASE(resolve request on id with result) {
+BOOST_AUTO_TEST_CASE(resolve_request_on_id_with_result) {
     handle_handshake();
     consume_handshake();
     sys.registry().put(self->id(), self);

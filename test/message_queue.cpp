@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -20,6 +19,24 @@
 #include <nil/actor/behavior.hpp>
 
 using namespace nil::actor;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class P, typename... T>
+            struct print_log_value<P<T...>> {
+                void operator()(std::ostream &, P<T...> const &) {
+                }
+            };
+
+            template<template<typename, std::size_t> class P, typename T, std::size_t S>
+            struct print_log_value<P<T, S>> {
+                void operator()(std::ostream &, P<T, S> const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -55,20 +72,20 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(message_queue_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(default construction) {
+BOOST_AUTO_TEST_CASE(default_construction) {
     BOOST_CHECK_EQUAL(queue.next_id, 0u);
     BOOST_CHECK_EQUAL(queue.next_undelivered, 0u);
     BOOST_CHECK_EQUAL(queue.pending.size(), 0u);
 }
 
-BOOST_AUTO_TEST_CASE(ascending IDs) {
+BOOST_AUTO_TEST_CASE(ascending_ids) {
     BOOST_CHECK_EQUAL(queue.new_id(), 0u);
     BOOST_CHECK_EQUAL(queue.new_id(), 1u);
     BOOST_CHECK_EQUAL(queue.new_id(), 2u);
     BOOST_CHECK_EQUAL(queue.next_undelivered, 0u);
 }
 
-BOOST_AUTO_TEST_CASE(push order 0 - 1 - 2) {
+BOOST_AUTO_TEST_CASE(push_order_0_1_2) {
     acquire_ids(3);
     push(0);
     expect((ok_atom, int), from(self).to(testee).with(_, 0));
@@ -78,7 +95,7 @@ BOOST_AUTO_TEST_CASE(push order 0 - 1 - 2) {
     expect((ok_atom, int), from(self).to(testee).with(_, 2));
 }
 
-BOOST_AUTO_TEST_CASE(push order 0 - 2 - 1) {
+BOOST_AUTO_TEST_CASE(push_order_0_2_1) {
     acquire_ids(3);
     push(0);
     expect((ok_atom, int), from(self).to(testee).with(_, 0));
@@ -89,7 +106,7 @@ BOOST_AUTO_TEST_CASE(push order 0 - 2 - 1) {
     expect((ok_atom, int), from(self).to(testee).with(_, 2));
 }
 
-BOOST_AUTO_TEST_CASE(push order 1 - 0 - 2) {
+BOOST_AUTO_TEST_CASE(push_order_1_0_2) {
     acquire_ids(3);
     push(1);
     disallow((ok_atom, int), from(self).to(testee));
@@ -100,7 +117,7 @@ BOOST_AUTO_TEST_CASE(push order 1 - 0 - 2) {
     expect((ok_atom, int), from(self).to(testee).with(_, 2));
 }
 
-BOOST_AUTO_TEST_CASE(push order 1 - 2 - 0) {
+BOOST_AUTO_TEST_CASE(push_order_1_2_0) {
     acquire_ids(3);
     push(1);
     disallow((ok_atom, int), from(self).to(testee));
@@ -112,7 +129,7 @@ BOOST_AUTO_TEST_CASE(push order 1 - 2 - 0) {
     expect((ok_atom, int), from(self).to(testee).with(_, 2));
 }
 
-BOOST_AUTO_TEST_CASE(push order 2 - 0 - 1) {
+BOOST_AUTO_TEST_CASE(push_order_2_0_1) {
     acquire_ids(3);
     push(2);
     disallow((ok_atom, int), from(self).to(testee));
@@ -123,7 +140,7 @@ BOOST_AUTO_TEST_CASE(push order 2 - 0 - 1) {
     expect((ok_atom, int), from(self).to(testee).with(_, 2));
 }
 
-BOOST_AUTO_TEST_CASE(push order 2 - 1 - 0) {
+BOOST_AUTO_TEST_CASE(push_order_2_1_0) {
     acquire_ids(3);
     push(2);
     disallow((ok_atom, int), from(self).to(testee));

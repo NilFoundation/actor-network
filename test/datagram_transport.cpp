@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,14 +11,6 @@
 #define BOOST_TEST_MODULE datagram_transport
 
 #include <nil/actor/network/datagram_transport.hpp>
-
-#include <nil/actor/test/host_fixture.hpp>
-#include <nil/actor/test/dsl.hpp>
-
-#include <nil/actor/serialization/binary_serializer.hpp>
-#include <nil/actor/byte.hpp>
-#include <nil/actor/detail/socket_sys_includes.hpp>
-#include <nil/actor/make_actor.hpp>
 #include <nil/actor/network/actor_proxy_impl.hpp>
 #include <nil/actor/network/endpoint_manager.hpp>
 #include <nil/actor/network/endpoint_manager_impl.hpp>
@@ -27,11 +18,47 @@
 #include <nil/actor/network/make_endpoint_manager.hpp>
 #include <nil/actor/network/multiplexer.hpp>
 #include <nil/actor/network/udp_datagram_socket.hpp>
+
+#include <nil/actor/test/dsl.hpp>
+
+#include <nil/actor/binary_serializer.hpp>
+#include <nil/actor/byte.hpp>
+#include <nil/actor/detail/socket_sys_includes.hpp>
+#include <nil/actor/make_actor.hpp>
 #include <nil/actor/span.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
 using namespace nil::actor::network::ip;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<template<typename...> class P, typename... T>
+            struct print_log_value<P<T...>> {
+                void operator()(std::ostream &, P<T...> const &) {
+                }
+            };
+
+            template<template<typename, std::size_t> class P, typename T, std::size_t S>
+            struct print_log_value<P<T, S>> {
+                void operator()(std::ostream &, P<T, S> const &) {
+                }
+            };
+
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -58,9 +85,9 @@ namespace {
             auto receive_pair = unbox(make_udp_datagram_socket(ep));
             recv_socket = receive_pair.first;
             ep.port(htons(receive_pair.second));
-            BOOST_TEST_MESSAGE("sending message to " << ACTOR_ARG(ep));
+            BOOST_TEST_MESSAGE("sending message");
             if (auto err = nonblocking(recv_socket, true))
-                BOOST_FAIL("nonblocking() returned an error: " << err);
+                BOOST_FAIL("nonblocking() returned an error");
         }
 
         ~fixture() {
@@ -153,10 +180,10 @@ namespace {
             BOOST_FAIL("handle_error called: " << to_string(sec));
         }
 
-        static expected<buffer_type> serialize(spawner &sys, const type_erased_tuple &x) {
+        static expected<buffer_type> serialize(spawner &sys, const message &x) {
             buffer_type result;
             binary_serializer sink {sys, result};
-            if (auto err = message::save(sink, x))
+            if (auto err = x.save(sink))
                 return err.value();
             return result;
         }
@@ -198,13 +225,14 @@ BOOST_AUTO_TEST_CASE(receive) {
     auto &transport = mgr_impl->transport();
     transport.configure_read(network::receive_policy::exactly(hello_manager.size()));
     BOOST_CHECK_EQUAL(mpx->num_socket_managers(), 2u);
-    BOOST_CHECK_EQUAL(write(send_socket, as_bytes(make_span(hello_manager)), ep), hello_manager.size());
+    BOOST_CHECK_EQUAL(get<std::size_t>(write(send_socket, as_bytes(make_span(hello_manager)), ep)),
+                      hello_manager.size());
     BOOST_TEST_MESSAGE("wrote " << hello_manager.size() << " bytes.");
     run();
     BOOST_CHECK_EQUAL(string_view(reinterpret_cast<char *>(shared_buf->data()), shared_buf->size()), hello_manager);
 }
 
-BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
+BOOST_AUTO_TEST_CASE(resolve_and_proxy_communication) {
     using transport_type = datagram_transport<dummy_application_factory>;
     buffer_type recv_buf(1024);
     auto uri = unbox(make_uri("test:/id/42"));
@@ -232,7 +260,7 @@ BOOST_AUTO_TEST_CASE(resolve and proxy communication) {
     if (msg.match_elements<std::string>())
         BOOST_CHECK_EQUAL(msg.get_as<std::string>(0), "hello proxy!");
     else
-        ACTOR_ERROR("expected a string, got: " << to_string(msg));
+        BOOST_ERROR("expected a string, got: " << to_string(msg));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

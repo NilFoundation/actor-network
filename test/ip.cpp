@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,7 +12,6 @@
 
 #include <nil/actor/network/ip.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <nil/actor/ip_address.hpp>
@@ -46,25 +44,25 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(ip_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(resolve localhost) {
+BOOST_AUTO_TEST_CASE(resolve_localhost) {
     addrs = ip::resolve("localhost");
     BOOST_CHECK(!addrs.empty());
     BOOST_CHECK(contains(v4_local) || contains(v6_local));
 }
 
-BOOST_AUTO_TEST_CASE(resolve any) {
+BOOST_AUTO_TEST_CASE(resolve_any) {
     addrs = ip::resolve("");
     BOOST_CHECK(!addrs.empty());
     BOOST_CHECK(contains(v4_any_addr) || contains(v6_any_addr));
 }
 
-BOOST_AUTO_TEST_CASE(local addresses localhost) {
+BOOST_AUTO_TEST_CASE(local_addresses_localhost) {
     addrs = ip::local_addresses("localhost");
     BOOST_CHECK(!addrs.empty());
     BOOST_CHECK(contains(v4_local) || contains(v6_local));
 }
 
-BOOST_AUTO_TEST_CASE(local addresses any) {
+BOOST_AUTO_TEST_CASE(local_addresses_any) {
     addrs = ip::local_addresses("0.0.0.0");
     auto tmp = ip::local_addresses("::");
     addrs.insert(addrs.end(), tmp.begin(), tmp.end());

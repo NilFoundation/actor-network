@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -13,17 +12,17 @@
 
 #include <nil/actor/network/tcp_accept_socket.hpp>
 
-#include <nil/actor/serialization/binary_serializer.hpp>
+#include <nil/actor/binary_serializer.hpp>
+#include <nil/actor/uri.hpp>
+
 #include <nil/actor/network/endpoint_manager.hpp>
 #include <nil/actor/network/ip.hpp>
 #include <nil/actor/network/make_endpoint_manager.hpp>
 #include <nil/actor/network/multiplexer.hpp>
 #include <nil/actor/network/socket_guard.hpp>
 #include <nil/actor/network/tcp_stream_socket.hpp>
-#include <nil/actor/uri.hpp>
 
 #include <nil/actor/test/dsl.hpp>
-#include <nil/actor/test/host_fixture.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;

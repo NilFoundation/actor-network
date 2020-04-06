@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,21 +11,42 @@
 #define BOOST_TEST_MODULE udp_datagram_socket
 
 #include <nil/actor/network/udp_datagram_socket.hpp>
+#include <nil/actor/network/ip.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
-#include <nil/actor/serialization/binary_serializer.hpp>
 #include <nil/actor/detail/net_syscall.hpp>
 #include <nil/actor/detail/socket_sys_includes.hpp>
+
+#include <nil/actor/binary_serializer.hpp>
 #include <nil/actor/ip_address.hpp>
 #include <nil/actor/ip_endpoint.hpp>
-#include <nil/actor/ipv4_address.hpp>
-#include <nil/actor/network/ip.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
 using namespace nil::actor::network::ip;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<error> {
+                void operator()(std::ostream &, error const &) {
+                }
+            };
+            template<>
+            struct print_log_value<sec> {
+                void operator()(std::ostream &, sec const &) {
+                }
+            };
+            template<>
+            struct print_log_value<none_t> {
+                void operator()(std::ostream &, none_t const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -95,18 +115,18 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(udp_datagram_socket_test, fixture)
 
-BOOST_AUTO_TEST_CASE(read / write using span<byte>) {
+BOOST_AUTO_TEST_CASE(read_write_using_span_byte) {
     if (auto err = nonblocking(socket_cast<network::socket>(receive_socket), true))
-        BOOST_FAIL("setting socket to nonblocking failed: " << err);
-    BOOST_CHECK_EQUAL(read(receive_socket, buf), sec::unavailable_or_would_block);
+        BOOST_FAIL("setting socket to nonblocking failed");
+    BOOST_CHECK_EQUAL(get<sec>(read(receive_socket, buf)), sec::unavailable_or_would_block);
     BOOST_TEST_MESSAGE("sending data to " << to_string(ep));
-    BOOST_CHECK_EQUAL(write(send_socket, as_bytes(make_span(hello_test)), ep), hello_test.size());
+    BOOST_CHECK_EQUAL(get<unsigned long>(write(send_socket, as_bytes(make_span(hello_test)), ep)), hello_test.size());
     BOOST_CHECK_EQUAL(read_from_socket(receive_socket, buf), none);
     string_view received {reinterpret_cast<const char *>(buf.data()), buf.size()};
     BOOST_CHECK_EQUAL(received, hello_test);
 }
 
-BOOST_AUTO_TEST_CASE(read / write using span<std::vector<byte> *>) {
+BOOST_AUTO_TEST_CASE(read_write_using_span_std_vector_byte_ptr) {
     // generate header and payload in separate buffers
     header hdr {hello_test.size()};
     std::vector<byte> hdr_buf;
@@ -117,7 +137,7 @@ BOOST_AUTO_TEST_CASE(read / write using span<std::vector<byte> *>) {
     std::vector<byte> payload_buf(bytes.begin(), bytes.end());
     auto packet_size = hdr_buf.size() + payload_buf.size();
     std::vector<std::vector<byte> *> bufs {&hdr_buf, &payload_buf};
-    BOOST_CHECK_EQUAL(write(send_socket, bufs, ep), packet_size);
+    BOOST_CHECK_EQUAL(get<unsigned long>(write(send_socket, bufs, ep)), packet_size);
     // receive both as one single packet.
     buf.resize(packet_size);
     BOOST_CHECK_EQUAL(read_from_socket(receive_socket, buf), none);
@@ -125,7 +145,7 @@ BOOST_AUTO_TEST_CASE(read / write using span<std::vector<byte> *>) {
     binary_deserializer source(nullptr, buf);
     header recv_hdr;
     if (auto err = source(recv_hdr))
-        BOOST_FAIL("serializing failed: " << err);
+        BOOST_FAIL("serializing failed");
     BOOST_CHECK_EQUAL(hdr.payload_size, recv_hdr.payload_size);
     string_view received {reinterpret_cast<const char *>(buf.data()) + sizeof(header), buf.size() - sizeof(header)};
     BOOST_CHECK_EQUAL(received, hello_test);

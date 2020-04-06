@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -10,14 +9,14 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/network/host.hpp>
+#include <nil/actor/network/socket.hpp>
 
-#include <nil/actor/config.hpp>
 #include <nil/actor/detail/net_syscall.hpp>
 #include <nil/actor/detail/socket_sys_includes.hpp>
+
+#include <nil/actor/config.hpp>
 #include <nil/actor/error.hpp>
-#include <nil/actor/make_message.hpp>
 #include <nil/actor/message.hpp>
-#include <nil/actor/network/socket.hpp>
 #include <nil/actor/none.hpp>
 
 namespace nil {

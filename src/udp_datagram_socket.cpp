@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -10,16 +9,18 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/network/udp_datagram_socket.hpp>
+#include <nil/actor/network/socket_guard.hpp>
 
-#include <nil/actor/byte.hpp>
 #include <nil/actor/detail/convert_ip_endpoint.hpp>
 #include <nil/actor/detail/net_syscall.hpp>
 #include <nil/actor/detail/socket_sys_aliases.hpp>
 #include <nil/actor/detail/socket_sys_includes.hpp>
+
+#include <nil/actor/byte.hpp>
 #include <nil/actor/expected.hpp>
 #include <nil/actor/ip_endpoint.hpp>
 #include <nil/actor/logger.hpp>
-#include <nil/actor/network/socket_guard.hpp>
+#include <nil/actor/span.hpp>
 
 namespace nil {
     namespace actor {
@@ -31,8 +32,8 @@ namespace nil {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
                 DWORD bytes_returned = 0;
                 ACTOR_NET_SYSCALL("WSAIoctl", res, !=, 0,
-                                WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
-                                         &bytes_returned, NULL, NULL));
+                                  WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
+                                           &bytes_returned, NULL, NULL));
                 return none;
             }
 
@@ -59,12 +60,12 @@ namespace nil {
                 if (reuse_addr) {
                     int on = 1;
                     ACTOR_NET_SYSCALL("setsockopt", tmp1, !=, 0,
-                                    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<setsockopt_ptr>(&on),
-                                               static_cast<socket_size_type>(sizeof(on))));
+                                      setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<setsockopt_ptr>(&on),
+                                                 static_cast<socket_size_type>(sizeof(on))));
                 }
                 ACTOR_NET_SYSCALL("bind", err, !=, 0, ::bind(sock.id, reinterpret_cast<sockaddr *>(&addr), len));
                 ACTOR_NET_SYSCALL("getsockname", erro, !=, 0,
-                                getsockname(sock.id, reinterpret_cast<sockaddr *>(&addr), &len));
+                                  getsockname(sock.id, reinterpret_cast<sockaddr *>(&addr), &len));
                 ACTOR_LOG_DEBUG(ACTOR_ARG(sock.id));
                 auto port = addr.ss_family == AF_INET ? reinterpret_cast<sockaddr_in *>(&addr)->sin_port :
                                                         reinterpret_cast<sockaddr_in6 *>(&addr)->sin6_port;
@@ -80,8 +81,8 @@ namespace nil {
                 if (auto num_bytes = get_if<size_t>(&ret)) {
                     ACTOR_LOG_INFO_IF(*num_bytes == 0, "Received empty datagram");
                     ACTOR_LOG_WARNING_IF(*num_bytes > buf.size(),
-                                       "recvfrom cut of message, only received " << ACTOR_ARG(buf.size()) << " of "
-                                                                                 << ACTOR_ARG(num_bytes) << " bytes");
+                                         "recvfrom cut of message, only received " << ACTOR_ARG(buf.size()) << " of "
+                                                                                   << ACTOR_ARG(num_bytes) << " bytes");
                     ip_endpoint ep;
                     if (auto err = detail::convert(addr, ep)) {
                         ACTOR_ASSERT(err.category() == error_category<sec>::value);

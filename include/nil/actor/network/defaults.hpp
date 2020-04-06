@@ -15,18 +15,12 @@
 
 // -- hard-coded default values for various CAF options ------------------------
 
-namespace nil {
-    namespace actor {
-        namespace defaults {
-            namespace middleman {
+namespace nil::actor::defaults::middleman {
 
-                /// Maximum number of cached buffers for sending payloads.
-                extern const size_t max_payload_buffers;
+    /// Maximum number of cached buffers for sending payloads.
+    extern const size_t max_payload_buffers;
 
-                /// Maximum number of cached buffers for sending headers.
-                extern const size_t max_header_buffers;
+    /// Maximum number of cached buffers for sending headers.
+    extern const size_t max_header_buffers;
 
-            }    // namespace middleman
-        }        // namespace defaults
-    }            // namespace actor
-}    // namespace nil
+}    // namespace nil::actor::defaults::middleman

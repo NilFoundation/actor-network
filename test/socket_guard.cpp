@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -12,10 +11,9 @@
 #define BOOST_TEST_MODULE socket_guard
 
 #include <nil/actor/network/socket_guard.hpp>
+#include <nil/actor/network/socket_id.hpp>
 
 #include <nil/actor/test/dsl.hpp>
-
-#include <nil/actor/network/socket_id.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;

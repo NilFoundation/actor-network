@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2011-2019 Dominik Charousset
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the terms and conditions of the BSD 3-Clause License or
@@ -14,13 +13,29 @@
 #include <nil/actor/network/tcp_accept_socket.hpp>
 #include <nil/actor/network/tcp_stream_socket.hpp>
 
-#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <nil/actor/network/socket_guard.hpp>
 
 using namespace nil::actor;
 using namespace nil::actor::network;
+
+namespace boost {
+    namespace test_tools {
+        namespace tt_detail {
+            template<>
+            struct print_log_value<tcp_stream_socket> {
+                void operator()(std::ostream &, tcp_stream_socket const &) {
+                }
+            };
+            template<>
+            struct print_log_value<socket> {
+                void operator()(std::ostream &, socket const &) {
+                }
+            };
+        }    // namespace tt_detail
+    }        // namespace test_tools
+}    // namespace boost
 
 namespace {
 
@@ -42,7 +57,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(tcp_sockets_tests, fixture)
 
-BOOST_AUTO_TEST_CASE(open tcp port) {
+BOOST_AUTO_TEST_CASE(open_tcp_port) {
     auto acceptor = unbox(make_tcp_accept_socket(auth, false));
     auto port = unbox(local_port(acceptor));
     BOOST_CHECK_NE(port, 0);
@@ -50,7 +65,7 @@ BOOST_AUTO_TEST_CASE(open tcp port) {
     BOOST_TEST_MESSAGE("opened acceptor on port " << port);
 }
 
-BOOST_AUTO_TEST_CASE(tcp connect) {
+BOOST_AUTO_TEST_CASE(tcp_connect) {
     auto acceptor = unbox(make_tcp_accept_socket(auth, false));
     auto port = unbox(local_port(acceptor));
     BOOST_CHECK_NE(port, 0);
