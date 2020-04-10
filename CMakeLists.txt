@@ -13,8 +13,8 @@ include(CMConfig)
 include(CMDeploy)
 include(CMSetupVersion)
 
-if(NOT CMAKE_WORKSPACE_NAME OR NOT ("${CMAKE_WORKSPACE_NAME}" STREQUAL "mtl"))
-    cm_workspace(mtl)
+if(NOT CMAKE_WORKSPACE_NAME OR NOT ("${CMAKE_WORKSPACE_NAME}" STREQUAL "actor"))
+    cm_workspace(actor)
 endif()
 
 macro(cm_find_package NAME)
@@ -79,7 +79,7 @@ set_target_properties(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTIES
                       CXX_STANDARD_REQUIRED TRUE)
 
 target_link_libraries(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PRIVATE
-                      ${CMAKE_WORKSPACE_NAME}::actor
+                      ${CMAKE_WORKSPACE_NAME}::core
 
                       marshalling
 
