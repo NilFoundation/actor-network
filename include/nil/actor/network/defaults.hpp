@@ -13,7 +13,7 @@
 
 #include <cstddef>
 
-// -- hard-coded default values for various CAF options ------------------------
+// -- hard-coded default values for various =nil; Actor options ------------------------
 
 namespace nil::actor::defaults::middleman {
 

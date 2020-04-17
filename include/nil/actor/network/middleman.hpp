@@ -28,7 +28,7 @@ namespace nil {
 
                 using module = spawner_module;
 
-                using module_ptr = spawner_module_ptr;
+                using module_ptr = std::unique_ptr<spawner_module>;
 
                 using middleman_backend_list = std::vector<middleman_backend_ptr>;
 
@@ -112,7 +112,6 @@ namespace nil {
                 /// Runs the multiplexer's event loop
                 std::thread mpx_thread_;
             };
-
         }    // namespace network
     }        // namespace actor
 }    // namespace nil
