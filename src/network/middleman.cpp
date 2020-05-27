@@ -34,7 +34,7 @@ namespace nil {
             void middleman::start() {
                 if (!get_or(config(), "middleman.manual-multiplexing", false)) {
                     auto mpx = mpx_;
-                    auto sys_ptr = &system();
+                    auto *sys_ptr = &system();
                     mpx_thread_ = std::thread {[mpx, sys_ptr] {
                         ACTOR_SET_LOGGER_SYS(sys_ptr);
                         detail::set_thread_name("caf.multiplexer");
@@ -61,7 +61,7 @@ namespace nil {
                     ACTOR_LOG_ERROR("mgr->init() failed: " << system().render(err));
                     ACTOR_RAISE_ERROR("mpx->init() failed");
                 }
-                if (auto node_uri = get_if<uri>(&cfg, "middleman.this-node")) {
+                if (const auto *node_uri = get_if<uri>(&cfg, "middleman.this-node")) {
                     auto this_node = make_node_id(std::move(*node_uri));
                     sys_.node_.swap(this_node);
                 } else {
@@ -83,7 +83,7 @@ namespace nil {
             }
 
             void middleman::resolve(const uri &locator, const actor &listener) {
-                auto ptr = backend(locator.scheme());
+                auto *ptr = backend(locator.scheme());
                 if (ptr != nullptr)
                     ptr->resolve(locator, listener);
                 else

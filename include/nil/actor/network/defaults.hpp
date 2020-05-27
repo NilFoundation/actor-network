@@ -11,16 +11,38 @@
 
 #pragma once
 
-#include <cstddef>
+#include <vector>
+#include <thread>
+
+#include <boost/config.hpp>
+
+#include <nil/actor/string_view.hpp>
 
 // -- hard-coded default values for various CAF options ------------------------
 
-namespace nil::actor::defaults::middleman {
+namespace nil {
+    namespace actor {
+        namespace defaults {
+            namespace middleman {
 
-    /// Maximum number of cached buffers for sending payloads.
-    extern const size_t max_payload_buffers;
+                BOOST_SYMBOL_VISIBLE static const std::vector<std::string> app_identifiers = {"default-application"};
+                BOOST_SYMBOL_VISIBLE static const std::string network_backend = "default";
+                BOOST_SYMBOL_VISIBLE static const bool enable_automatic_connections = false;
+                BOOST_SYMBOL_VISIBLE static const std::size_t max_consecutive_reads = 50;
+                BOOST_SYMBOL_VISIBLE static const std::size_t heartbeat_interval = 0;
+                BOOST_SYMBOL_VISIBLE static const bool manual_multiplexing = false;
+                BOOST_SYMBOL_VISIBLE static const std::size_t cached_udp_buffers = 10;
+                BOOST_SYMBOL_VISIBLE static const std::size_t max_pending_msgs = 10;
+                BOOST_SYMBOL_VISIBLE static const std::size_t workers =
+                    std::min(3u, std::thread::hardware_concurrency() / 4u) + 1;
 
-    /// Maximum number of cached buffers for sending headers.
-    extern const size_t max_header_buffers;
+                /// Maximum number of cached buffers for sending payloads.
+                BOOST_SYMBOL_VISIBLE static const std::size_t max_payload_buffers = 100;
 
-}    // namespace nil::actor::defaults::middleman
+                /// Maximum number of cached buffers for sending headers.
+                BOOST_SYMBOL_VISIBLE static const std::size_t max_header_buffers = 10;
+
+            }    // namespace middleman
+        }        // namespace defaults
+    }            // namespace actor
+}    // namespace nil

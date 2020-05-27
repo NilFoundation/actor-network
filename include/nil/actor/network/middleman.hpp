@@ -22,11 +22,11 @@ namespace nil {
     namespace actor {
         namespace network {
 
-            class middleman : public spawner::module {
+            class middleman : public spawner_module {
             public:
                 // -- member types -----------------------------------------------------------
 
-                using module = spawner::module;
+                using module = spawner_module;
 
                 using module_ptr = spawner::module_ptr;
 

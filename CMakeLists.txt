@@ -52,7 +52,6 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/application.cpp
     src/convert_ip_endpoint.cpp
     src/datagram_socket.cpp
-    src/defaults.cpp
     src/endpoint_manager.cpp
     src/header.cpp
     src/host.cpp
