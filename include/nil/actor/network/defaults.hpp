@@ -26,7 +26,7 @@ namespace nil {
             namespace middleman {
 
                 BOOST_SYMBOL_VISIBLE static const std::vector<std::string> app_identifiers = {"default-application"};
-                BOOST_SYMBOL_VISIBLE static const std::string network_backend = "default";
+                BOOST_SYMBOL_VISIBLE static const char *network_backend = "default";
                 BOOST_SYMBOL_VISIBLE static const bool enable_automatic_connections = false;
                 BOOST_SYMBOL_VISIBLE static const std::size_t max_consecutive_reads = 50;
                 BOOST_SYMBOL_VISIBLE static const std::size_t heartbeat_interval = 0;
