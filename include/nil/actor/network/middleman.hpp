@@ -19,45 +19,23 @@
 
 #include <nil/actor/network/fwd.hpp>
 #include <nil/actor/network/defaults.hpp>
+#include <nil/actor/network/middleman_config.hpp>
 
 namespace nil {
     namespace actor {
         namespace network {
-            struct middleman_config {
-                middleman_config() :
-                    app_identifiers(defaults::middleman::app_identifiers),
-                    network_backend(defaults::middleman::network_backend),
-                    enable_automatic_connections(defaults::middleman::enable_automatic_connections),
-                    max_consecutive_reads(defaults::middleman::max_consecutive_reads),
-                    heartbeat_interval(defaults::middleman::heartbeat_interval),
-                    manual_multiplexing(defaults::middleman::manual_multiplexing),
-                    cached_udp_buffers(defaults::middleman::cached_udp_buffers),
-                    max_pending_msgs(defaults::middleman::max_pending_msgs),
-                    max_payload_buffers(defaults::middleman::max_payload_buffers),
-                    max_header_buffers(defaults::middleman::max_header_buffers),
-                    workers(defaults::middleman::workers) {
-                }
 
-                const std::vector<std::string> app_identifiers;
-                const char *network_backend;
-                const bool enable_automatic_connections;
-                const std::size_t max_consecutive_reads;
-                const std::size_t heartbeat_interval;
-                const bool manual_multiplexing;
-                const std::size_t cached_udp_buffers;
-                const std::size_t max_pending_msgs;
-                const std::size_t max_payload_buffers;
-                const std::size_t max_header_buffers;
-                const std::size_t workers;
-            };
+            class middleman : public spawner_module<middleman_config, middleman_config> {
+                typedef spawner_module<middleman_config, middleman_config> policy_type;
 
-            class middleman : public spawner_module {
             public:
+                typedef typename policy_type::options_type options_type;
+                typedef typename policy_type::configuration_type configuration_type;
                 // -- member types -----------------------------------------------------------
 
                 using module = spawner_module;
 
-                using module_ptr = spawner::module_ptr;
+                using module_ptr = std::unique_ptr<spawner_module>;
 
                 using middleman_backend_list = std::vector<middleman_backend_ptr>;
 
@@ -67,13 +45,15 @@ namespace nil {
 
                 // -- interface functions ----------------------------------------------------
 
-                void start() override;
+                virtual void startup() override;
 
-                void stop() override;
+                virtual void shutdown() override;
 
-                void init(spawner_config &) override;
+                virtual void initialize(spawner_config &) override;
 
-                id_t id() const override;
+                id_t id() const override {
+                    return 0x01;
+                }
 
                 void *subtype_ptr() override;
 

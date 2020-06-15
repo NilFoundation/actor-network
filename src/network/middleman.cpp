@@ -31,7 +31,7 @@ namespace nil {
                 // nop
             }
 
-            void middleman::start() {
+            void middleman::startup() {
                 if (!get_or(config(), "middleman.manual-multiplexing", false)) {
                     auto mpx = mpx_;
                     auto *sys_ptr = &system();
@@ -46,7 +46,7 @@ namespace nil {
                 }
             }
 
-            void middleman::stop() {
+            void middleman::shutdown() {
                 for (const auto &backend : backends_)
                     backend->stop();
                 mpx_->shutdown();
@@ -56,7 +56,7 @@ namespace nil {
                     mpx_->run();
             }
 
-            void middleman::init(spawner_config &cfg) {
+            void middleman::initialize(spawner_config &cfg) {
                 if (auto err = mpx_->init()) {
                     ACTOR_LOG_ERROR("mgr->init() failed: " << system().render(err));
                     ACTOR_RAISE_ERROR("mpx->init() failed");
@@ -72,10 +72,6 @@ namespace nil {
                         ACTOR_LOG_ERROR("failed to initialize backend: " << system().render(err));
                         ACTOR_RAISE_ERROR("failed to initialize backend");
                     }
-            }
-
-            middleman::module::id_t middleman::id() const {
-                return module::network_manager;
             }
 
             void *middleman::subtype_ptr() {
