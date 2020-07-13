@@ -50,14 +50,14 @@ namespace nil {
                     ACTOR_ASSERT(ptr != nullptr);
                     ACTOR_ASSERT(ptr->msg != nullptr);
                     ACTOR_LOG_TRACE(ACTOR_ARG2("content", ptr->msg->content()));
-                    auto payload_prefix = writer.next_payload_buffer();
-                    binary_serializer sink {system(), payload_prefix};
                     const auto &src = ptr->msg->sender;
                     const auto &dst = ptr->receiver;
                     if (dst == nullptr) {
                         // TODO: valid?
                         return none;
                     }
+                    auto payload_buf = writer.next_payload_buffer();
+                    binary_serializer sink {system(), payload_buf};
                     if (src != nullptr) {
                         auto src_id = src->id();
                         system().registry().put(src_id, src);
@@ -67,12 +67,13 @@ namespace nil {
                         if (auto err = sink(node_id {}, actor_id {0}, dst->id(), ptr->msg->stages))
                             return err;
                     }
+                    if (auto err = sink(ptr->msg->content()))
+                        return err;
                     auto hdr = writer.next_header_buffer();
-                    to_bytes(header {message_type::actor_message,
-                                     static_cast<uint32_t>(payload_prefix.size() + ptr->payload.size()),
+                    to_bytes(header {message_type::actor_message, static_cast<uint32_t>(payload_buf.size()),
                                      ptr->msg->mid.integer_value()},
                              hdr);
-                    writer.write_packet(hdr, payload_prefix, ptr->payload);
+                    writer.write_packet(hdr, payload_buf);
                     return none;
                 }
 
@@ -108,14 +109,6 @@ namespace nil {
                                      static_cast<uint64_t>(id)},
                              hdr);
                     writer.write_packet(hdr, payload);
-                }
-
-                expected<std::vector<byte>> application::serialize(spawner &sys, const message &x) {
-                    std::vector<byte> result;
-                    binary_serializer sink {sys, result};
-                    if (auto err = x.save(sink))
-                        return err.value();
-                    return result;
                 }
 
                 strong_actor_ptr application::resolve_local_path(string_view path) {

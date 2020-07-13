@@ -48,11 +48,9 @@ namespace nil {
             }
 
             endpoint_manager_queue::message::message(mailbox_element_ptr msg,
-                                                     strong_actor_ptr receiver,
-                                                     std::vector<byte>
-                                                         payload) :
+                                                     strong_actor_ptr receiver) :
                 element(element_type::message),
-                msg(std::move(msg)), receiver(std::move(receiver)), payload(std::move(payload)) {
+                msg(std::move(msg)), receiver(std::move(receiver))) {
                 // nop
             }
 

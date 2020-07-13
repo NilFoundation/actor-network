@@ -20,6 +20,7 @@
 
 #include <nil/actor/detail/scope_guard.hpp>
 
+#include <nil/actor/binary_deserializer.hpp>
 #include <nil/actor/binary_serializer.hpp>
 #include <nil/actor/byte.hpp>
 #include <nil/actor/make_actor.hpp>
@@ -83,16 +84,7 @@ namespace {
         multiplexer_ptr mpx;
     };
 
-    class dummy_application {
-    public:
-        static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
-            std::vector<byte> result;
-            binary_serializer sink {sys, result};
-            if (auto err = x.save(sink))
-                return err.value();
-            return result;
-        }
-    };
+    struct dummy_application { };
 
     class dummy_transport {
     public:
@@ -118,7 +110,7 @@ namespace {
         template<class Manager>
         bool handle_read_event(Manager &) {
             auto res = read(handle_, read_buf_);
-            if (auto num_bytes = get_if<size_t>(&res)) {
+            if (auto *num_bytes = get_if<size_t>(&res)) {
                 data_->insert(data_->end(), read_buf_.begin(), read_buf_.begin() + *num_bytes);
                 return true;
             }
@@ -128,13 +120,14 @@ namespace {
         template<class Manager>
         bool handle_write_event(Manager &mgr) {
             for (auto x = mgr.next_message(); x != nullptr; x = mgr.next_message()) {
-                auto &payload = x->payload;
-                buf_.insert(buf_.end(), payload.begin(), payload.end());
+                binary_serializer sink {mgr.system(), buf_};
+                if (auto err = sink(x->msg->payload))
+                    BOOST_FAIL("serializing failed: " << err);
             }
             auto res = write(handle_, buf_);
-            if (auto num_bytes = get_if<size_t>(&res)) {
+            if (auto *num_bytes = get_if<size_t>(&res)) {
                 buf_.erase(buf_.begin(), buf_.begin() + *num_bytes);
-                return buf_.size() > 0;
+                return !buf_.empty();
             }
             return get<sec>(res) == sec::unavailable_or_would_block;
         }

@@ -47,17 +47,14 @@ namespace nil {
             void endpoint_manager::resolve(uri locator, actor listener) {
                 using intrusive::inbox_result;
                 using event_type = endpoint_manager_queue::event;
-                auto ptr = new event_type(std::move(locator), listener);
+                auto *ptr = new event_type(std::move(locator), listener);
                 if (!enqueue(ptr))
                     anon_send(listener, resolve_atom_v, make_error(sec::request_receiver_down));
             }
 
-            void endpoint_manager::enqueue(mailbox_element_ptr msg,
-                                           strong_actor_ptr receiver,
-                                           std::vector<byte>
-                                               payload) {
+            void endpoint_manager::enqueue(mailbox_element_ptr msg, strong_actor_ptr receiver) {
                 using message_type = endpoint_manager_queue::message;
-                auto ptr = new message_type(std::move(msg), std::move(receiver), std::move(payload));
+                auto *ptr = new message_type(std::move(msg), std::move(receiver));
                 enqueue(ptr);
             }
 
