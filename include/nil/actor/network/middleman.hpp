@@ -18,7 +18,10 @@
 
 #include <nil/actor/detail/type_list.hpp>
 #include <nil/actor/fwd.hpp>
+
 #include <nil/actor/network/fwd.hpp>
+#include <nil/actor/network/defaults.hpp>
+#include <nil/actor/network/middleman_config.hpp>
 
 namespace nil {
     namespace actor {
@@ -27,6 +30,8 @@ namespace nil {
                 typedef module::configurable<middleman_config, middleman_config> policy_type;
 
             public:
+                typedef typename policy_type::options_type options_type;
+                typedef typename policy_type::configuration_type configuration_type;
                 // -- member types -----------------------------------------------------------
 
                 using module = spawner_module;
@@ -41,13 +46,15 @@ namespace nil {
 
                 // -- interface functions ----------------------------------------------------
 
-                void start() override;
+                virtual void startup() override;
 
-                void stop() override;
+                virtual void shutdown() override;
 
-                void init(spawner_config &) override;
+                virtual void initialize(spawner_config &) override;
 
-                id_t id() const override;
+                id_t id() const override {
+                    return 0x01;
+                }
 
                 void *subtype_ptr() override;
 

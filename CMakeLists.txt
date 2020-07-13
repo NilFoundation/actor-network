@@ -47,12 +47,12 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/network/endpoint_manager_queue.cpp
     src/network/middleman.cpp
     src/network/middleman_backend.cpp
+    src/network/middleman_config.cpp
     src/network/packet_writer.cpp
     src/actor_proxy_impl.cpp
     src/application.cpp
     src/convert_ip_endpoint.cpp
     src/datagram_socket.cpp
-    src/defaults.cpp
     src/endpoint_manager.cpp
     src/header.cpp
     src/host.cpp
@@ -79,7 +79,10 @@ set_target_properties(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTIES
                       CXX_STANDARD_REQUIRED TRUE)
 
 target_link_libraries(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PRIVATE
+
                       ${CMAKE_WORKSPACE_NAME}::core
+
+                      module
 
                       marshalling
 

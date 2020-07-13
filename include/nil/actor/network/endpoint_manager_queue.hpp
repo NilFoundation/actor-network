@@ -14,13 +14,16 @@
 
 #include <nil/actor/actor.hpp>
 #include <nil/actor/fwd.hpp>
+#include <nil/actor/mailbox_element.hpp>
+#include <nil/actor/unit.hpp>
+#include <nil/actor/variant.hpp>
+
 #include <nil/actor/intrusive/drr_queue.hpp>
 #include <nil/actor/intrusive/fifo_inbox.hpp>
 #include <nil/actor/intrusive/singly_linked.hpp>
 #include <nil/actor/intrusive/wdrr_fixed_multiplexed_queue.hpp>
-#include <nil/actor/mailbox_element.hpp>
-#include <nil/actor/unit.hpp>
-#include <nil/actor/variant.hpp>
+
+#include <nil/actor/detail/serialized_size.hpp>
 
 namespace nil {
     namespace actor {
@@ -106,7 +109,7 @@ namespace nil {
                         // nop
                     }
 
-                    task_size_type task_size(const event &) const noexcept {
+                    constexpr static task_size_type task_size(const event &) noexcept {
                         return 1;
                     }
                 };
@@ -119,10 +122,7 @@ namespace nil {
                     /// ID of the receiving actor.
                     strong_actor_ptr receiver;
 
-                    /// Serialized representation of of `msg->content()`.
-                    std::vector<byte> payload;
-
-                    message(mailbox_element_ptr msg, strong_actor_ptr receiver, std::vector<byte> payload);
+                    message(mailbox_element_ptr msg, strong_actor_ptr receiver);
 
                     ~message() override;
 
@@ -147,8 +147,7 @@ namespace nil {
                     }
 
                     static task_size_type task_size(const message &x) noexcept {
-                        // Return at least 1 if the payload is empty.
-                        return x.payload.size() + static_cast<task_size_type>(x.payload.empty());
+                        return detail::serialized_size(x.msg->content());
                     }
                 };
 

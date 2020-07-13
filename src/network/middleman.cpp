@@ -31,10 +31,10 @@ namespace nil {
                 // nop
             }
 
-            void middleman::start() {
+            void middleman::startup() {
                 if (!get_or(config(), "middleman.manual-multiplexing", false)) {
                     auto mpx = mpx_;
-                    auto sys_ptr = &system();
+                    auto *sys_ptr = &system();
                     mpx_thread_ = std::thread {[mpx, sys_ptr] {
                         ACTOR_SET_LOGGER_SYS(sys_ptr);
                         detail::set_thread_name("caf.multiplexer");
@@ -46,7 +46,7 @@ namespace nil {
                 }
             }
 
-            void middleman::stop() {
+            void middleman::shutdown() {
                 for (const auto &backend : backends_)
                     backend->stop();
                 mpx_->shutdown();
@@ -56,13 +56,13 @@ namespace nil {
                     mpx_->run();
             }
 
-            void middleman::init(spawner_config &cfg) {
+            void middleman::initialize(spawner_config &cfg) {
                 if (auto err = mpx_->init()) {
                     ACTOR_LOG_ERROR("mgr->init() failed: " << system().render(err));
                     ACTOR_RAISE_ERROR("mpx->init() failed");
                 }
-                if (auto node_uri = get_if<uri>(&cfg, "middleman.this-node")) {
-                    auto this_node = make_node_id(std::move(*node_uri));
+                if (const auto *node_uri = get_if<uri>(&cfg, "middleman.this-node")) {
+                    auto this_node = make_node_id(*node_uri);
                     sys_.node_.swap(this_node);
                 } else {
                     ACTOR_RAISE_ERROR("no valid entry for middleman.this-node found");
@@ -74,16 +74,12 @@ namespace nil {
                     }
             }
 
-            middleman::module::id_t middleman::id() const {
-                return module::network_manager;
-            }
-
             void *middleman::subtype_ptr() {
                 return this;
             }
 
             void middleman::resolve(const uri &locator, const actor &listener) {
-                auto ptr = backend(locator.scheme());
+                auto *ptr = backend(locator.scheme());
                 if (ptr != nullptr)
                     ptr->resolve(locator, listener);
                 else

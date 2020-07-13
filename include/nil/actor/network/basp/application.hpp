@@ -22,23 +22,26 @@
 #include <nil/actor/spawner_config.hpp>
 #include <nil/actor/byte.hpp>
 #include <nil/actor/callback.hpp>
-#include <nil/actor/defaults.hpp>
-#include <nil/actor/detail/worker_hub.hpp>
 #include <nil/actor/error.hpp>
+#include <nil/actor/node_id.hpp>
+#include <nil/actor/proxy_registry.hpp>
+#include <nil/actor/response_promise.hpp>
+#include <nil/actor/scoped_execution_unit.hpp>
+#include <nil/actor/unit.hpp>
+
+#include <nil/actor/detail/worker_hub.hpp>
+
+#include <nil/actor/network/defaults.hpp>
+#include <nil/actor/network/endpoint_manager.hpp>
+#include <nil/actor/network/packet_writer.hpp>
+#include <nil/actor/network/receive_policy.hpp>
+
 #include <nil/actor/network/basp/connection_state.hpp>
 #include <nil/actor/network/basp/constants.hpp>
 #include <nil/actor/network/basp/header.hpp>
 #include <nil/actor/network/basp/message_queue.hpp>
 #include <nil/actor/network/basp/message_type.hpp>
 #include <nil/actor/network/basp/worker.hpp>
-#include <nil/actor/network/endpoint_manager.hpp>
-#include <nil/actor/network/packet_writer.hpp>
-#include <nil/actor/network/receive_policy.hpp>
-#include <nil/actor/node_id.hpp>
-#include <nil/actor/proxy_registry.hpp>
-#include <nil/actor/response_promise.hpp>
-#include <nil/actor/scoped_execution_unit.hpp>
-#include <nil/actor/unit.hpp>
 
 namespace nil {
     namespace actor {
@@ -74,7 +77,8 @@ namespace nil {
                         // Allow unit tests to run the application without endpoint manager.
                         if (!std::is_base_of<test_tag, Parent>::value)
                             manager_ = &parent.manager();
-                        auto workers = get_or(system_->config(), "middleman.workers", defaults::middleman::workers);
+                        auto workers =
+                            get_or(system_->config(), "middleman.workers", nil::actor::defaults::middleman::workers);
                         for (size_t i = 0; i < workers; ++i)
                             hub_->add_new_worker(*queue_, proxies_);
                         // Write handshake.
@@ -115,8 +119,6 @@ namespace nil {
                     void handle_error(sec) {
                         // nop
                     }
-
-                    static expected<buffer_type> serialize(spawner &sys, const message &x);
 
                     // -- utility functions ------------------------------------------------------
 

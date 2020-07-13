@@ -71,13 +71,11 @@ namespace boost {
 
 namespace {
 
-    using buffer_type = std::vector<byte>;
-
     constexpr string_view hello_test = "hello test!";
 
     struct application_result {
         bool initialized;
-        std::vector<byte> data_buffer;
+        byte_buffer data_buffer;
         std::string resolve_path;
         actor resolve_listener;
         std::string timeout_value;
@@ -106,9 +104,13 @@ namespace {
         }
 
         template<class Parent>
-        void write_message(Parent &parent, std::unique_ptr<endpoint_manager_queue::message> msg) {
-            auto header_buffer = parent.next_header_buffer();
-            parent.write_packet(header_buffer, msg->payload);
+        void write_message(Parent &parent, std::unique_ptr<endpoint_manager_queue::message> ptr) {
+            auto payload_buf = parent.next_payload_buffer();
+            binary_serializer sink(parent.system(), payload_buf);
+            if (auto err = sink(ptr->msg->content()))
+                BOOST_FAIL("serializing failed: " << err);
+            BOOST_TEST_MESSAGE("before sending: " << ACTOR_ARG(ptr->msg->content()));
+            parent.write_packet(payload_buf);
         }
 
         template<class Parent>
@@ -135,14 +137,6 @@ namespace {
             res_->err = err;
         }
 
-        static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
-            std::vector<byte> result;
-            binary_serializer sink {sys, result};
-            if (auto err = x.save(sink))
-                return err.value();
-            return result;
-        }
-
     private:
         std::shared_ptr<application_result> res_;
     };
@@ -153,31 +147,36 @@ namespace {
 
         using application_type = dummy_application;
 
-        dummy_transport(std::shared_ptr<transport_result> res) : res_(std::move(res)) {
+        dummy_transport(spawner &sys, std::shared_ptr<transport_result> res) : sys_(sys), res_(std::move(res)) {
             // nop
         }
 
-        void write_packet(ip_endpoint ep, span<buffer_type *> buffers) {
+        void write_packet(ip_endpoint ep, span<byte_buffer *> buffers) {
             res_->ep = ep;
             auto &packet_buf = res_->packet_buffer;
             packet_buf.clear();
-            for (auto buf : buffers)
+            for (auto *buf : buffers)
                 packet_buf.insert(packet_buf.end(), buf->begin(), buf->end());
+        }
+
+        spawner &system() {
+            return sys_;
         }
 
         transport_type &transport() {
             return *this;
         }
 
-        std::vector<byte> next_header_buffer() {
+        byte_buffer next_header_buffer() {
             return {};
         }
 
-        std::vector<byte> next_payload_buffer() {
+        byte_buffer next_payload_buffer() {
             return {};
         }
 
     private:
+        spawner &sys_;
         std::shared_ptr<transport_result> res_;
     };
 
@@ -187,7 +186,7 @@ namespace {
         fixture() :
             transport_results {std::make_shared<transport_result>()},
             application_results {std::make_shared<application_result>()},
-            transport(transport_results), worker {dummy_application {application_results}} {
+            transport(sys, transport_results), worker {dummy_application {application_results}} {
             mpx = std::make_shared<multiplexer>();
             if (auto err = mpx->init())
                 BOOST_FAIL("mpx->init failed: " << sys.render(err));
@@ -226,18 +225,22 @@ BOOST_AUTO_TEST_CASE(handle_data) {
 }
 
 BOOST_AUTO_TEST_CASE(write_message) {
+    std::string hello_test {"hello world!"};
     actor act;
     auto strong_actor = actor_cast<strong_actor_ptr>(act);
     mailbox_element::forwarding_stack stack;
-    auto msg = make_message();
+    auto msg = make_message(hello_test);
     auto elem = make_mailbox_element(strong_actor, make_message_id(12345), stack, msg);
-    auto test_span = as_bytes(make_span(hello_test));
-    std::vector<byte> payload(test_span.begin(), test_span.end());
     using message_type = endpoint_manager_queue::message;
-    auto message = detail::make_unique<message_type>(std::move(elem), nullptr, payload);
+    auto message = detail::make_unique<message_type>(std::move(elem), nullptr);
     worker.write_message(transport, std::move(message));
     auto &buf = transport_results->packet_buffer;
-    string_view result {reinterpret_cast<char *>(buf.data()), buf.size()};
+    binary_deserializer source {sys, buf};
+    nil::actor::message received_msg;
+    BOOST_CHECK(!source(received_msg));
+    BOOST_TEST_MESSAGE(ACTOR_ARG(received_msg));
+    auto received_str = received_msg.get_as<std::string>(0);
+    string_view result {received_str};
     BOOST_CHECK_EQUAL(result, hello_test);
     BOOST_CHECK_EQUAL(transport_results->ep, ep);
 }

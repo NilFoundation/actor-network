@@ -33,64 +33,54 @@ namespace nil {
 
             /// Manages a communication endpoint.
             class endpoint_manager : public socket_manager {
-            public:
-                // -- member types -----------------------------------------------------------
+                public:
+                    // -- member types -----------------------------------------------------------
 
-                using super = socket_manager;
+                    using super = socket_manager;
 
-                /// Represents either an error or a serialized payload.
-                using maybe_buffer = expected<std::vector<byte>>;
+                    // -- constructors, destructors, and assignment operators --------------------
 
-                /// A function type for serializing message payloads.
-                using serialize_fun_type = maybe_buffer (*)(spawner &, const message &);
+                    endpoint_manager(socket handle, const multiplexer_ptr &parent, spawner &sys);
 
-                // -- constructors, destructors, and assignment operators --------------------
+                    ~endpoint_manager() override;
 
-                endpoint_manager(socket handle, const multiplexer_ptr &parent, spawner &sys);
+                    // -- properties -------------------------------------------------------------
 
-                ~endpoint_manager() override;
+                    spawner &system() {
+                        return sys_;
+                    }
 
-                // -- properties -------------------------------------------------------------
+                    endpoint_manager_queue::message_ptr next_message();
 
-                spawner &system() {
-                    return sys_;
-                }
+                    // -- event management -------------------------------------------------------
 
-                endpoint_manager_queue::message_ptr next_message();
+                    /// Resolves a path to a remote actor.
+                    void resolve(uri locator, actor listener);
 
-                // -- event management -------------------------------------------------------
+                    void enqueue(mailbox_element_ptr msg, strong_actor_ptr receiver);
 
-                /// Resolves a path to a remote actor.
-                void resolve(uri locator, actor listener);
+                    /// Enqueues an event to the endpoint.
+                    template<class... Ts>
+                        void enqueue_event(Ts &&... xs) {
+                            enqueue(new endpoint_manager_queue::event(std::forward<Ts>(xs)...));
+                        }
 
-                /// Enqueues a message to the endpoint.
-                void enqueue(mailbox_element_ptr msg, strong_actor_ptr receiver, std::vector<byte> payload);
+                    // -- pure virtual member functions ------------------------------------------
 
-                /// Enqueues an event to the endpoint.
-                template<class... Ts>
-                void enqueue_event(Ts &&... xs) {
-                    enqueue(new endpoint_manager_queue::event(std::forward<Ts>(xs)...));
-                }
+                    /// Initializes the manager before adding it to the multiplexer's event loop.
+                    virtual error init() = 0;
 
-                // -- pure virtual member functions ------------------------------------------
+                protected:
+                    bool enqueue(endpoint_manager_queue::element *ptr);
 
-                /// Initializes the manager before adding it to the multiplexer's event loop.
-                virtual error init() = 0;
+                    /// Points to the hosting actor system.
+                    spawner &sys_;
 
-                /// @returns the protocol-specific function for serializing payloads.
-                virtual serialize_fun_type serialize_fun() const noexcept = 0;
+                    /// Stores control events and outbound messages.
+                    endpoint_manager_queue::type queue_;
 
-            protected:
-                bool enqueue(endpoint_manager_queue::element *ptr);
-
-                /// Points to the hosting actor system.
-                spawner &sys_;
-
-                /// Stores control events and outbound messages.
-                endpoint_manager_queue::type queue_;
-
-                /// Stores a proxy for interacting with the actor clock.
-                actor timeout_proxy_;
+                    /// Stores a proxy for interacting with the actor clock.
+                    actor timeout_proxy_;
             };
 
             using endpoint_manager_ptr = intrusive_ptr<endpoint_manager>;
@@ -98,3 +88,4 @@ namespace nil {
         }    // namespace network
     }        // namespace actor
 }    // namespace nil
+

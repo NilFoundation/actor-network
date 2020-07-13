@@ -87,7 +87,7 @@ namespace {
     public:
         using header_type = string_application_header;
 
-        string_application(spawner &sys, std::shared_ptr<std::vector<byte>> buf) : sys_(sys), buf_(std::move(buf)) {
+        string_application(std::shared_ptr<std::vector<byte>> buf) : buf_(std::move(buf)) {
             // nop
         }
 
@@ -97,8 +97,8 @@ namespace {
         }
 
         template<class Parent>
-        void handle_packet(Parent &, header_type &, span<const byte> payload) {
-            binary_deserializer source {sys_, payload};
+        void handle_packet(Parent &parent, header_type &, span<const byte> payload) {
+            binary_deserializer source {parent.system(), payload};
             message msg;
             if (auto err = msg.load(source))
                 BOOST_FAIL("unable to deserialize message");
@@ -115,11 +115,14 @@ namespace {
             if (ptr->msg == nullptr)
                 return;
             auto header_buf = parent.next_header_buffer();
-            binary_serializer sink {sys_, header_buf};
-            header_type header {static_cast<uint32_t>(ptr->payload.size())};
-            if (auto err = sink(header))
+            auto payload_buf = parent.next_payload_buffer();
+            binary_serializer payload_sink {parent.system(), payload_buf};
+            if (auto err = payload_sink(ptr->msg->payload))
                 BOOST_FAIL("serializing failed");
-            parent.write_packet(header_buf, ptr->payload);
+            binary_serializer header_sink {parent.system(), header_buf};
+            if (auto err = header_sink(header_type {static_cast<uint32_t>(payload_buf.size())}))
+                BOOST_FAIL("serializing failed: " << err);
+            parent.write_packet(header_buf, payload_buf);
         }
 
         static expected<std::vector<byte>> serialize(spawner &sys, const message &x) {
@@ -131,17 +134,16 @@ namespace {
         }
 
     private:
-        spawner &sys_;
         std::shared_ptr<std::vector<byte>> buf_;
-    };
+    };    // namespace
 
     template<class Base, class Subtype>
     class stream_string_application : public Base {
     public:
         using header_type = typename Base::header_type;
 
-        stream_string_application(spawner &sys, std::shared_ptr<std::vector<byte>> buf) :
-            Base(sys, std::move(buf)), await_payload_(false) {
+        stream_string_application(std::shared_ptr<std::vector<byte>> buf) :
+            Base(std::move(buf)), await_payload_(false) {
             // nop
         }
 

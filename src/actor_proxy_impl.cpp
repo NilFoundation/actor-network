@@ -19,7 +19,7 @@ namespace nil {
         namespace network {
 
             actor_proxy_impl::actor_proxy_impl(actor_config &cfg, endpoint_manager_ptr dst) :
-                super(cfg), sf_(dst->serialize_fun()), dst_(std::move(dst)) {
+                super(cfg), dst_(std::move(dst)) {
                 ACTOR_ASSERT(dst_ != nullptr);
                 dst_->enqueue_event(node(), id());
             }
@@ -32,10 +32,7 @@ namespace nil {
                 ACTOR_PUSH_AID(0);
                 ACTOR_ASSERT(what != nullptr);
                 ACTOR_LOG_SEND_EVENT(what);
-                if (auto payload = sf_(home_system(), what->content()))
-                    dst_->enqueue(std::move(what), ctrl(), std::move(*payload));
-                else
-                    ACTOR_LOG_ERROR("unable to serialize payload: " << home_system().render(payload.error()));
+                dst_->enqueue(std::move(what), ctrl());
             }
 
             void actor_proxy_impl::kill_proxy(execution_unit *ctx, error rsn) {
