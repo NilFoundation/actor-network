@@ -49,7 +49,7 @@ namespace nil {
             namespace basp {
 
                 /// An implementation of BASP as an application layer protocol.
-                class application {
+                class BOOST_SYMBOL_VISIBLE application {
                 public:
                     // -- member types -----------------------------------------------------------
 

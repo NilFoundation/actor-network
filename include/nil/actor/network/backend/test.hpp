@@ -45,6 +45,8 @@ namespace nil {
 
                     endpoint_manager_ptr peer(const node_id &id) override;
 
+                    expected<endpoint_manager_ptr> get_or_connect(const uri &locator) override;
+
                     void resolve(const uri &locator, const actor &listener) override;
 
                     strong_actor_ptr make_proxy(node_id nid, actor_id aid) override;
@@ -56,6 +58,8 @@ namespace nil {
                     stream_socket socket(const node_id &peer_id) {
                         return get_peer(peer_id).first;
                     }
+
+                    uint16_t port() const noexcept override;
 
                     peer_entry &emplace(const node_id &peer_id, stream_socket first, stream_socket second);
 

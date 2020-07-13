@@ -39,18 +39,22 @@ file(GLOB_RECURSE ${CURRENT_PROJECT_NAME}_HEADERS "include/nil/actor/*.hpp")
 
 # list cpp files excluding platform-dependent files
 set(${CURRENT_PROJECT_NAME}_SOURCES
+    src/basp/application.cpp
     src/basp/connection_state_strings.cpp
     src/basp/ec_strings.cpp
     src/basp/message_type_strings.cpp
     src/basp/operation_strings.cpp
+
     src/network/backend/test.cpp
+    src/network/backend/tcp.cpp
+
     src/network/endpoint_manager_queue.cpp
     src/network/middleman.cpp
     src/network/middleman_backend.cpp
     src/network/middleman_config.cpp
     src/network/packet_writer.cpp
+
     src/actor_proxy_impl.cpp
-    src/application.cpp
     src/convert_ip_endpoint.cpp
     src/datagram_socket.cpp
     src/endpoint_manager.cpp
