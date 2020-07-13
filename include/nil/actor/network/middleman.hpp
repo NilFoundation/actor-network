@@ -12,6 +12,8 @@
 
 #include <thread>
 
+#include <nil/module/configurable.hpp>
+
 #include <nil/actor/spawner.hpp>
 
 #include <nil/actor/detail/type_list.hpp>
@@ -21,8 +23,9 @@
 namespace nil {
     namespace actor {
         namespace network {
+            class middleman : public spawner_module, public module::configurable<middleman_config, middleman_config> {
+                typedef module::configurable<middleman_config, middleman_config> policy_type;
 
-            class middleman : public spawner_module {
             public:
                 // -- member types -----------------------------------------------------------
 

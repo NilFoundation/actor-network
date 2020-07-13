@@ -14,12 +14,12 @@
 #include <nil/actor/actor_cast.hpp>
 #include <nil/actor/spawner.hpp>
 #include <nil/actor/detail/overload.hpp>
+
 #include <nil/actor/network/endpoint_manager.hpp>
 
 namespace nil {
     namespace actor {
         namespace network {
-
             template<class Transport>
             class endpoint_manager_impl : public endpoint_manager {
             public:

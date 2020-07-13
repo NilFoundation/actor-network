@@ -13,22 +13,26 @@
 #include <nil/actor/network/network_socket.hpp>
 #include <nil/actor/variant.hpp>
 
-namespace nil::actor::network {
+namespace nil {
+    namespace actor {
+        namespace network {
 
-    /// A datagram-oriented network communication endpoint.
-    struct datagram_socket : network_socket {
-        using super = network_socket;
+            /// A datagram-oriented network communication endpoint.
+            struct datagram_socket : network_socket {
+                using super = network_socket;
 
-        using super::super;
-    };
+                using super::super;
+            };
 
-    /// Enables or disables `SIO_UDP_CONNRESET` error on `x`.
-    /// @relates datagram_socket
-    error allow_connreset(datagram_socket x, bool new_value);
+            /// Enables or disables `SIO_UDP_CONNRESET` error on `x`.
+            /// @relates datagram_socket
+            error allow_connreset(datagram_socket x, bool new_value);
 
-    /// Converts the result from I/O operation on a ::datagram_socket to either an
-    /// error code or a integer greater or equal to zero.
-    /// @relates datagram_socket
-    variant<size_t, sec> check_datagram_socket_io_res(std::make_signed<size_t>::type res);
+            /// Converts the result from I/O operation on a ::datagram_socket to either an
+            /// error code or a integer greater or equal to zero.
+            /// @relates datagram_socket
+            variant<size_t, sec> check_datagram_socket_io_res(std::make_signed<size_t>::type res);
 
-}    // namespace nil::actor::network
+        }    // namespace network
+    }        // namespace actor
+}    // namespace nil
