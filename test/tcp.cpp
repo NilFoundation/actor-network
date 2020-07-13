@@ -12,13 +12,13 @@
 
 #include <nil/actor/network/backend/tcp.hpp>
 
-#include <nil/actor/network/test/host_fixture.hpp>
+#include <nil/actor/test/host_fixture.hpp>
 #include <nil/actor/test/dsl.hpp>
 
 #include <string>
 #include <thread>
 
-#include <nil/actor/actor_system_config.hpp>
+#include <nil/actor/spawner_config.hpp>
 #include <nil/actor/ip_endpoint.hpp>
 #include <nil/actor/network/middleman.hpp>
 #include <nil/actor/network/socket_guard.hpp>
@@ -50,7 +50,7 @@ namespace {
     };
 
     template<class Node>
-    struct config : actor_system_config {
+    struct config : spawner_config {
         config() {
             Node this_node;
             put(content, "middleman.this-node", this_node());
@@ -80,7 +80,7 @@ namespace {
             return driver_.handle_io_event();
         }
 
-        net::middleman &mm;
+        network::middleman &mm;
         multiplexer_ptr mpx;
 
     private:
@@ -111,7 +111,7 @@ namespace {
 
 BOOST_FIXTURE_TEST_SUITE(tcp_backend_tests, fixture)
 
-BOOST_AUTO_TEST_SUITE(doorman accept) {
+BOOST_AUTO_TEST_SUITE(doorman_accept) {
     auto backend = earth.mm.backend("tcp");
     BOOST_CHECK(backend);
     uri::authority_type auth;
