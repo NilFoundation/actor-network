@@ -56,7 +56,7 @@ namespace nil {
 
                     using hub_type = detail::worker_hub<worker>;
 
-                    struct test_tag {};
+                    struct test_tag { };
 
                     // -- constructors, destructors, and assignment operators --------------------
 

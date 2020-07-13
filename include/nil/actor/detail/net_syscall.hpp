@@ -18,19 +18,17 @@
 #include <nil/actor/sec.hpp>
 
 /// Calls a C functions and returns an error if `var op rhs` returns `true`.
-#define ACTOR_NET_SYSCALL(funname, var, op, rhs, expr)                           \
-  auto var = expr;                                                             \
-  if (var op rhs)                                                              \
-  return make_error(sec::network_syscall_failed, funname,                      \
-                    last_socket_error_as_string())
+#define ACTOR_NET_SYSCALL(funname, var, op, rhs, expr) \
+    auto var = expr;                                   \
+    if (var op rhs)                                    \
+    return make_error(sec::network_syscall_failed, funname, last_socket_error_as_string())
 
 /// Calls a C functions and calls exit() if `var op rhs` returns `true`.
-#define ACTOR_NET_CRITICAL_SYSCALL(funname, var, op, rhs, expr)                  \
-  auto var = expr;                                                             \
-  if (var op rhs) {                                                            \
-    fprintf(stderr, "[FATAL] %s:%u: syscall failed: %s returned %s\n",         \
-            __FILE__, __LINE__, funname,                                       \
-            last_socket_error_as_string().c_str());                            \
-    abort();                                                                   \
-  }                                                                            \
-  static_cast<void>(0)
+#define ACTOR_NET_CRITICAL_SYSCALL(funname, var, op, rhs, expr)                                         \
+    auto var = expr;                                                                                    \
+    if (var op rhs) {                                                                                   \
+        fprintf(stderr, "[FATAL] %s:%u: syscall failed: %s returned %s\n", __FILE__, __LINE__, funname, \
+                last_socket_error_as_string().c_str());                                                 \
+        abort();                                                                                        \
+    }                                                                                                   \
+    static_cast<void>(0)

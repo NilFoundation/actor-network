@@ -24,8 +24,8 @@ namespace nil {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
                 DWORD bytes_returned = 0;
                 ACTOR_NET_SYSCALL("WSAIoctl", res, !=, 0,
-                                WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
-                                         &bytes_returned, NULL, NULL));
+                                  WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
+                                           &bytes_returned, NULL, NULL));
                 return none;
             }
 

@@ -14,7 +14,6 @@
 #include <system_error>
 #include <utility>
 
-
 #include <nil/actor/fwd.hpp>
 #include <nil/actor/network/socket.hpp>
 #include <nil/actor/network/socket_id.hpp>

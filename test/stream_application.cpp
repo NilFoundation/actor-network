@@ -160,7 +160,7 @@ namespace {
 
 #define MOCK(kind, op, ...)                                                                     \
     do {                                                                                        \
-        BOOST_TEST_MESSAGE("mock");                                                    \
+        BOOST_TEST_MESSAGE("mock");                                                             \
         if (!std::is_same<decltype(std::make_tuple(__VA_ARGS__)), std::tuple<unit_t>>::value) { \
             auto payload = to_buf(__VA_ARGS__);                                                 \
             mock(basp::header {kind, static_cast<uint32_t>(payload.size()), op});               \
@@ -173,7 +173,7 @@ namespace {
 
 #define RECEIVE(msg_type, op_data, ...)                                                         \
     do {                                                                                        \
-        BOOST_TEST_MESSAGE("receive");                                             \
+        BOOST_TEST_MESSAGE("receive");                                                          \
         buffer_type buf(basp::header_size);                                                     \
         if (fetch_size(read(sock, buf)) != basp::header_size)                                   \
             BOOST_FAIL("unable to read " << basp::header_size << " bytes");                     \

@@ -12,7 +12,6 @@
 
 #include <string>
 
-
 #include <nil/actor/fwd.hpp>
 #include <nil/actor/network/fwd.hpp>
 #include <nil/actor/proxy_registry.hpp>

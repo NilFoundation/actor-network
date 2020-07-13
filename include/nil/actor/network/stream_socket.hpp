@@ -10,7 +10,6 @@
 
 #pragma once
 
-
 #include <nil/actor/fwd.hpp>
 #include <nil/actor/network/network_socket.hpp>
 

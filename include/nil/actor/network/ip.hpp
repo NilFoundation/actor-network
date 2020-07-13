@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 
-
 #include <nil/actor/fwd.hpp>
 
 namespace nil {

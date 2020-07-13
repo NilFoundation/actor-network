@@ -30,7 +30,7 @@ namespace nil {
                 template<int Family>
                 bool ip_connect(stream_socket fd, std::string host, uint16_t port) {
                     ACTOR_LOG_TRACE("Family =" << (Family == AF_INET ? "AF_INET" : "AF_INET6") << ACTOR_ARG(fd.id)
-                                             << ACTOR_ARG(host) << ACTOR_ARG(port));
+                                               << ACTOR_ARG(host) << ACTOR_ARG(port));
                     static_assert(Family == AF_INET || Family == AF_INET6, "invalid family");
                     using sockaddr_type = typename std::conditional<Family == AF_INET, sockaddr_in, sockaddr_in6>::type;
                     sockaddr_type sa;

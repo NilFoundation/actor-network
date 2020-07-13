@@ -66,8 +66,8 @@ namespace nil {
             error allow_udp_connreset(network_socket x, bool new_value) {
                 DWORD bytes_returned = 0;
                 ACTOR_NET_SYSCALL("WSAIoctl", res, !=, 0,
-                                WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
-                                         &bytes_returned, NULL, NULL));
+                                  WSAIoctl(x.id, _WSAIOW(IOC_VENDOR, 12), &new_value, sizeof(new_value), NULL, 0,
+                                           &bytes_returned, NULL, NULL));
                 return none;
             }
 #else    // ACTOR_WINDOWS
@@ -106,8 +106,8 @@ namespace nil {
             error send_buffer_size(network_socket x, size_t capacity) {
                 auto new_value = static_cast<int>(capacity);
                 ACTOR_NET_SYSCALL("setsockopt", res, !=, 0,
-                                setsockopt(x.id, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<setsockopt_ptr>(&new_value),
-                                           static_cast<socket_size_type>(sizeof(int))));
+                                  setsockopt(x.id, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<setsockopt_ptr>(&new_value),
+                                             static_cast<socket_size_type>(sizeof(int))));
                 return none;
             }
 
@@ -133,7 +133,7 @@ namespace nil {
                 sockaddr_storage st;
                 auto st_len = static_cast<socket_size_type>(sizeof(st));
                 ACTOR_NET_SYSCALL("getsockname", tmp, !=, 0,
-                                getsockname(x.id, reinterpret_cast<sockaddr *>(&st), &st_len));
+                                  getsockname(x.id, reinterpret_cast<sockaddr *>(&st), &st_len));
                 return ntohs(port_of(reinterpret_cast<sockaddr &>(st)));
             }
 
@@ -159,7 +159,7 @@ namespace nil {
                 sockaddr_storage st;
                 socket_size_type st_len = sizeof(st);
                 ACTOR_NET_SYSCALL("getpeername", tmp, !=, 0,
-                                getpeername(x.id, reinterpret_cast<sockaddr *>(&st), &st_len));
+                                  getpeername(x.id, reinterpret_cast<sockaddr *>(&st), &st_len));
                 return ntohs(port_of(reinterpret_cast<sockaddr &>(st)));
             }
 
