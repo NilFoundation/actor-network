@@ -48,6 +48,12 @@ namespace nil {
                     return get_peer(id).second;
                 }
 
+                expected<endpoint_manager_ptr> test::get_or_connect(const uri &locator) {
+                    if (auto ptr = peer(make_node_id(*locator.authority_only())))
+                        return ptr;
+                    return make_error(sec::runtime_error, "connecting not implemented in test backend");
+                }
+
                 void test::resolve(const uri &locator, const actor &listener) {
                     auto id = locator.authority_only();
                     if (id)
@@ -65,6 +71,10 @@ namespace nil {
 
                 void test::set_last_hop(node_id *) {
                     // nop
+                }
+
+                std::uint16_t test::port() const noexcept {
+                    return 0;
                 }
 
                 test::peer_entry &test::emplace(const node_id &peer_id, stream_socket first, stream_socket second) {

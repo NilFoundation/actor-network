@@ -54,6 +54,7 @@ list(APPEND TESTS_NAMES
      stream_socket
      stream_transport
      string_application
+     tcp
      tcp_sockets
      transport_worker
      transport_worker_dispatcher

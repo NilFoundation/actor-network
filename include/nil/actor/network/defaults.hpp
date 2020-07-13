@@ -41,6 +41,9 @@ namespace nil {
                 /// Maximum number of cached buffers for sending headers.
                 BOOST_SYMBOL_VISIBLE static const std::size_t max_header_buffers = 10;
 
+                /// Port to listen on for tcp.
+                BOOST_SYMBOL_VISIBLE static const std::uint16_t tcp_port = 0;
+
             }    // namespace middleman
         }        // namespace defaults
     }            // namespace actor
