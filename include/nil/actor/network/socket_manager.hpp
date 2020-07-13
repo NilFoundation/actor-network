@@ -22,7 +22,8 @@ namespace nil {
         namespace network {
 
             /// Manages the lifetime of a single socket and handles any I/O events on it.
-            class socket_manager : public ref_counted {
+            class BOOST_SYMBOL_VISIBLE
+                socket_manager : public ref_counted {
             public:
                 // -- constructors, destructors, and assignment operators --------------------
 

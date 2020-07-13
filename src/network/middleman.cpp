@@ -78,6 +78,13 @@ namespace nil {
                 return this;
             }
 
+            expected<endpoint_manager_ptr> middleman::connect(const uri &locator) {
+                if (auto *ptr = backend(locator.scheme()))
+                    return ptr->get_or_connect(locator);
+                else
+                    return basp::ec::invalid_scheme;
+            }
+
             void middleman::resolve(const uri &locator, const actor &listener) {
                 auto *ptr = backend(locator.scheme());
                 if (ptr != nullptr)
@@ -94,6 +101,12 @@ namespace nil {
                 return nullptr;
             }
 
+            expected<uint16_t> middleman::port(string_view scheme) const {
+                if (auto *ptr = backend(scheme))
+                    return ptr->port();
+                else
+                    return basp::ec::invalid_scheme;
+            }
         }    // namespace network
     }        // namespace actor
 }    // namespace nil

@@ -29,7 +29,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-            class endpoint_manager_queue {
+            class BOOST_SYMBOL_VISIBLE endpoint_manager_queue {
             public:
                 enum class element_type { event, message };
 

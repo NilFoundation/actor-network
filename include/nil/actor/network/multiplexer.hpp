@@ -31,7 +31,7 @@ namespace nil {
         namespace network {
 
             /// Multiplexes any number of ::socket_manager objects with a ::socket.
-            class multiplexer : public std::enable_shared_from_this<multiplexer> {
+            class BOOST_SYMBOL_VISIBLE multiplexer : public std::enable_shared_from_this<multiplexer> {
             public:
                 // -- member types -----------------------------------------------------------
 

@@ -14,9 +14,12 @@
 #include <cstdint>
 
 #include <nil/actor/detail/comparable.hpp>
+
 #include <nil/actor/fwd.hpp>
+
 #include <nil/actor/meta/hex_formatted.hpp>
 #include <nil/actor/meta/type_name.hpp>
+
 #include <nil/actor/network/basp/constants.hpp>
 #include <nil/actor/network/basp/message_type.hpp>
 
@@ -28,7 +31,7 @@ namespace nil {
                 /// @addtogroup BASP
 
                 /// The header of a Binary Actor System Protocol (BASP) message.
-                struct header : detail::comparable<header> {
+                struct BOOST_SYMBOL_VISIBLE header : detail::comparable<header> {
                     // -- constructors, destructors, and assignment operators --------------------
 
                     constexpr header() noexcept : type(message_type::handshake), payload_len(0), operation_data(0) {
@@ -67,11 +70,11 @@ namespace nil {
 
                 /// Serializes a header to a byte representation.
                 /// @relates header
-                std::array<byte, header_size> to_bytes(header x);
+                BOOST_SYMBOL_VISIBLE std::array<byte, header_size> to_bytes(header x);
 
                 /// Serializes a header to a byte representation.
                 /// @relates header
-                void to_bytes(header x, std::vector<byte> &buf);
+                BOOST_SYMBOL_VISIBLE void to_bytes(header x, std::vector<byte> &buf);
 
                 /// @relates header
                 template<class Inspector>

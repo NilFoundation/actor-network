@@ -72,6 +72,37 @@ namespace nil {
 
                 // -- remoting ---------------------------------------------------------------
 
+                expected<endpoint_manager_ptr> connect(const uri &locator);
+
+                // Publishes an actor.
+                template<class Handle>
+                void publish(Handle whom, const std::string &path) {
+                    // TODO: Currently, we can't get the interface from the registry. Either we
+                    // change that, or we need to associate the handle with the interface.
+                    system().registry().put(path, whom);
+                }
+
+                template<class Handle = actor, class Duration = std::chrono::seconds>
+                expected<Handle> remote_actor(const uri &locator, Duration timeout = std::chrono::seconds(5)) {
+                    scoped_actor self {sys_};
+                    resolve(locator, self);
+                    Handle handle;
+                    error err;
+                    self->receive(
+                        [&handle](strong_actor_ptr &ptr, const std::set<std::string> &) {
+                            // TODO: This cast is not type-safe.
+                            handle = actor_cast<Handle>(std::move(ptr));
+                        },
+                        [&err](const error &e) { err = e; },
+                        after(timeout) >>
+                            [&err] { err = make_error(sec::runtime_error, "manager did not respond with a proxy."); });
+                    if (err)
+                        return err;
+                    if (handle)
+                        return handle;
+                    return make_error(sec::runtime_error, "cast to handle-type failed");
+                }
+
                 /// Resolves a path to a remote actor.
                 void resolve(const uri &locator, const actor &listener);
 
@@ -90,6 +121,8 @@ namespace nil {
                 }
 
                 middleman_backend *backend(string_view scheme) const noexcept;
+
+                expected<uint16_t> port(string_view scheme) const;
 
             private:
                 // -- constructors, destructors, and assignment operators --------------------
