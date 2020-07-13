@@ -109,8 +109,12 @@ namespace {
         }
 
         template<class Parent>
-        void write_message(Parent &parent, std::unique_ptr<endpoint_manager_queue::message> ptr) {
-            parent.write_packet(ptr->payload);
+        void write_message(Parent &parent, std::unique_ptr<endpoint_manager_queue::message> msg) {
+            auto payload_buf = parent.next_payload_buffer();
+            binary_serializer sink {parent.system(), payload_buf};
+            if (auto err = sink(msg->msg->payload))
+                BOOST_FAIL("serializing failed: " << err);
+            parent.write_packet(payload_buf);
         }
 
         template<class Parent>
@@ -148,14 +152,6 @@ namespace {
 
         void handle_error(sec) {
             // nop
-        }
-
-        static expected<buffer_type> serialize(spawner &sys, const message &x) {
-            buffer_type result;
-            binary_serializer sink {sys, result};
-            if (auto err = x.save(sink))
-                return err.value();
-            return result;
         }
 
     private:

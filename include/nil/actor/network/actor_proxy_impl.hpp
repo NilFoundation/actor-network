@@ -29,7 +29,8 @@ namespace nil::actor::network {
         void kill_proxy(execution_unit *ctx, error rsn) override;
 
     private:
-        endpoint_manager::serialize_fun_type sf_;
         endpoint_manager_ptr dst_;
     };
 }    // namespace nil::actor::network
+}    // namespace actor
+}    // namespace nil

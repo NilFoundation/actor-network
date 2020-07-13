@@ -110,10 +110,6 @@ namespace nil {
                     transport_.handle_error(code);
                 }
 
-                serialize_fun_type serialize_fun() const noexcept override {
-                    return application_type::serialize;
-                }
-
             private:
                 transport_type transport_;
 

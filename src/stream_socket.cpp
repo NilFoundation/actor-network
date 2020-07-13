@@ -67,7 +67,8 @@ namespace nil {
             expected<std::pair<stream_socket, stream_socket>> make_stream_socket_pair() {
                 auto addrlen = static_cast<int>(sizeof(sockaddr_in));
                 socket_id socks[2] = {invalid_socket_id, invalid_socket_id};
-                ACTOR_NET_SYSCALL("socket", listener, ==, invalid_socket_id, ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+                ACTOR_NET_SYSCALL("socket", listener, ==, invalid_socket_id,
+                                  ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
                 union {
                     sockaddr_in inaddr;
                     sockaddr addr;
@@ -87,8 +88,8 @@ namespace nil {
                 // bind listener to a local port
                 int reuse = 1;
                 ACTOR_NET_SYSCALL("setsockopt", tmp1, !=, 0,
-                                setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char *>(&reuse),
-                                           static_cast<int>(sizeof(reuse))));
+                                  setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char *>(&reuse),
+                                             static_cast<int>(sizeof(reuse))));
                 ACTOR_NET_SYSCALL("bind", tmp2, !=, 0, bind(listener, &a.addr, static_cast<int>(sizeof(a.inaddr))));
                 // Read the port in use: win32 getsockname may only set the port number
                 // (http://msdn.microsoft.com/library/ms738543.aspx).
@@ -101,8 +102,9 @@ namespace nil {
                 // create read-only end of the pipe
                 DWORD flags = 0;
                 ACTOR_NET_SYSCALL("WSASocketW", read_fd, ==, invalid_socket_id,
-                                WSASocketW(AF_INET, SOCK_STREAM, 0, nullptr, 0, flags));
-                ACTOR_NET_SYSCALL("connect", tmp6, !=, 0, connect(read_fd, &a.addr, static_cast<int>(sizeof(a.inaddr))));
+                                  WSASocketW(AF_INET, SOCK_STREAM, 0, nullptr, 0, flags));
+                ACTOR_NET_SYSCALL("connect", tmp6, !=, 0,
+                                  connect(read_fd, &a.addr, static_cast<int>(sizeof(a.inaddr))));
                 // get write-only end of the pipe
                 ACTOR_NET_SYSCALL("accept", write_fd, ==, invalid_socket_id, accept(listener, nullptr, nullptr));
                 close(socket {listener});
@@ -114,7 +116,7 @@ namespace nil {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
                 char value = new_value ? 1 : 0;
                 ACTOR_NET_SYSCALL("setsockopt", res, !=, 0,
-                                setsockopt(x.id, SOL_SOCKET, SO_KEEPALIVE, &value, static_cast<int>(sizeof(value))));
+                                  setsockopt(x.id, SOL_SOCKET, SO_KEEPALIVE, &value, static_cast<int>(sizeof(value))));
                 return none;
             }
 
@@ -147,8 +149,8 @@ namespace nil {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
                 int flag = new_value ? 1 : 0;
                 ACTOR_NET_SYSCALL("setsockopt", res, !=, 0,
-                                setsockopt(x.id, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<setsockopt_ptr>(&flag),
-                                           static_cast<socket_size_type>(sizeof(flag))));
+                                  setsockopt(x.id, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<setsockopt_ptr>(&flag),
+                                             static_cast<socket_size_type>(sizeof(flag))));
                 return none;
             }
 

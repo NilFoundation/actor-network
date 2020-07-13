@@ -36,12 +36,6 @@ namespace nil::actor::network {
 
         using super = socket_manager;
 
-        /// Represents either an error or a serialized payload.
-        using maybe_buffer = expected<std::vector<byte>>;
-
-        /// A function type for serializing message payloads.
-        using serialize_fun_type = maybe_buffer (*)(spawner &, const message &);
-
         // -- constructors, destructors, and assignment operators --------------------
 
         endpoint_manager(socket handle, const multiplexer_ptr &parent, spawner &sys);
@@ -61,8 +55,7 @@ namespace nil::actor::network {
         /// Resolves a path to a remote actor.
         void resolve(uri locator, actor listener);
 
-        /// Enqueues a message to the endpoint.
-        void enqueue(mailbox_element_ptr msg, strong_actor_ptr receiver, std::vector<byte> payload);
+        void enqueue(mailbox_element_ptr msg, strong_actor_ptr receiver);
 
         /// Enqueues an event to the endpoint.
         template<class... Ts>
@@ -74,9 +67,6 @@ namespace nil::actor::network {
 
         /// Initializes the manager before adding it to the multiplexer's event loop.
         virtual error init() = 0;
-
-        /// @returns the protocol-specific function for serializing payloads.
-        virtual serialize_fun_type serialize_fun() const noexcept = 0;
 
     protected:
         bool enqueue(endpoint_manager_queue::element *ptr);

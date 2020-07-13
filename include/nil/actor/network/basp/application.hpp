@@ -120,8 +120,6 @@ namespace nil {
                         // nop
                     }
 
-                    static expected<buffer_type> serialize(spawner &sys, const message &x);
-
                     // -- utility functions ------------------------------------------------------
 
                     strong_actor_ptr resolve_local_path(string_view path);
