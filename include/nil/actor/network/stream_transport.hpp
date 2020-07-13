@@ -29,8 +29,11 @@ namespace nil {
         namespace network {
 
             template<class Application>
-            using stream_transport_base = transport_base<stream_transport<Application>, transport_worker<Application>,
-                                                         stream_socket, Application, unit_t>;
+            using stream_transport_base = transport_base<stream_transport<Application>,
+                                                         transport_worker<Application>,
+                                                         stream_socket,
+                                                         Application,
+                                                         unit_t>;
 
             /// Implements a stream_transport that manages a stream socket.
             template<class Application>

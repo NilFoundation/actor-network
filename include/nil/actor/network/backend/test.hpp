@@ -12,7 +12,6 @@
 
 #include <map>
 
-
 #include <nil/actor/network/endpoint_manager.hpp>
 #include <nil/actor/network/fwd.hpp>
 #include <nil/actor/network/middleman_backend.hpp>

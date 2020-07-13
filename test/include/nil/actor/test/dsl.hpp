@@ -12,7 +12,7 @@
 ACTOR_PUSH_WARNINGS
 
 /// The type of `_`.
-struct wildcard {};
+struct wildcard { };
 
 /// Allows ignoring individual messages elements in `expect` clauses, e.g.
 /// `expect((int, int), from(foo).to(bar).with(1, _))`.
@@ -944,7 +944,7 @@ T unbox(nil::actor::optional<T> x) {
 /// Defines the required base type for testee states in the current namespace.
 #define TESTEE_SETUP() \
     template<class T>  \
-    struct testee_state_base {}
+    struct testee_state_base { }
 
 /// Convenience macro for adding additional state to a testee.
 #define TESTEE_STATE(tname) \

@@ -98,7 +98,7 @@ namespace nil {
 
                 void local_actor_down(endpoint_manager &, const node_id &peer, actor_id id, error reason) {
                     ACTOR_LOG_ERROR("doorman received local_actor_down" << ACTOR_ARG(peer) << ACTOR_ARG(id)
-                                                                      << ACTOR_ARG(reason));
+                                                                        << ACTOR_ARG(reason));
                     ACTOR_IGNORE_UNUSED(peer);
                     ACTOR_IGNORE_UNUSED(id);
                     ACTOR_IGNORE_UNUSED(reason);

@@ -39,8 +39,9 @@ namespace nil {
                     // Also accept ipv4 connections on this socket.
                     int off = 0;
                     ACTOR_NET_SYSCALL("setsockopt", res, !=, 0,
-                                    setsockopt(x.id, IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<setsockopt_ptr>(&off),
-                                               static_cast<socket_size_type>(sizeof(off))));
+                                      setsockopt(x.id, IPPROTO_IPV6, IPV6_V6ONLY,
+                                                 reinterpret_cast<setsockopt_ptr>(&off),
+                                                 static_cast<socket_size_type>(sizeof(off))));
                     return none;
                 }
 
@@ -61,8 +62,9 @@ namespace nil {
                     if (reuse_addr) {
                         int on = 1;
                         ACTOR_NET_SYSCALL("setsockopt", tmp1, !=, 0,
-                                        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<setsockopt_ptr>(&on),
-                                                   static_cast<socket_size_type>(sizeof(on))));
+                                          setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
+                                                     reinterpret_cast<setsockopt_ptr>(&on),
+                                                     static_cast<socket_size_type>(sizeof(on))));
                     }
                     using sockaddr_type = typename std::conditional<Family == AF_INET, sockaddr_in, sockaddr_in6>::type;
                     sockaddr_type sa;

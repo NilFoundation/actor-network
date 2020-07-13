@@ -10,7 +10,6 @@
 
 #pragma once
 
-
 #include <nil/actor/ip_endpoint.hpp>
 #include <nil/actor/network/socket.hpp>
 #include <nil/actor/network/stream_socket.hpp>
@@ -37,8 +36,7 @@ namespace nil {
             /// @param node Host and port of the remote node.
             /// @returns The connected socket or an error.
             /// @relates tcp_stream_socket
-            expected<tcp_stream_socket>
-                make_connected_tcp_stream_socket(const uri::authority_type &node);
+            expected<tcp_stream_socket> make_connected_tcp_stream_socket(const uri::authority_type &node);
 
         }    // namespace network
     }        // namespace actor

@@ -84,5 +84,5 @@ namespace nil {
             }
 
         }    // namespace network
-    }    // namespace actor
+    }        // namespace actor
 }    // namespace nil
