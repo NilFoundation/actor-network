@@ -201,7 +201,7 @@ namespace nil {
             private:
                 // -- utility functions ------------------------------------------------------
 
-                static buffer_type next_buffer_impl(buffer_cache_type cache) {
+                static buffer_type next_buffer_impl(buffer_cache_type &cache) {
                     if (cache.empty())
                         return {};
                     auto buf = std::move(cache.back());
