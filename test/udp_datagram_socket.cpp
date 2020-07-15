@@ -61,7 +61,7 @@ namespace {
             send_socket = send_pair.first;
             auto receive_pair = unbox(make_udp_datagram_socket(ep));
             receive_socket = receive_pair.first;
-            ep.port(ntohs(receive_pair.second));
+            ep.port(receive_pair.second);
         }
 
         ~fixture() {
@@ -114,6 +114,15 @@ namespace {
 }    // namespace
 
 BOOST_FIXTURE_TEST_SUITE(udp_datagram_socket_test, fixture)
+
+BOOST_AUTO_TEST_CASE(socket_creation) {
+    ip_endpoint ep;
+    BOOST_CHECK_EQUAL(parse("0.0.0.0:0", ep), none);
+    auto ret = make_udp_datagram_socket(ep);
+    if (!ret)
+        BOOST_FAIL("socket creation failed: " << ret.error());
+    BOOST_CHECK_EQUAL(local_port(ret->first), ret->second);
+}
 
 BOOST_AUTO_TEST_CASE(read_write_using_span_byte) {
     if (auto err = nonblocking(socket_cast<network::socket>(receive_socket), true))

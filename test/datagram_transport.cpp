@@ -84,7 +84,7 @@ namespace {
             send_socket = send_pair.first;
             auto receive_pair = unbox(make_udp_datagram_socket(ep));
             recv_socket = receive_pair.first;
-            ep.port(htons(receive_pair.second));
+            ep.port(receive_pair.second);
             BOOST_TEST_MESSAGE("sending message");
             if (auto err = nonblocking(recv_socket, true))
                 BOOST_FAIL("nonblocking() returned an error");
