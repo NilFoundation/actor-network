@@ -23,7 +23,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             error this_host::startup() {
                 WSADATA WinsockData;
@@ -35,7 +35,7 @@ namespace nil {
                 WSACleanup();
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             error this_host::startup() {
                 return none;
@@ -45,7 +45,7 @@ namespace nil {
                 // nop
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
         }    // namespace network
     }        // namespace actor

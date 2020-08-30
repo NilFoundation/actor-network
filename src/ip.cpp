@@ -25,7 +25,7 @@
 #include <nil/actor/string_algorithms.hpp>
 #include <nil/actor/string_view.hpp>
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0600
 #endif
@@ -74,7 +74,7 @@ namespace nil {
                                    AF_UNSPEC;
                     }
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
                     template<class F>
                     void for_each_adapter(F f, bool is_link_local = false) {
@@ -121,7 +121,7 @@ namespace nil {
                         }
                     }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
                     template<class F>
                     void for_each_adapter(F f, bool is_link_local = false) {
@@ -147,7 +147,7 @@ namespace nil {
                         }
                     }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
                 }    // namespace
 

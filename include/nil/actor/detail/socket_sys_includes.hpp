@@ -16,10 +16,10 @@
 #include <nil/actor/config.hpp>
 
 // clang-format off
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 #  ifndef WIN32_LEAN_AND_MEAN
 #    define WIN32_LEAN_AND_MEAN
-#  endif // ACTOR_WINDOWS
+#  endif // BOOST_OS_WINDOWS_AVAILABLE
 #  ifndef NOMINMAX
 #    define NOMINMAX
 #  endif // NOMINMAX
@@ -34,7 +34,7 @@
 #  include <winsock2.h>
 #  include <ws2ipdef.h>
 #  include <ws2tcpip.h>
-#else // ACTOR_WINDOWS
+#else // BOOST_OS_WINDOWS_AVAILABLE
 #  include <sys/types.h>
 #  include <arpa/inet.h>
 #  include <cerrno>

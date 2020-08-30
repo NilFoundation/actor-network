@@ -18,7 +18,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_connreset(datagram_socket x, bool new_value) {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
@@ -29,7 +29,7 @@ namespace nil {
                 return none;
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_connreset(datagram_socket x, bool) {
                 if (x == invalid_socket)
@@ -38,7 +38,7 @@ namespace nil {
                 return none;
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> check_datagram_socket_io_res(std::make_signed<size_t>::type res) {
                 if (res < 0) {

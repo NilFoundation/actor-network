@@ -26,7 +26,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_connreset(udp_datagram_socket x, bool new_value) {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
@@ -37,7 +37,7 @@ namespace nil {
                 return none;
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_connreset(udp_datagram_socket x, bool) {
                 if (socket_cast<network::socket>(x) == invalid_socket)
@@ -46,7 +46,7 @@ namespace nil {
                 return none;
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             expected<std::pair<udp_datagram_socket, uint16_t>> make_udp_datagram_socket(ip_endpoint ep,
                                                                                         bool reuse_addr) {
@@ -107,7 +107,7 @@ namespace nil {
                     return get<sec>(ret);
             }
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> write(udp_datagram_socket x, span<std::vector<byte> *> bufs, ip_endpoint ep) {
                 ACTOR_ASSERT(bufs.size() < 10);
@@ -131,7 +131,7 @@ namespace nil {
                 return static_cast<size_t>(bytes_sent);
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> write(udp_datagram_socket x, span<std::vector<byte> *> bufs, ip_endpoint ep) {
                 ACTOR_ASSERT(bufs.size() < 10);
@@ -150,7 +150,7 @@ namespace nil {
                 return check_udp_datagram_socket_io_res(res);
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> check_udp_datagram_socket_io_res(std::make_signed<size_t>::type res) {
                 if (res < 0) {

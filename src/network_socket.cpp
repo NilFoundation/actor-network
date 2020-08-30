@@ -50,11 +50,11 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#if defined(ACTOR_MACOS) || defined(ACTOR_IOS) || defined(ACTOR_BSD)
+#if defined(BOOST_OS_MACOS_AVAILABLE) || defined(BOOST_OS_IOS_AVAILABLE) || defined(BOOST_OS_BSD_AVAILABLE)
 #define ACTOR_HAS_NOSIGPIPE_SOCKET_FLAG
 #endif
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_sigpipe(network_socket x, bool) {
                 if (x == invalid_socket)
@@ -69,7 +69,7 @@ namespace nil {
                                            &bytes_returned, NULL, NULL));
                 return none;
             }
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             error allow_sigpipe(network_socket x, [[maybe_unused]] bool new_value) {
 #ifdef ACTOR_HAS_NOSIGPIPE_SOCKET_FLAG
@@ -91,7 +91,7 @@ namespace nil {
                 return none;
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             expected<size_t> send_buffer_size(network_socket x) {
                 int size = 0;

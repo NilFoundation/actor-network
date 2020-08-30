@@ -25,11 +25,11 @@
 #include <nil/actor/span.hpp>
 #include <nil/actor/variant.hpp>
 
-#ifndef ACTOR_WINDOWS
+#ifndef BOOST_OS_WINDOWS_AVAILABLE
 #include <poll.h>
 #else
 #include <nil/actor/detail/socket_sys_includes.hpp>
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
 namespace nil {
     namespace actor {
@@ -45,7 +45,7 @@ namespace nil {
 
             namespace {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
                 // From the MSDN: If the POLLPRI flag is set on a socket for the Microsoft
                 //                Winsock provider, the WSAPoll function will fail.
                 const short input_mask = POLLIN;
@@ -150,7 +150,7 @@ namespace nil {
                 // We'll call poll() until poll() succeeds or fails.
                 for (;;) {
                     int presult;
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
                     presult = ::WSAPoll(pollset_.data(), static_cast<ULONG>(pollset_.size()), blocking ? -1 : 0);
 #else
                     presult = ::poll(pollset_.data(), static_cast<nfds_t>(pollset_.size()), blocking ? -1 : 0);

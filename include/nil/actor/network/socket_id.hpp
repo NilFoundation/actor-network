@@ -20,7 +20,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             /// Platform-specific representation of a socket.
             /// @relates socket
@@ -29,7 +29,7 @@ namespace nil {
             /// Identifies the invalid socket.
             constexpr socket_id invalid_socket_id = std::numeric_limits<socket_id>::max();
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             /// Platform-specific representation of a socket.
             /// @relates socket
@@ -38,7 +38,7 @@ namespace nil {
             /// Identifies the invalid socket.
             constexpr socket_id invalid_socket_id = -1;
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             /// Signed counterpart of `socket_id`.
             /// @relates socket

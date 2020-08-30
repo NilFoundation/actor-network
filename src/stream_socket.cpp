@@ -21,7 +21,7 @@
 #include <nil/actor/span.hpp>
 #include <nil/actor/variant.hpp>
 
-#ifdef ACTOR_POSIX
+#ifdef BOOST_OS_UNIX_AVAILABLE
 #include <sys/uio.h>
 #endif
 
@@ -29,7 +29,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             constexpr int no_sigpipe_io_flag = 0;
 
@@ -120,9 +120,9 @@ namespace nil {
                 return none;
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
-#if defined(ACTOR_MACOS) || defined(ACTOR_IOS) || defined(ACTOR_BSD)
+#if defined(BOOST_OS_MACOS_AVAILABLE) || defined(BOOST_OS_IOS_AVAILABLE) || defined(BOOST_OS_BSD_AVAILABLE)
             constexpr int no_sigpipe_io_flag = 0;
 #else
             constexpr int no_sigpipe_io_flag = MSG_NOSIGNAL;
@@ -143,7 +143,7 @@ namespace nil {
                 return none;
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             error nodelay(stream_socket x, bool new_value) {
                 ACTOR_LOG_TRACE(ACTOR_ARG(x) << ACTOR_ARG(new_value));
@@ -164,7 +164,7 @@ namespace nil {
                 return check_stream_socket_io_res(res);
             }
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> write(stream_socket x, std::initializer_list<span<const byte>> bufs) {
                 ACTOR_ASSERT(bufs.size() < 10);
@@ -185,7 +185,7 @@ namespace nil {
                 return static_cast<size_t>(bytes_sent);
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> write(stream_socket x, std::initializer_list<span<const byte>> bufs) {
                 ACTOR_ASSERT(bufs.size() < 10);
@@ -196,7 +196,7 @@ namespace nil {
                 return check_stream_socket_io_res(res);
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> check_stream_socket_io_res(std::make_signed<size_t>::type res) {
                 if (res == 0)

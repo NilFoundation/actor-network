@@ -16,7 +16,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             using setsockopt_ptr = const char *;
             using getsockopt_ptr = char *;
@@ -24,7 +24,7 @@ namespace nil {
             using socket_recv_ptr = char *;
             using socket_size_type = int;
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             using setsockopt_ptr = const void *;
             using getsockopt_ptr = void *;
@@ -32,7 +32,7 @@ namespace nil {
             using socket_recv_ptr = void *;
             using socket_size_type = unsigned;
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
         }    // namespace network
     }        // namespace actor

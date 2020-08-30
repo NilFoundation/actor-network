@@ -29,7 +29,7 @@ namespace nil {
     namespace actor {
         namespace network {
 
-#ifdef ACTOR_WINDOWS
+#ifdef BOOST_OS_WINDOWS_AVAILABLE
 
             expected<std::pair<pipe_socket, pipe_socket>> make_pipe() {
                 // Windows has no support for unidirectional pipes. Emulate pipes by using a
@@ -54,7 +54,7 @@ namespace nil {
                 return read(socket_cast<stream_socket>(x), buf);
             }
 
-#else    // ACTOR_WINDOWS
+#else    // BOOST_OS_WINDOWS_AVAILABLE
 
             expected<std::pair<pipe_socket, pipe_socket>> make_pipe() {
                 socket_id pipefds[2];
@@ -84,7 +84,7 @@ namespace nil {
                 return check_pipe_socket_io_res(res);
             }
 
-#endif    // ACTOR_WINDOWS
+#endif    // BOOST_OS_WINDOWS_AVAILABLE
 
             variant<size_t, sec> check_pipe_socket_io_res(std::make_signed<size_t>::type res) {
                 return check_stream_socket_io_res(res);
