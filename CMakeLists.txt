@@ -6,8 +6,10 @@ cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0057 NEW)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake"
-     "${CMAKE_CURRENT_LIST_DIR}/cmake/packages"
-     "${CMAKE_CURRENT_LIST_DIR}/cmake/modules/share/modules/cmake")
+    "${CMAKE_CURRENT_LIST_DIR}/cmake/packages"
+    "${CMAKE_CURRENT_LIST_DIR}/cmake/modules/share/modules/cmake")
+
+cm_find_package(CM)
 
 include(CMConfig)
 include(CMDeploy)
@@ -25,89 +27,682 @@ macro(cm_find_package NAME)
     endif()
 endmacro()
 
-if(NOT Boost_THREAD_FOUND)
-    cm_find_package(Boost COMPONENTS thread)
+cm_project(network WORKSPACE_NAME ${CMAKE_WORKSPACE_NAME} LANGUAGES CXX)
+
+cm_setup_version(VERSION 0.1.0 PREFIX ${CMAKE_WORKSPACE_NAME})
+
+include(Cooking OPTIONAL)
+
+# This variable impacts the way DPDK is configured by cmake-cooking (if DPDK is enabled), so its definition needs to
+# come before PROJECT.
+set(BUILD_WITH_DPDK_MACHINE
+    "native"
+    CACHE
+    STRING
+    "Configure DPDK for this processor architecture (if `BUILD_WITH_DPDK` is enabled). A DPDK code name abbreviation (e.g., ivb)")
+
+set(BUILD_WITH_ALLOC_FAILURE_INJECTION
+    "DEFAULT"
+    CACHE
+    STRING
+    "Enable failure injection into the Seastar allocator. Can be ON, OFF or DEFAULT (which enables it for Dev mode)")
+
+option(BUILD_WITH_TASK_BACKTRACE
+    "Collect backtrace at deferring points."
+    OFF)
+
+option(BUILD_WITH_DEBUG_ALLOCATIONS
+    "For now just writes 0xab to newly allocated memory"
+    OFF)
+
+option(BUILD_WITH_SSTRING
+    "Use seastar's own string implementation"
+    ON)
+
+set(BUILD_WITH_API_LEVEL
+    "6"
+    CACHE
+    STRING
+    "Seastar compatibility API level (2=server_socket::accept() returns accept_result, 3=make_file_output_stream(), make_file_data_sink() returns future<...>, 4=when_all_succeed returns future<std::tuple<>>, 5=future<T>::get() returns T&&), 6=future is not variadic")
+
+set_property(CACHE BUILD_WITH_API_LEVEL
+    PROPERTY
+    STRINGS 2 3 4 5 6)
+
+#
+# Add a dev build type.
+#
+# All pre-defined build modes include optimizations or debug info,
+# which make them slow to build. The dev build mode is intended for
+# fast build/test iteration.
+#
+
+set(CMAKE_CXX_FLAGS_DEV
+    "-O1"
+    CACHE
+    STRING
+    "Flags used by the C++ compiler during dev builds."
+    FORCE)
+
+set(CMAKE_C_FLAGS_DEV
+    "-O1"
+    CACHE
+    STRING
+    "Flags used by the C compiler during dev builds."
+    FORCE)
+
+set(CMAKE_EXE_LINKER_FLAGS_DEV
+    ""
+    CACHE
+    STRING
+    "Flags used for linking binaries during dev builds."
+    FORCE)
+
+set(CMAKE_SHARED_LINKER_FLAGS_DEV
+    ""
+    CACHE
+    STRING
+    "Flags used by the shared libraries linker during builds."
+    FORCE)
+
+mark_as_advanced(
+    CMAKE_CXX_FLAGS_DEV
+    CMAKE_C_FLAGS_DEV
+    CMAKE_EXE_LINKER_FLAGS_DEV
+    CMAKE_SHARED_LINKER_FLAGS_DEV)
+
+set(CMAKE_CXX_FLAGS_SANITIZE
+    "-Os -g"
+    CACHE
+    STRING
+    "Flags used by the C++ compiler during sanitize builds."
+    FORCE)
+
+set(CMAKE_C_FLAGS_SANITIZE
+    "-Os -g"
+    CACHE
+    STRING
+    "Flags used by the C compiler during sanitize builds."
+    FORCE)
+
+set(CMAKE_EXE_LINKER_FLAGS_SANITIZE
+    ""
+    CACHE
+    STRING
+    "Flags used for linking binaries during sanitize builds."
+    FORCE)
+
+set(CMAKE_SHARED_LINKER_FLAGS_SANITIZE
+    ""
+    CACHE
+    STRING
+    "Flags used by the shared libraries linker during sanitize builds."
+    FORCE)
+
+mark_as_advanced(
+    CMAKE_CXX_FLAGS_SANITIZE
+    CMAKE_C_FLAGS_SANITIZE
+    CMAKE_EXE_LINKER_FLAGS_SANITIZE
+    CMAKE_SHARED_LINKER_FLAGS_SANITIZE)
+
+set(CMAKE_BUILD_TYPE
+    "${CMAKE_BUILD_TYPE}"
+    CACHE
+    STRING
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel Dev Sanitize."
+    FORCE)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-cm_project(network WORKSPACE_NAME ${CMAKE_WORKSPACE_NAME})
+set(BUILD_WITH_ALLOC_PAGE_SIZE
+    ""
+    CACHE
+    STRING
+    "Override the Seastar allocator page size, in bytes.")
 
-cm_setup_version(VERSION 0.1.0)
+set(BUILD_WITH_CXX_DIALECT
+    "gnu++17"
+    CACHE
+    STRING
+    "Compile Seastar according to the named C++ standard.")
+if(BUILD_WITH_CXX_DIALECT)
+    # extract CXX standard (14/17/...) from BUILD_WITH_CXX_DIALECT
+    string(SUBSTRING ${BUILD_WITH_CXX_DIALECT} 5 2 STANDARD)
+    set(CMAKE_CXX_STANDARD ${STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+set(BUILD_WITH_CXX_FLAGS
+    ""
+    CACHE
+    STRING
+    "Semicolon-separated list of extra compilation flags for Seastar itself.")
+
+option(BUILD_WITH_DPDK
+    "Enable DPDK support."
+    OFF)
+
+option(BUILD_WITH_EXCLUDE_APPS_FROM_ALL
+    "When enabled alongside BUILD_WITH_APPS, do not build applications by default."
+    OFF)
+
+option(BUILD_WITH_EXCLUDE_DEMOS_FROM_ALL
+    "When enabled alongside BUILD_WITH_DEMOS, do not build demonstrations by default."
+    OFF)
+
+option(BUILD_WITH_EXCLUDE_TESTS_FROM_ALL
+    "When enabled alongside BUILD_WITH_TESTING, do not build tests by default."
+    OFF)
+
+option(BUILD_WITH_EXECUTE_ONLY_FAST_TESTS
+    "Only execute tests which run quickly."
+    OFF)
+
+option(BUILD_WITH_HWLOC
+    "Enable hwloc support."
+    ON)
+
+set(BUILD_WITH_LD_FLAGS
+    ""
+    CACHE
+    STRING
+    "Semicolon-separated list of extra linking flags for Seastar itself.")
+
+option(BUILD_WITH_NUMA
+    "Enable NUMA support."
+    ON)
+
+option(BUILD_WITH_COMPRESS_DEBUG
+    "Compress debug info."
+    ON)
+
+option(BUILD_WITH_SPLIT_DWARF
+    "Use split dwarf."
+    OFF)
+
+option(BUILD_WITH_HEAP_PROFILING
+    "Enable heap profiling. No effect when Seastar is compiled with the default allocator."
+    OFF)
+
+set(BUILD_WITH_TEST_TIMEOUT
+    "300"
+    CACHE
+    STRING
+    "Maximum allowed time for a test to run, in seconds.")
+
+# We set the following environment variables
+# * ASAN_OPTIONS=disable_coredump=0:abort_on_error=1:detect_stack_use_after_return=1
+#   By default asan disables core dumps because they used to be
+#   huge. This is no longer the case since the shadow memory is
+#   excluded, so it is safe to enable them.
+# * UBSAN_OPTIONS=halt_on_error=1:abort_on_error=1
+#   Fail the test if any undefined behavior is found and use abort
+#   instead of exit. Using abort is what causes core dumps to be
+#   produced.
+# * BOOST_TEST_CATCH_SYSTEM_ERRORS=no
+#   Normally the boost test library handles SIGABRT and prevents core
+#   dumps from being produced.
+
+# This works great with clang and gcc 10.2, but unfortunately not any
+# previous gcc.
+set(BUILD_WITH_USE_AFTER_RETURN "")
+if((NOT (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")) OR
+    (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.2))
+    set(BUILD_WITH_USE_AFTER_RETURN ":detect_stack_use_after_return=1")
+endif()
+
+set(BUILD_WITH_TEST_ENVIRONMENT
+    "ASAN_OPTIONS=disable_coredump=0:abort_on_error=1${BUILD_WITH_USE_AFTER_RETURN};UBSAN_OPTIONS=halt_on_error=1:abort_on_error=1;BOOST_TEST_CATCH_SYSTEM_ERRORS=no"
+    CACHE
+    STRING
+    "Environment variables for running tests")
+
+option(BUILD_WITH_UNUSED_RESULT_ERROR
+    "Make [[nodiscard]] violations an error (instead of a warning)."
+    OFF)
+
+set(BUILD_WITH_STACK_GUARDS
+    "DEFAULT"
+    CACHE
+    STRING
+    "Enable stack guards. Can be ON, OFF or DEFAULT (which enables it for non release builds)")
+
+set(BUILD_WITH_SANITIZE
+    "DEFAULT"
+    CACHE
+    STRING
+    "Enable ASAN and UBSAN. Can be ON, OFF or DEFAULT (which enables it for Debug and Sanitize)")
+
+set(BUILD_WITH_DEBUG_SHARED_PTR
+    "DEFAULT"
+    CACHE
+    STRING
+    "Enable shared_ptr debugging. Can be ON, OFF or DEFAULT (which enables it for Debug and Sanitize)")
+
+#
+# Useful (non-cache) variables.
+#
+
+set(BUILD_WITH_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(BUILD_WITH_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(BUILD_WITH_GEN_BINARY_DIR ${BUILD_WITH_BINARY_DIR}/gen)
+
+include(ActorDependencies)
+seastar_find_dependencies()
+
+# Private build dependencies not visible to consumers
+find_package(ragel 6.10 REQUIRED)
+find_package(Threads REQUIRED)
+find_package(PthreadSetName REQUIRED)
+
+if(BUILD_WITH_DPDK)
+    set(seastar_dpdk_obj seastar-dpdk.o)
+endif()
 
 # get header files; only needed by CMake generators,
 # e.g., for creating proper Xcode projects
-file(GLOB_RECURSE ${CURRENT_PROJECT_NAME}_HEADERS "include/nil/actor/*.hpp")
+set(${CURRENT_PROJECT_NAME}_HEADERS 
+    ${seastar_dpdk_obj}
+    include/nil/actor/http/api_docs.hh
+    include/nil/actor/http/common.hh
+    include/nil/actor/http/exception.hh
+    include/nil/actor/http/file_handler.hh
+    include/nil/actor/http/function_handlers.hh
+    include/nil/actor/http/handlers.hh
+    include/nil/actor/http/httpd.hh
+    include/nil/actor/http/json_path.hh
+    include/nil/actor/http/matcher.hh
+    include/nil/actor/http/matchrules.hh
+    include/nil/actor/http/mime_types.hh
+    include/nil/actor/http/reply.hh
+    include/nil/actor/http/request.hh
+    include/nil/actor/http/routes.hh
+    include/nil/actor/http/transformers.hh
+    include/nil/actor/json/formatter.hh
+    include/nil/actor/json/json_elements.hh
+    include/nil/actor/net/api.hh
+    include/nil/actor/net/arp.hh
+    include/nil/actor/net/byteorder.hh
+    include/nil/actor/net/config.hh
+    include/nil/actor/net/const.hh
+    include/nil/actor/net/dhcp.hh
+    include/nil/actor/net/dns.hh
+    include/nil/actor/net/dpdk.hh
+    include/nil/actor/net/ethernet.hh
+    include/nil/actor/net/inet_address.hh
+    include/nil/actor/net/ip.hh
+    include/nil/actor/net/ip_checksum.hh
+    include/nil/actor/net/native-stack.hh
+    include/nil/actor/net/net.hh
+    include/nil/actor/net/packet-data-source.hh
+    include/nil/actor/net/packet-util.hh
+    include/nil/actor/net/packet.hh
+    include/nil/actor/net/posix-stack.hh
+    include/nil/actor/net/proxy.hh
+    include/nil/actor/net/socket_defs.hh
+    include/nil/actor/net/stack.hh
+    include/nil/actor/net/tcp-stack.hh
+    include/nil/actor/net/tcp.hh
+    include/nil/actor/net/tls.hh
+    include/nil/actor/net/toeplitz.hh
+    include/nil/actor/net/udp.hh
+    include/nil/actor/net/unix_address.hh
+    include/nil/actor/net/virtio-interface.hh
+    include/nil/actor/net/virtio.hh
+    include/nil/actor/rpc/lz4_compressor.hh
+    include/nil/actor/rpc/lz4_fragmented_compressor.hh
+    include/nil/actor/rpc/multi_algo_compressor_factory.hh
+    include/nil/actor/rpc/rpc.hh
+    include/nil/actor/rpc/rpc_impl.hh
+    include/nil/actor/rpc/rpc_types.hh)
 
 # list cpp files excluding platform-dependent files
 set(${CURRENT_PROJECT_NAME}_SOURCES
-    src/basp/application.cpp
-    src/basp/connection_state_strings.cpp
-    src/basp/ec_strings.cpp
-    src/basp/message_type_strings.cpp
-    src/basp/operation_strings.cpp
+    src/http/api_docs.cc
+    src/http/common.cc
+    src/http/file_handler.cc
+    src/http/httpd.cc
+    src/http/json_path.cc
+    src/http/matcher.cc
+    src/http/mime_types.cc
+    src/http/reply.cc
+    src/http/routes.cc
+    src/http/transformers.cc
+    src/json/formatter.cc
+    src/json/json_elements.cc
+    src/net/arp.cc
+    src/net/config.cc
+    src/net/dhcp.cc
+    src/net/dns.cc
+    src/net/dpdk.cc
+    src/net/ethernet.cc
+    src/net/inet_address.cc
+    src/net/ip.cc
+    src/net/ip_checksum.cc
+    src/net/native-stack-impl.hh
+    src/net/native-stack.cc
+    src/net/net.cc
+    src/net/packet.cc
+    src/net/posix-stack.cc
+    src/net/proxy.cc
+    src/net/socket_address.cc
+    src/net/stack.cc
+    src/net/tcp.cc
+    src/net/tls.cc
+    src/net/udp.cc
+    src/net/unix_address.cc
+    src/net/virtio.cc
+    src/rpc/lz4_compressor.cc
+    src/rpc/lz4_fragmented_compressor.cc
+    src/rpc/rpc.cc)
 
-    src/network/backend/test.cpp
-    src/network/backend/tcp.cpp
+set(${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS
+    -fvisibility=hidden
+    -UNDEBUG
+    -Wall
+    -Werror
+    -Wno-array-bounds # Disabled because of https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93437
+    -Wno-error=deprecated-declarations)
 
-    src/network/endpoint_manager_queue.cpp
-    src/network/middleman.cpp
-    src/network/middleman_backend.cpp
-    src/network/middleman_config.cpp
-    src/network/packet_writer.cpp
+list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_INCLUDES
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+    $<BUILD_INTERFACE:${BUILD_WITH_GEN_BINARY_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
 
-    src/actor_proxy_impl.cpp
-    src/convert_ip_endpoint.cpp
-    src/datagram_socket.cpp
-    src/endpoint_manager.cpp
-    src/header.cpp
-    src/host.cpp
-    src/ip.cpp
-    src/message_queue.cpp
-    src/multiplexer.cpp
-    src/network_socket.cpp
-    src/pipe_socket.cpp
-    src/pollset_updater.cpp
-    src/socket.cpp
-    src/socket_manager.cpp
-    src/stream_socket.cpp
-    src/tcp_accept_socket.cpp
-    src/tcp_stream_socket.cpp
-    src/udp_datagram_socket.cpp
-    src/worker.cpp)
+list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${BUILD_WITH_GEN_BINARY_DIR}/src
 
-add_library(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} ${${CURRENT_PROJECT_NAME}_HEADERS}
-            ${${CURRENT_PROJECT_NAME}_SOURCES})
+    ${Boost_INCLUDE_DIRS})
+
+list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES
+    ${Boost_LIBRARIES}
+    ${cryptopp_LIBRARIES}
+    ${c-ares_LIBRARIES}
+    ${lz4_LIBRARIES}
+    fmt::fmt)
+
+list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES
+    ${CMAKE_DL_LIBS}
+    ${GnuTLS_LIBRARIES}
+    ${StdAtomic_LIBRARIES}
+    ${Protobuf_LIBRARIES}
+    ${yaml-cpp_LIBRARIES})
+
+if(BUILD_SHARED_LIBS)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES ${CMAKE_WORKSPACE_NAME}::core)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES Threads::Threads)
+else()
+    list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES 
+        ${CMAKE_WORKSPACE_NAME}::core Threads::Threads)
+endif()
+
+set(BUILD_WITH_SANITIZE_MODES "Debug" "Sanitize")
+if((BUILD_WITH_SANITIZE STREQUAL "ON") OR
+    ((BUILD_WITH_SANITIZE STREQUAL "DEFAULT") AND
+    (CMAKE_BUILD_TYPE IN_LIST BUILD_WITH_SANITIZE_MODES)))
+    if(NOT Sanitizers_FOUND)
+        message(FATAL_ERROR "Sanitizers not found!")
+    endif()
+    set(Seastar_Sanitizers_OPTIONS ${Sanitizers_COMPILER_OPTIONS})
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES
+        Sanitizers::address
+        Sanitizers::undefined_behavior)
+endif()
+
+# We only need valgrind to find uninitialized memory uses, so disable
+# the leak sanitizer.
+# To test with valgrind run "ctest -T memcheck"
+set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1 --leak-check=no --trace-children=yes")
+include(CTest)
+
+#
+# We want asserts enabled on all modes, but cmake defaults to passing
+# -DNDEBUG in some modes. We add -UNDEBUG to our private options to
+# reenable it. To force asserts off pass -DNDEBUG in
+# Seastar_CXX_FLAGS.
+#
+# To disable -Werror, pass -Wno-error to Seastar_CXX_FLAGS.
+#
+# We disable _FORTIFY_SOURCE because it generates false positives with longjmp() (src/core/thread.cc)
+#
+
+list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS  
+    -std=${BUILD_WITH_CXX_DIALECT}
+    -U_FORTIFY_SOURCE)
+
+list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS 
+    SEASTAR_API_LEVEL=${BUILD_WITH_API_LEVEL})
+
+if(BUILD_WITH_COMPRESS_DEBUG)
+    # -gz doesn't imply -g, so it is safe to add it regardless of debug
+    # info being enabled.
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS -gz)
+endif()
+
+function(seastar_supports_flag flag var)
+    set(CMAKE_REQUIRED_FLAGS ${flag})
+    check_cxx_source_compiles ("int main() { return 0; }" result)
+    set(${var} ${result} PARENT_SCOPE)
+endfunction ()
+
+seastar_supports_flag("-Wno-maybe-uninitialized -Werror" MaybeUninitialized_FOUND)
+if(MaybeUninitialized_FOUND)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS
+        # With std::experimental::optional it is easy to hit
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88897.  We disable
+        # -Wmaybe-uninitialized in here since otherwise we would have to
+        # disable it on many types used inside optional<>.
+        -Wno-maybe-uninitialized)
+endif()
+
+if(BUILD_WITH_SSTRING)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS 
+        -DSEASTAR_SSTRING)
+endif()
+
+if(LinuxMembarrier_FOUND)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS 
+        SEASTAR_HAS_MEMBARRIER)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES 
+        LinuxMembarrier::membarrier)
+endif()
+
+set(BUILD_WITH_ALLOC_FAILURE_INJECTION_MODES "Dev")
+if(BUILD_WITH_ALLOC_FAILURE_INJECTION OR CMAKE_BUILD_TYPE IN_LIST
+        BUILD_WITH_ALLOC_FAILURE_INJECTION_MODES)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS 
+        SEASTAR_ENABLE_ALLOC_FAILURE_INJECTION)
+endif()
+
+if(BUILD_WITH_TASK_BACKTRACE)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS
+        SEASTAR_TASK_BACKTRACE)
+endif()
+
+if(BUILD_WITH_DEBUG_ALLOCATIONS)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS
+        SEASTAR_DEBUG_ALLOCATIONS)
+endif()
+
+if(Sanitizers_FIBER_SUPPORT)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS 
+        SEASTAR_HAVE_ASAN_FIBER_SUPPORT)
+endif()
+
+if(BUILD_WITH_ALLOC_PAGE_SIZE)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS
+        SEASTAR_OVERRIDE_ALLOCATOR_PAGE_SIZE=${BUILD_WITH_ALLOC_PAGE_SIZE})
+endif()
+
+if(BUILD_WITH_CXX_FLAGS)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS ${BUILD_WITH_CXX_FLAGS})
+endif()
+
+# When using split dwarf --gdb-index is effectively required since
+# otherwise gdb is just too slow. We also want to use split dwarf in
+# as many compilation units as possible.  So while these flags don't
+# have to be public, we don't expect anyone to want to build seastar
+# with them and some client code without.
+if(BUILD_WITH_SPLIT_DWARF AND (NOT (CMAKE_BUILD_TYPE STREQUAL "Dev")))
+    set(BUILD_WITH_SPLIT_DWARF_FLAG "-Wl,--gdb-index")
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES ${BUILD_WITH_SPLIT_DWARF_FLAG})
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS "-gsplit-dwarf")
+endif()
+
+if(BUILD_WITH_HEAP_PROFILING)
+    set_property(SOURCE "src/core/memory.cc"
+        PROPERTY COMPILE_DEFINITIONS SEASTAR_HEAPPROF)
+endif()
+
+if(BUILD_WITH_DPDK)
+    if(NOT dpdk_FOUND)
+        message(FATAL_ERROR "dpdk support is enabled but it is not available!")
+    endif()
+
+    #
+    # The DPDK architecture needs to be transitively applied to consumers of Seastar as well.
+    #
+
+    set(Seastar_ARCH_FOR_native "native")
+    set(Seastar_ARCH_FOR_nhm "nehalem")
+    set(Seastar_ARCH_FOR_wsm "westmere")
+    set(Seastar_ARCH_FOR_snb "sandybridge")
+    set(Seastar_ARCH_FOR_ivb "ivybridge")
+    set(Seastar_ARCH_FOR_armv8a "armv8-a")
+    set(Seastar_ARCH ${Seastar_ARCH_FOR_${BUILD_WITH_DPDK_MACHINE}})
+
+    if(NOT Seastar_ARCH)
+        message(FATAL_ERROR "Unrecognized DPDK machine identifier: ${BUILD_WITH_DPDK_MACHINE}")
+    endif()
+
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS -march=${Seastar_ARCH})
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS SEASTAR_HAVE_DPDK)
+
+    # No pmd driver code will be pulled in without "--whole-archive". To
+    # avoid exposing that to seastar users, combine dpdk into a single
+    # .o file.
+    add_custom_command(OUTPUT seastar-dpdk.o
+        COMMAND ld -r -o seastar-dpdk.o --whole-archive ${dpdk_LIBRARIES}
+        --no-whole-archive)
+
+    # This just provides the include path to cmake
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES dpdk::dpdk)
+endif()
+
+if(BUILD_WITH_HWLOC)
+    if(NOT hwloc_FOUND)
+        message(FATAL_ERROR "`hwloc` support is enabled but it is not available!")
+    endif()
+
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS SEASTAR_HAVE_HWLOC)
+    if (BUILD_SHARED_LIBS)
+        list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES hwloc::hwloc)
+    else()
+        list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES hwloc::hwloc)
+    endif()
+endif()
+
+if(BUILD_WITH_LD_FLAGS)
+    # In newer versions of CMake, there is `target_link_options`.
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES ${BUILD_WITH_LD_FLAGS})
+endif()
+
+if(BUILD_WITH_NUMA)
+    if(NOT numactl_FOUND)
+        message(FATAL_ERROR "NUMA support is enabled but `numactl` is not available!")
+    endif()
+
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS SEASTAR_HAVE_NUMA)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES numactl::numactl)
+endif()
+
+if(lz4_HAVE_COMPRESS_DEFAULT)
+    list (APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS SEASTAR_HAVE_LZ4_COMPRESS_DEFAULT)
+endif()
+
+seastar_supports_flag("-Werror=unused-result" ErrorUnused_FOUND)
+if(ErrorUnused_FOUND)
+    if(BUILD_WITH_UNUSED_RESULT_ERROR)
+        list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_OPTIONS -Werror=unused-result)
+    else()
+        list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_OPTIONS -Wno-error=unused-result)
+    endif()
+endif()
+
+if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "Sanitize"))
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS
+        SEASTAR_DEBUG
+        SEASTAR_DEFAULT_ALLOCATOR
+        SEASTAR_SHUFFLE_TASK_QUEUE)
+endif()
+
+set(Seastar_DEBUG_SHARED_PTR_MODES "Debug" "Sanitize")
+if(BUILD_WITH_DEBUG_SHARED_PTR OR (CMAKE_BUILD_TYPE IN_LIST Seastar_DEBUG_SHARED_PTR_MODES))
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS SEASTAR_DEBUG_SHARED_PTR)
+endif()
+
+set(Seastar_STACK_GUARD_MODES "Debug" "Sanitize" "Dev")
+if(BUILD_WITH_STACK_GUARDS OR (CMAKE_BUILD_TYPE IN_LIST Seastar_STACK_GUARD_MODES))
+    seastar_supports_flag("-fstack-clash-protection" StackClashProtection_FOUND)
+    if(StackClashProtection_FOUND)
+        list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS -fstack-clash-protection)
+    endif()
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_OPTIONS SEASTAR_THREAD_STACK_GUARDS)
+endif()
+
+if((CMAKE_BUILD_TYPE STREQUAL "Dev") OR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS SEASTAR_TYPE_ERASE_MORE)
+endif()
+
+if(UNIX AND NOT APPLE)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES
+        ${lksctp-tools_LIBRARIES}
+        ${numactl_LIBRARIES}
+        ${rt_LIBRARIES})
+elseif(APPLE)
+
+endif()
+
+add_library(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
+    ${${CURRENT_PROJECT_NAME}_HEADERS}
+    ${${CURRENT_PROJECT_NAME}_SOURCES})
+
 set_target_properties(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTIES
-                      LINKER_LANGUAGE CXX
-                      EXPORT_NAME ${CURRENT_PROJECT_NAME}
-                      CXX_STANDARD 17
-                      CXX_STANDARD_REQUIRED TRUE)
-
-target_link_libraries(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PRIVATE
-
-                      ${CMAKE_WORKSPACE_NAME}::core
-
-                      module
-
-                      marshalling
-
-                      ${Boost_LIBRARIES})
-
-target_include_directories(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PRIVATE
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-                           $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-
-                           ${Boost_INCLUDE_DIRS})
-
-cm_deploy(TARGETS ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
-          INCLUDE include
-          NAMESPACE ${CMAKE_WORKSPACE_NAME}::)
+    LINKER_LANGUAGE CXX
+    EXPORT_NAME ${CURRENT_PROJECT_NAME})
 
 if(APPLE OR NOT ${CMAKE_TARGET_ARCHITECTURE} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
     set_target_properties(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTIES
-                          XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "${APPLE_CODE_SIGN_IDENTITY}"
-                          XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM}")
+        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "${APPLE_CODE_SIGN_IDENTITY}"
+        XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM}")
 endif()
+
+target_compile_options(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
+    PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS}
+    PRIVATE ${${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS}
+    ${${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_OPTIONS})
+
+target_compile_definitions(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
+    PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS}
+    PRIVATE ${${CURRENT_PROJECT_NAME}_PRIVATE_COMPILE_DEFINITIONS})
+
+target_include_directories(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} 
+    PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_INCLUDES}
+    PRIVATE ${${CURRENT_PROJECT_NAME}_PRIVATE_INCLUDES})
+
+target_link_libraries(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} 
+    PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES}
+    PRIVATE ${${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES}
+    INTERFACE ${${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES})
+
+cm_deploy(TARGETS ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
+    INCLUDE include
+    NAMESPACE ${CMAKE_WORKSPACE_NAME}::)
 
 if(BUILD_TESTS)
     add_subdirectory(test)
