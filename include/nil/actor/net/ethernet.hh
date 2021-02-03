@@ -25,8 +25,9 @@
 #pragma once
 
 #include <array>
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
+
 #include <nil/actor/net/byteorder.hh>
 
 namespace nil {

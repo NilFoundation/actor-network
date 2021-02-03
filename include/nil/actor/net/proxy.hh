@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+
 #include <nil/actor/net/net.hh>
 #include <nil/actor/net/packet.hh>
 

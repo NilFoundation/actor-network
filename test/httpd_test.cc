@@ -1,6 +1,26 @@
-/*
- * Copyright 2015 Cloudius Systems
- */
+//---------------------------------------------------------------------------//
+// Copyright (c) 2018-2021 Mikhail Komarov <nemo@nil.foundation>
+//
+// MIT License
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//---------------------------------------------------------------------------//
 
 #include <nil/actor/http/httpd.hh>
 #include <nil/actor/http/handlers.hh>
@@ -15,11 +35,15 @@
 #include <nil/actor/core/when_all.hh>
 #include <nil/actor/testing/test_case.hh>
 #include <nil/actor/testing/thread_test_case.hh>
+
 #include "loopback_socket.hh"
+
 #include <boost/algorithm/string.hpp>
+
 #include <nil/actor/core/thread.hh>
 #include <nil/actor/detail/noncopyable_function.hh>
 #include <nil/actor/http/json_path.hh>
+
 #include <sstream>
 
 using namespace nil::actor;
@@ -448,7 +472,8 @@ public:
     }
 
     static future<> run_test(std::function<future<>(output_stream<char> &&)> &&write_func,
-                             std::function<bool(size_t, http_consumer &)> reader) {
+                             std::function<bool(size_t, http_consumer &)>
+                                 reader) {
         return do_with(
             loopback_connection_factory(), foreign_ptr<shared_ptr<http_server>>(make_shared<http_server>("test")),
             [reader, &write_func](loopback_connection_factory &lcf, auto &server) {
@@ -499,8 +524,10 @@ public:
                                            _write_func(write_func) {
                                        }
                                        future<std::unique_ptr<reply>> handle(const sstring &path,
-                                                                             std::unique_ptr<request> req,
-                                                                             std::unique_ptr<reply> rep) override {
+                                                                             std::unique_ptr<request>
+                                                                                 req,
+                                                                             std::unique_ptr<reply>
+                                                                                 rep) override {
                                            rep->write_body("json", std::move(_write_func));
                                            count++;
                                            _all_message_sent.set_value();
@@ -579,8 +606,10 @@ public:
                                            _tests(tests) {
                                        }
                                        future<std::unique_ptr<reply>> handle(const sstring &path,
-                                                                             std::unique_ptr<request> req,
-                                                                             std::unique_ptr<reply> rep) override {
+                                                                             std::unique_ptr<request>
+                                                                                 req,
+                                                                             std::unique_ptr<reply>
+                                                                                 rep) override {
                                            rep->write_body("txt", make_writer(std::get<size_t>(_tests[count]),
                                                                               std::get<bool>(_tests[count])));
                                            count++;

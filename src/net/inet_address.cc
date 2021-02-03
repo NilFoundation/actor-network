@@ -1,27 +1,32 @@
-/*
- * This file is open source software, licensed to you under the terms
- * of the Apache License, Version 2.0 (the "License").  See the NOTICE file
- * distributed with this work for additional information regarding copyright
- * ownership.  You may not use this file except in compliance with the License.
- *
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-/*
- * Copyright (C) 2016 ScyllaDB.
- */
+//---------------------------------------------------------------------------//
+// Copyright (c) 2018-2021 Mikhail Komarov <nemo@nil.foundation>
+//
+// MIT License
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//---------------------------------------------------------------------------//
 
 #include <ostream>
 #include <arpa/inet.h>
+
 #include <boost/functional/hash.hpp>
+
 #include <nil/actor/net/inet_address.hh>
 #include <nil/actor/net/socket_defs.hh>
 #include <nil/actor/net/dns.hh>
@@ -41,26 +46,21 @@ static_assert(std::is_nothrow_default_constructible_v<nil::actor::net::inet_addr
 static_assert(std::is_nothrow_copy_constructible_v<nil::actor::net::inet_address>);
 static_assert(std::is_nothrow_move_constructible_v<nil::actor::net::inet_address>);
 
-nil::actor::net::inet_address::inet_address() noexcept
-                : inet_address(::in6_addr{})
-{}
+nil::actor::net::inet_address::inet_address() noexcept : inet_address(::in6_addr {}) {
+}
 
-nil::actor::net::inet_address::inet_address(family f) noexcept
-                : _in_family(f)
-{
+nil::actor::net::inet_address::inet_address(family f) noexcept : _in_family(f) {
     memset(&_in6, 0, sizeof(_in6));
 }
 
-nil::actor::net::inet_address::inet_address(::in_addr i) noexcept
-                : _in_family(family::INET), _in(i) {
+nil::actor::net::inet_address::inet_address(::in_addr i) noexcept : _in_family(family::INET), _in(i) {
 }
 
-nil::actor::net::inet_address::inet_address(::in6_addr i, uint32_t scope) noexcept
-                : _in_family(family::INET6), _in6(i), _scope(scope) {
+nil::actor::net::inet_address::inet_address(::in6_addr i, uint32_t scope) noexcept :
+    _in_family(family::INET6), _in6(i), _scope(scope) {
 }
 
-std::optional<nil::actor::net::inet_address> 
-nil::actor::net::inet_address::parse_numerical(const sstring& addr) {
+std::optional<nil::actor::net::inet_address> nil::actor::net::inet_address::parse_numerical(const sstring &addr) {
     inet_address in;
     if (::inet_pton(AF_INET, addr.c_str(), &in._in)) {
         in._in_family = family::INET;
@@ -78,7 +78,7 @@ nil::actor::net::inet_address::parse_numerical(const sstring& addr) {
                 index = std::stoul(ext);
             } catch (...) {
             }
-            for (auto& nwif : engine().net().network_interfaces()) {
+            for (auto &nwif : engine().net().network_interfaces()) {
                 if (nwif.index() == index || nwif.name() == ext || nwif.display_name() == ext) {
                     res->_scope = nwif.index();
                     break;
@@ -94,27 +94,28 @@ nil::actor::net::inet_address::parse_numerical(const sstring& addr) {
     return {};
 }
 
-nil::actor::net::inet_address::inet_address(const sstring& addr)
-                : inet_address([&addr] {
-    auto res = parse_numerical(addr);                        
-    if (res) {
-        return std::move(*res);
-    }
-    throw std::invalid_argument(addr);
-}())
-{}
+nil::actor::net::inet_address::inet_address(const sstring &addr) :
+    inet_address([&addr] {
+        auto res = parse_numerical(addr);
+        if (res) {
+            return std::move(*res);
+        }
+        throw std::invalid_argument(addr);
+    }()) {
+}
 
-nil::actor::net::inet_address::inet_address(const ipv4_address& in) noexcept
-    : inet_address(::in_addr{hton(in.ip)})
-{}
+nil::actor::net::inet_address::inet_address(const ipv4_address &in) noexcept : inet_address(::in_addr {hton(in.ip)}) {
+}
 
-nil::actor::net::inet_address::inet_address(const ipv6_address& in, uint32_t scope) noexcept
-    : inet_address([&] {
-        ::in6_addr tmp;
-        std::copy(in.bytes().begin(), in.bytes().end(), tmp.s6_addr);
-        return tmp;
-    }(), scope)
-{}
+nil::actor::net::inet_address::inet_address(const ipv6_address &in, uint32_t scope) noexcept :
+    inet_address(
+        [&] {
+            ::in6_addr tmp;
+            std::copy(in.bytes().begin(), in.bytes().end(), tmp.s6_addr);
+            return tmp;
+        }(),
+        scope) {
+}
 
 nil::actor::net::ipv4_address nil::actor::net::inet_address::as_ipv4_address() const {
     in_addr in = *this;
@@ -123,20 +124,20 @@ nil::actor::net::ipv4_address nil::actor::net::inet_address::as_ipv4_address() c
 
 nil::actor::net::ipv6_address nil::actor::net::inet_address::as_ipv6_address() const noexcept {
     in6_addr in6 = *this;
-    return ipv6_address{in6};
+    return ipv6_address {in6};
 }
 
-bool nil::actor::net::inet_address::operator==(const inet_address& o) const noexcept {
+bool nil::actor::net::inet_address::operator==(const inet_address &o) const noexcept {
     if (o._in_family != _in_family) {
         return false;
     }
     switch (_in_family) {
-    case family::INET:
-        return _in.s_addr == o._in.s_addr;
-    case family::INET6:
-        return std::equal(std::begin(_in6.s6_addr), std::end(_in6.s6_addr), std::begin(o._in6.s6_addr));
-    default:
-        return false;
+        case family::INET:
+            return _in.s_addr == o._in.s_addr;
+        case family::INET6:
+            return std::equal(std::begin(_in6.s6_addr), std::end(_in6.s6_addr), std::begin(o._in6.s6_addr));
+        default:
+            return false;
     }
 }
 
@@ -168,60 +169,57 @@ nil::actor::net::inet_address::operator nil::actor::net::ipv6_address() const no
 
 size_t nil::actor::net::inet_address::size() const noexcept {
     switch (_in_family) {
-    case family::INET:
-        return sizeof(::in_addr);
-    case family::INET6:
-        return sizeof(::in6_addr);
-    default:
-        return 0;
+        case family::INET:
+            return sizeof(::in_addr);
+        case family::INET6:
+            return sizeof(::in6_addr);
+        default:
+            return 0;
     }
 }
 
-const void * nil::actor::net::inet_address::data() const noexcept {
+const void *nil::actor::net::inet_address::data() const noexcept {
     return &_in;
 }
 
-nil::actor::net::ipv6_address::ipv6_address(const ::in6_addr& in) noexcept {
+nil::actor::net::ipv6_address::ipv6_address(const ::in6_addr &in) noexcept {
     std::copy(std::begin(in.s6_addr), std::end(in.s6_addr), ip.begin());
 }
 
-nil::actor::net::ipv6_address::ipv6_address(const ipv6_bytes& in) noexcept
-    : ip(in)
-{}
+nil::actor::net::ipv6_address::ipv6_address(const ipv6_bytes &in) noexcept : ip(in) {
+}
 
-nil::actor::net::ipv6_address::ipv6_address(const ipv6_addr& addr) noexcept
-    : ipv6_address(addr.ip)
-{}
+nil::actor::net::ipv6_address::ipv6_address(const ipv6_addr &addr) noexcept : ipv6_address(addr.ip) {
+}
 
-nil::actor::net::ipv6_address::ipv6_address() noexcept
-    : ipv6_address(::in6addr_any)
-{}
+nil::actor::net::ipv6_address::ipv6_address() noexcept : ipv6_address(::in6addr_any) {
+}
 
-nil::actor::net::ipv6_address::ipv6_address(const std::string& addr) {
+nil::actor::net::ipv6_address::ipv6_address(const std::string &addr) {
     if (!::inet_pton(AF_INET6, addr.c_str(), ip.data())) {
-        throw std::runtime_error(format("Wrong format for IPv6 address {}. Please ensure it's in colon-hex format",
-                                        addr));
+        throw std::runtime_error(
+            format("Wrong format for IPv6 address {}. Please ensure it's in colon-hex format", addr));
     }
 }
 
-nil::actor::net::ipv6_address nil::actor::net::ipv6_address::read(const char* s) noexcept {
-    auto* b = reinterpret_cast<const uint8_t *>(s);
+nil::actor::net::ipv6_address nil::actor::net::ipv6_address::read(const char *s) noexcept {
+    auto *b = reinterpret_cast<const uint8_t *>(s);
     ipv6_address in;
     std::copy(b, b + ipv6_address::size(), in.ip.begin());
     return in;
 }
 
-nil::actor::net::ipv6_address nil::actor::net::ipv6_address::consume(const char*& p) noexcept {
+nil::actor::net::ipv6_address nil::actor::net::ipv6_address::consume(const char *&p) noexcept {
     auto res = read(p);
     p += size();
     return res;
 }
 
-void nil::actor::net::ipv6_address::write(char* p) const noexcept {
+void nil::actor::net::ipv6_address::write(char *p) const noexcept {
     std::copy(ip.begin(), ip.end(), p);
 }
 
-void nil::actor::net::ipv6_address::produce(char*& p) const noexcept {
+void nil::actor::net::ipv6_address::produce(char *&p) const noexcept {
     write(p);
     p += size();
 }
@@ -230,71 +228,62 @@ bool nil::actor::net::ipv6_address::is_unspecified() const noexcept {
     return std::all_of(ip.begin(), ip.end(), [](uint8_t b) { return b == 0; });
 }
 
-std::ostream& nil::actor::net::operator<<(std::ostream& os, const ipv4_address& a) {
+std::ostream &nil::actor::net::operator<<(std::ostream &os, const ipv4_address &a) {
     auto ip = a.ip;
-    return fmt_print(os, "{:d}.{:d}.{:d}.{:d}",
-            (ip >> 24) & 0xff,
-            (ip >> 16) & 0xff,
-            (ip >> 8) & 0xff,
-            (ip >> 0) & 0xff);
+    return fmt_print(os, "{:d}.{:d}.{:d}.{:d}", (ip >> 24) & 0xff, (ip >> 16) & 0xff, (ip >> 8) & 0xff,
+                     (ip >> 0) & 0xff);
 }
 
-std::ostream& nil::actor::net::operator<<(std::ostream& os, const ipv6_address& a) {
+std::ostream &nil::actor::net::operator<<(std::ostream &os, const ipv6_address &a) {
     char buffer[64];
     return os << ::inet_ntop(AF_INET6, a.ip.data(), buffer, sizeof(buffer));
 }
 
-nil::actor::ipv6_addr::ipv6_addr(const ipv6_bytes& b, uint16_t p) noexcept
-    : ip(b), port(p)
-{}
+nil::actor::ipv6_addr::ipv6_addr(const ipv6_bytes &b, uint16_t p) noexcept : ip(b), port(p) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(uint16_t p) noexcept
-    : ipv6_addr(net::inet_address(), p)
-{}
+nil::actor::ipv6_addr::ipv6_addr(uint16_t p) noexcept : ipv6_addr(net::inet_address(), p) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const ::in6_addr& in6, uint16_t p) noexcept
-    : ipv6_addr(net::ipv6_address(in6).bytes(), p)
-{}
+nil::actor::ipv6_addr::ipv6_addr(const ::in6_addr &in6, uint16_t p) noexcept :
+    ipv6_addr(net::ipv6_address(in6).bytes(), p) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const std::string& s)
-    : ipv6_addr([&] {
+nil::actor::ipv6_addr::ipv6_addr(const std::string &s) :
+    ipv6_addr([&] {
         auto lc = s.find_last_of(']');
         auto cp = s.find_first_of(':', lc);
         auto port = cp != std::string::npos ? std::stoul(s.substr(cp + 1)) : 0;
         auto ss = lc != std::string::npos ? s.substr(1, lc - 1) : s;
         return ipv6_addr(net::ipv6_address(ss).bytes(), uint16_t(port));
-    }())
-{}
+    }()) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const std::string& s, uint16_t p)
-    : ipv6_addr(net::ipv6_address(s).bytes(), p)
-{}
+nil::actor::ipv6_addr::ipv6_addr(const std::string &s, uint16_t p) : ipv6_addr(net::ipv6_address(s).bytes(), p) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const net::inet_address& i, uint16_t p) noexcept
-    : ipv6_addr(i.as_ipv6_address().bytes(), p)
-{}
+nil::actor::ipv6_addr::ipv6_addr(const net::inet_address &i, uint16_t p) noexcept :
+    ipv6_addr(i.as_ipv6_address().bytes(), p) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const ::sockaddr_in6& s) noexcept
-    : ipv6_addr(s.sin6_addr, net::ntoh(s.sin6_port))
-{}
+nil::actor::ipv6_addr::ipv6_addr(const ::sockaddr_in6 &s) noexcept : ipv6_addr(s.sin6_addr, net::ntoh(s.sin6_port)) {
+}
 
-nil::actor::ipv6_addr::ipv6_addr(const socket_address& s) noexcept
-    : ipv6_addr(s.as_posix_sockaddr_in6())
-{}
+nil::actor::ipv6_addr::ipv6_addr(const socket_address &s) noexcept : ipv6_addr(s.as_posix_sockaddr_in6()) {
+}
 
 bool nil::actor::ipv6_addr::is_ip_unspecified() const noexcept {
     return std::all_of(ip.begin(), ip.end(), [](uint8_t b) { return b == 0; });
 }
 
-
 nil::actor::net::inet_address nil::actor::socket_address::addr() const noexcept {
     switch (family()) {
-    case AF_INET:
-        return net::inet_address(as_posix_sockaddr_in().sin_addr);
-    case AF_INET6:
-        return net::inet_address(as_posix_sockaddr_in6().sin6_addr, as_posix_sockaddr_in6().sin6_scope_id);
-    default:
-        return net::inet_address();
+        case AF_INET:
+            return net::inet_address(as_posix_sockaddr_in().sin_addr);
+        case AF_INET6:
+            return net::inet_address(as_posix_sockaddr_in6().sin6_addr, as_posix_sockaddr_in6().sin6_scope_id);
+        default:
+            return net::inet_address();
     }
 }
 
@@ -304,21 +293,21 @@ nil::actor::net::inet_address nil::actor::socket_address::addr() const noexcept 
 
 bool nil::actor::socket_address::is_wildcard() const noexcept {
     switch (family()) {
-    case AF_INET: {
+        case AF_INET: {
             ipv4_addr addr(*this);
             return addr.is_ip_unspecified() && addr.is_port_unspecified();
         }
-    default:
-    case AF_INET6: {
+        default:
+        case AF_INET6: {
             ipv6_addr addr(*this);
             return addr.is_ip_unspecified() && addr.is_port_unspecified();
         }
-    case AF_UNIX:
-        return length() <= sizeof(::sa_family_t);
+        case AF_UNIX:
+            return length() <= sizeof(::sa_family_t);
     }
 }
 
-std::ostream& nil::actor::net::operator<<(std::ostream& os, const inet_address& addr) {
+std::ostream &nil::actor::net::operator<<(std::ostream &os, const inet_address &addr) {
     char buffer[64];
     os << inet_ntop(int(addr.in_family()), addr.data(), buffer, sizeof(buffer));
     if (addr.scope() != inet_address::invalid_scope) {
@@ -327,44 +316,44 @@ std::ostream& nil::actor::net::operator<<(std::ostream& os, const inet_address& 
     return os;
 }
 
-std::ostream& nil::actor::net::operator<<(std::ostream& os, const inet_address::family& f) {
+std::ostream &nil::actor::net::operator<<(std::ostream &os, const inet_address::family &f) {
     switch (f) {
-    case inet_address::family::INET:
-        os << "INET";
-        break;
-    case inet_address::family::INET6:
-        os << "INET6";
-        break;
-    default:
-        break;
+        case inet_address::family::INET:
+            os << "INET";
+            break;
+        case inet_address::family::INET6:
+            os << "INET6";
+            break;
+        default:
+            break;
     }
     return os;
 }
 
-std::ostream& nil::actor::operator<<(std::ostream& os, const ipv4_addr& a) {
+std::ostream &nil::actor::operator<<(std::ostream &os, const ipv4_addr &a) {
     return os << nil::actor::socket_address(a);
 }
 
-std::ostream& nil::actor::operator<<(std::ostream& os, const ipv6_addr& a) {
+std::ostream &nil::actor::operator<<(std::ostream &os, const ipv6_addr &a) {
     return os << nil::actor::socket_address(a);
 }
 
-size_t std::hash<nil::actor::net::inet_address>::operator()(const nil::actor::net::inet_address& a) const {
+size_t std::hash<nil::actor::net::inet_address>::operator()(const nil::actor::net::inet_address &a) const {
     switch (a.in_family()) {
-    case nil::actor::net::inet_address::family::INET:
-        return std::hash<nil::actor::net::ipv4_address>()(a.as_ipv4_address());
-    case nil::actor::net::inet_address::family::INET6:
-        return std::hash<nil::actor::net::ipv6_address>()(a.as_ipv6_address());
-    default:
-        return 0;
+        case nil::actor::net::inet_address::family::INET:
+            return std::hash<nil::actor::net::ipv4_address>()(a.as_ipv4_address());
+        case nil::actor::net::inet_address::family::INET6:
+            return std::hash<nil::actor::net::ipv6_address>()(a.as_ipv6_address());
+        default:
+            return 0;
     }
 }
 
-size_t std::hash<nil::actor::net::ipv6_address>::operator()(const nil::actor::net::ipv6_address& a) const {
+size_t std::hash<nil::actor::net::ipv6_address>::operator()(const nil::actor::net::ipv6_address &a) const {
     return boost::hash_range(a.ip.begin(), a.ip.end());
 }
 
-size_t std::hash<nil::actor::ipv4_addr>::operator()(const nil::actor::ipv4_addr& x) const {
+size_t std::hash<nil::actor::ipv4_addr>::operator()(const nil::actor::ipv4_addr &x) const {
     size_t h = x.ip;
     boost::hash_combine(h, x.port);
     return h;
