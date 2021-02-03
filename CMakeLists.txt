@@ -335,6 +335,7 @@ set(${CURRENT_PROJECT_NAME}_HEADERS
     include/nil/actor/net/ip.hh
     include/nil/actor/net/ip_checksum.hh
     include/nil/actor/net/native-stack.hh
+    include/nil/actor/net/detail/native-stack-impl.hh
     include/nil/actor/net/net.hh
     include/nil/actor/net/packet-data-source.hh
     include/nil/actor/net/packet-util.hh
@@ -381,7 +382,6 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/net/inet_address.cc
     src/net/ip.cc
     src/net/ip_checksum.cc
-    src/net/native-stack-impl.hh
     src/net/native-stack.cc
     src/net/net.cc
     src/net/packet.cc
