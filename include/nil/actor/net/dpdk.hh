@@ -27,6 +27,7 @@
 #ifdef SEASTAR_HAVE_DPDK
 
 #include <memory>
+
 #include <nil/actor/net/config.hh>
 #include <nil/actor/net/net.hh>
 #include <nil/actor/core/sstring.hh>

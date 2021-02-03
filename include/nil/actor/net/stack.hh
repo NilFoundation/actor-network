@@ -27,7 +27,7 @@
 #include <chrono>
 #include <nil/actor/net/api.hh>
 #include <nil/actor/core/memory.hh>
-#include "../core/internal/api-level.hh"
+#include <nil/actor/core/detail/api-level.hh>
 
 namespace nil {
     namespace actor {
