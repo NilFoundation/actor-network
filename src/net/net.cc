@@ -109,7 +109,7 @@ namespace nil {
             }
 
             qp::qp(bool register_copy_stats, const std::string stats_plugin_name, uint8_t qid) :
-                _tx_poller(std::make_unique<internal::poller>(reactor::poller::simple([this] { return poll_tx(); }))),
+                _tx_poller(std::make_unique<detail::poller>(reactor::poller::simple([this] { return poll_tx(); }))),
                 _stats_plugin_name(stats_plugin_name), _queue_name(std::string("queue") + std::to_string(qid)) {
                 namespace sm = metrics;
 

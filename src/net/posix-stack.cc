@@ -598,7 +598,7 @@ namespace nil {
             }
 
             future<temporary_buffer<char>> posix_data_source_impl::get() {
-                return _fd.read_some(static_cast<internal::buffer_allocator *>(this))
+                return _fd.read_some(static_cast<detail::buffer_allocator *>(this))
                     .then([this](temporary_buffer<char> b) {
                         if (b.size() >= _config.buffer_size) {
                             _config.buffer_size *= 2;

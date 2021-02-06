@@ -36,24 +36,24 @@
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto
 PROTOBUF_NAMESPACE_OPEN
-namespace internal {
+namespace detail {
 class AnyMetadata;
-}  // namespace internal
+}  // namespace detail
 PROTOBUF_NAMESPACE_CLOSE
 
 // Internal implementation detail -- do not use these members.
 struct TableStruct_metrics2_2eproto {
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTableField entries[]
+  static const ::PROTOBUF_NAMESPACE_ID::detail::ParseTableField entries[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
+  static const ::PROTOBUF_NAMESPACE_ID::detail::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
+  static const ::PROTOBUF_NAMESPACE_ID::detail::ParseTable schema[10]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
-  static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
+  static const ::PROTOBUF_NAMESPACE_ID::detail::FieldMetadata field_metadata[];
+  static const ::PROTOBUF_NAMESPACE_ID::detail::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
-extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_metrics2_2eproto;
+extern const ::PROTOBUF_NAMESPACE_ID::detail::DescriptorTable descriptor_table_metrics2_2eproto;
 namespace io {
 namespace prometheus {
 namespace client {
@@ -124,12 +124,12 @@ inline const std::string& MetricType_Name(T enum_t_value) {
   static_assert(::std::is_same<T, MetricType>::value ||
     ::std::is_integral<T>::value,
     "Incorrect type passed to function MetricType_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+  return ::PROTOBUF_NAMESPACE_ID::detail::NameOfEnum(
     MetricType_descriptor(), enum_t_value);
 }
 inline bool MetricType_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricType* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricType>(
+  return ::PROTOBUF_NAMESPACE_ID::detail::ParseNamedEnum<MetricType>(
     MetricType_descriptor(), name, value);
 }
 // ===================================================================
@@ -192,7 +192,7 @@ class LabelPair PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(LabelPair* other) {
@@ -218,7 +218,7 @@ class LabelPair PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -228,7 +228,7 @@ class LabelPair PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(LabelPair* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.LabelPair";
   }
@@ -242,7 +242,7 @@ class LabelPair PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -303,10 +303,10 @@ class LabelPair PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr name_;
+  ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr value_;
   friend struct ::TableStruct_metrics2_2eproto;
 };
 // -------------------------------------------------------------------
@@ -369,7 +369,7 @@ class Gauge PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Gauge* other) {
@@ -395,7 +395,7 @@ class Gauge PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -405,7 +405,7 @@ class Gauge PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Gauge* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Gauge";
   }
@@ -419,7 +419,7 @@ class Gauge PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -452,8 +452,8 @@ class Gauge PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   double value_;
   friend struct ::TableStruct_metrics2_2eproto;
 };
@@ -517,7 +517,7 @@ class Counter PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Counter* other) {
@@ -543,7 +543,7 @@ class Counter PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -553,7 +553,7 @@ class Counter PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Counter* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Counter";
   }
@@ -567,7 +567,7 @@ class Counter PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -600,8 +600,8 @@ class Counter PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   double value_;
   friend struct ::TableStruct_metrics2_2eproto;
 };
@@ -665,7 +665,7 @@ class Quantile PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Quantile* other) {
@@ -691,7 +691,7 @@ class Quantile PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -701,7 +701,7 @@ class Quantile PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Quantile* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Quantile";
   }
@@ -715,7 +715,7 @@ class Quantile PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -762,8 +762,8 @@ class Quantile PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   double quantile_;
   double value_;
   friend struct ::TableStruct_metrics2_2eproto;
@@ -828,7 +828,7 @@ class Summary PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Summary* other) {
@@ -854,7 +854,7 @@ class Summary PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -864,7 +864,7 @@ class Summary PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Summary* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Summary";
   }
@@ -878,7 +878,7 @@ class Summary PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -944,8 +944,8 @@ class Summary PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::io::prometheus::client::Quantile > quantile_;
   ::PROTOBUF_NAMESPACE_ID::uint64 sample_count_;
   double sample_sum_;
@@ -1011,7 +1011,7 @@ class Untyped PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Untyped* other) {
@@ -1037,7 +1037,7 @@ class Untyped PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -1047,7 +1047,7 @@ class Untyped PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Untyped* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Untyped";
   }
@@ -1061,7 +1061,7 @@ class Untyped PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -1094,8 +1094,8 @@ class Untyped PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   double value_;
   friend struct ::TableStruct_metrics2_2eproto;
 };
@@ -1159,7 +1159,7 @@ class Histogram PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Histogram* other) {
@@ -1185,7 +1185,7 @@ class Histogram PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -1195,7 +1195,7 @@ class Histogram PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Histogram* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Histogram";
   }
@@ -1209,7 +1209,7 @@ class Histogram PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -1275,8 +1275,8 @@ class Histogram PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::io::prometheus::client::Bucket > bucket_;
   ::PROTOBUF_NAMESPACE_ID::uint64 sample_count_;
   double sample_sum_;
@@ -1342,7 +1342,7 @@ class Bucket PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Bucket* other) {
@@ -1368,7 +1368,7 @@ class Bucket PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -1378,7 +1378,7 @@ class Bucket PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Bucket* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Bucket";
   }
@@ -1392,7 +1392,7 @@ class Bucket PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -1439,8 +1439,8 @@ class Bucket PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint64 cumulative_count_;
   double upper_bound_;
   friend struct ::TableStruct_metrics2_2eproto;
@@ -1505,7 +1505,7 @@ class Metric PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(Metric* other) {
@@ -1531,7 +1531,7 @@ class Metric PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -1541,7 +1541,7 @@ class Metric PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(Metric* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.Metric";
   }
@@ -1555,7 +1555,7 @@ class Metric PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -1702,8 +1702,8 @@ class Metric PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::io::prometheus::client::LabelPair > label_;
   ::io::prometheus::client::Gauge* gauge_;
   ::io::prometheus::client::Counter* counter_;
@@ -1773,7 +1773,7 @@ class MetricFamily PROTOBUF_FINAL :
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
     } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+      ::PROTOBUF_NAMESPACE_ID::detail::GenericSwap(this, other);
     }
   }
   void UnsafeArenaSwap(MetricFamily* other) {
@@ -1799,7 +1799,7 @@ class MetricFamily PROTOBUF_FINAL :
   bool IsInitialized() const final;
 
   size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) final;
   ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
       ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
   int GetCachedSize() const final { return _cached_size_.Get(); }
@@ -1809,7 +1809,7 @@ class MetricFamily PROTOBUF_FINAL :
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
   void InternalSwap(MetricFamily* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  friend class ::PROTOBUF_NAMESPACE_ID::detail::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
     return "io.prometheus.client.MetricFamily";
   }
@@ -1823,7 +1823,7 @@ class MetricFamily PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
   private:
   static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
+    ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&::descriptor_table_metrics2_2eproto);
     return ::descriptor_table_metrics2_2eproto.file_level_metadata[kIndexInFileMessages];
   }
 
@@ -1917,11 +1917,11 @@ class MetricFamily PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::detail::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::detail::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::io::prometheus::client::Metric > metric_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr help_;
+  ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr name_;
+  ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr help_;
   int type_;
   friend struct ::TableStruct_metrics2_2eproto;
 };
@@ -1965,30 +1965,30 @@ inline const std::string& LabelPair::_internal_name() const {
 }
 inline void LabelPair::_internal_set_name(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void LabelPair::set_name(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
   name_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+    ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:io.prometheus.client.LabelPair.name)
 }
 inline void LabelPair::set_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:io.prometheus.client.LabelPair.name)
 }
 inline void LabelPair::set_name(const char* value,
     size_t size) {
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:io.prometheus.client.LabelPair.name)
 }
 inline std::string* LabelPair::_internal_mutable_name() {
   _has_bits_[0] |= 0x00000001u;
-  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* LabelPair::release_name() {
   // @@protoc_insertion_point(field_release:io.prometheus.client.LabelPair.name)
@@ -1996,7 +1996,7 @@ inline std::string* LabelPair::release_name() {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
-  return name_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  return name_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
 }
 inline void LabelPair::set_allocated_name(std::string* name) {
   if (name != nullptr) {
@@ -2004,7 +2004,7 @@ inline void LabelPair::set_allocated_name(std::string* name) {
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), name,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:io.prometheus.client.LabelPair.name)
 }
@@ -2038,30 +2038,30 @@ inline const std::string& LabelPair::_internal_value() const {
 }
 inline void LabelPair::_internal_set_value(const std::string& value) {
   _has_bits_[0] |= 0x00000002u;
-  value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+  value_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void LabelPair::set_value(std::string&& value) {
   _has_bits_[0] |= 0x00000002u;
   value_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+    ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:io.prometheus.client.LabelPair.value)
 }
 inline void LabelPair::set_value(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000002u;
-  value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  value_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:io.prometheus.client.LabelPair.value)
 }
 inline void LabelPair::set_value(const char* value,
     size_t size) {
   _has_bits_[0] |= 0x00000002u;
-  value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+  value_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:io.prometheus.client.LabelPair.value)
 }
 inline std::string* LabelPair::_internal_mutable_value() {
   _has_bits_[0] |= 0x00000002u;
-  return value_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+  return value_.Mutable(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* LabelPair::release_value() {
   // @@protoc_insertion_point(field_release:io.prometheus.client.LabelPair.value)
@@ -2069,7 +2069,7 @@ inline std::string* LabelPair::release_value() {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000002u;
-  return value_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  return value_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
 }
 inline void LabelPair::set_allocated_value(std::string* value) {
   if (value != nullptr) {
@@ -2077,7 +2077,7 @@ inline void LabelPair::set_allocated_value(std::string* value) {
   } else {
     _has_bits_[0] &= ~0x00000002u;
   }
-  value_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value,
+  value_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), value,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:io.prometheus.client.LabelPair.value)
 }
@@ -2579,7 +2579,7 @@ inline ::io::prometheus::client::Gauge* Metric::release_gauge() {
   ::io::prometheus::client::Gauge* temp = gauge_;
   gauge_ = nullptr;
   if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    temp = ::PROTOBUF_NAMESPACE_ID::detail::DuplicateIfNonNull(temp);
   }
   return temp;
 }
@@ -2611,7 +2611,7 @@ inline void Metric::set_allocated_gauge(::io::prometheus::client::Gauge* gauge) 
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
       ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(gauge);
     if (message_arena != submessage_arena) {
-      gauge = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      gauge = ::PROTOBUF_NAMESPACE_ID::detail::GetOwnedMessage(
           message_arena, gauge, submessage_arena);
     }
     _has_bits_[0] |= 0x00000001u;
@@ -2662,7 +2662,7 @@ inline ::io::prometheus::client::Counter* Metric::release_counter() {
   ::io::prometheus::client::Counter* temp = counter_;
   counter_ = nullptr;
   if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    temp = ::PROTOBUF_NAMESPACE_ID::detail::DuplicateIfNonNull(temp);
   }
   return temp;
 }
@@ -2694,7 +2694,7 @@ inline void Metric::set_allocated_counter(::io::prometheus::client::Counter* cou
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
       ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(counter);
     if (message_arena != submessage_arena) {
-      counter = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      counter = ::PROTOBUF_NAMESPACE_ID::detail::GetOwnedMessage(
           message_arena, counter, submessage_arena);
     }
     _has_bits_[0] |= 0x00000002u;
@@ -2745,7 +2745,7 @@ inline ::io::prometheus::client::Summary* Metric::release_summary() {
   ::io::prometheus::client::Summary* temp = summary_;
   summary_ = nullptr;
   if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    temp = ::PROTOBUF_NAMESPACE_ID::detail::DuplicateIfNonNull(temp);
   }
   return temp;
 }
@@ -2777,7 +2777,7 @@ inline void Metric::set_allocated_summary(::io::prometheus::client::Summary* sum
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
       ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(summary);
     if (message_arena != submessage_arena) {
-      summary = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      summary = ::PROTOBUF_NAMESPACE_ID::detail::GetOwnedMessage(
           message_arena, summary, submessage_arena);
     }
     _has_bits_[0] |= 0x00000004u;
@@ -2828,7 +2828,7 @@ inline ::io::prometheus::client::Untyped* Metric::release_untyped() {
   ::io::prometheus::client::Untyped* temp = untyped_;
   untyped_ = nullptr;
   if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    temp = ::PROTOBUF_NAMESPACE_ID::detail::DuplicateIfNonNull(temp);
   }
   return temp;
 }
@@ -2860,7 +2860,7 @@ inline void Metric::set_allocated_untyped(::io::prometheus::client::Untyped* unt
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
       ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(untyped);
     if (message_arena != submessage_arena) {
-      untyped = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      untyped = ::PROTOBUF_NAMESPACE_ID::detail::GetOwnedMessage(
           message_arena, untyped, submessage_arena);
     }
     _has_bits_[0] |= 0x00000008u;
@@ -2911,7 +2911,7 @@ inline ::io::prometheus::client::Histogram* Metric::release_histogram() {
   ::io::prometheus::client::Histogram* temp = histogram_;
   histogram_ = nullptr;
   if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    temp = ::PROTOBUF_NAMESPACE_ID::detail::DuplicateIfNonNull(temp);
   }
   return temp;
 }
@@ -2943,7 +2943,7 @@ inline void Metric::set_allocated_histogram(::io::prometheus::client::Histogram*
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
       ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(histogram);
     if (message_arena != submessage_arena) {
-      histogram = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      histogram = ::PROTOBUF_NAMESPACE_ID::detail::GetOwnedMessage(
           message_arena, histogram, submessage_arena);
     }
     _has_bits_[0] |= 0x00000010u;
@@ -3015,30 +3015,30 @@ inline const std::string& MetricFamily::_internal_name() const {
 }
 inline void MetricFamily::_internal_set_name(const std::string& value) {
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void MetricFamily::set_name(std::string&& value) {
   _has_bits_[0] |= 0x00000001u;
   name_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+    ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:io.prometheus.client.MetricFamily.name)
 }
 inline void MetricFamily::set_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:io.prometheus.client.MetricFamily.name)
 }
 inline void MetricFamily::set_name(const char* value,
     size_t size) {
   _has_bits_[0] |= 0x00000001u;
-  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+  name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:io.prometheus.client.MetricFamily.name)
 }
 inline std::string* MetricFamily::_internal_mutable_name() {
   _has_bits_[0] |= 0x00000001u;
-  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* MetricFamily::release_name() {
   // @@protoc_insertion_point(field_release:io.prometheus.client.MetricFamily.name)
@@ -3046,7 +3046,7 @@ inline std::string* MetricFamily::release_name() {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000001u;
-  return name_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  return name_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
 }
 inline void MetricFamily::set_allocated_name(std::string* name) {
   if (name != nullptr) {
@@ -3054,7 +3054,7 @@ inline void MetricFamily::set_allocated_name(std::string* name) {
   } else {
     _has_bits_[0] &= ~0x00000001u;
   }
-  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), name,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:io.prometheus.client.MetricFamily.name)
 }
@@ -3088,30 +3088,30 @@ inline const std::string& MetricFamily::_internal_help() const {
 }
 inline void MetricFamily::_internal_set_help(const std::string& value) {
   _has_bits_[0] |= 0x00000002u;
-  help_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+  help_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void MetricFamily::set_help(std::string&& value) {
   _has_bits_[0] |= 0x00000002u;
   help_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+    ::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:io.prometheus.client.MetricFamily.help)
 }
 inline void MetricFamily::set_help(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   _has_bits_[0] |= 0x00000002u;
-  help_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  help_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:io.prometheus.client.MetricFamily.help)
 }
 inline void MetricFamily::set_help(const char* value,
     size_t size) {
   _has_bits_[0] |= 0x00000002u;
-  help_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+  help_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:io.prometheus.client.MetricFamily.help)
 }
 inline std::string* MetricFamily::_internal_mutable_help() {
   _has_bits_[0] |= 0x00000002u;
-  return help_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+  return help_.Mutable(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* MetricFamily::release_help() {
   // @@protoc_insertion_point(field_release:io.prometheus.client.MetricFamily.help)
@@ -3119,7 +3119,7 @@ inline std::string* MetricFamily::release_help() {
     return nullptr;
   }
   _has_bits_[0] &= ~0x00000002u;
-  return help_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  return help_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
 }
 inline void MetricFamily::set_allocated_help(std::string* help) {
   if (help != nullptr) {
@@ -3127,7 +3127,7 @@ inline void MetricFamily::set_allocated_help(std::string* help) {
   } else {
     _has_bits_[0] &= ~0x00000002u;
   }
-  help_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), help,
+  help_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), help,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:io.prometheus.client.MetricFamily.help)
 }

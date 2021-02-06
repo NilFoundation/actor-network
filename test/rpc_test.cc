@@ -605,12 +605,12 @@ SEASTAR_TEST_CASE(test_rpc_scheduling) {
                              sg,
                              []() {
                                  return make_ready_future<unsigned>(
-                                     internal::scheduling_group_index(current_scheduling_group()));
+                                     detail::scheduling_group_index(current_scheduling_group()));
                              })
             .get();
         auto call_sg_id = env.proto().make_client<unsigned()>(1);
         auto id = call_sg_id(c1).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg));
     });
 }
 
@@ -642,14 +642,14 @@ SEASTAR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based) {
         test_rpc_proto::client c2(env.proto(), co2, env.make_socket(), ipv4_addr());
         env.register_handler(
                1,
-               [] { return make_ready_future<unsigned>(internal::scheduling_group_index(current_scheduling_group())); })
+               [] { return make_ready_future<unsigned>(detail::scheduling_group_index(current_scheduling_group())); })
             .get();
         auto call_sg_id = env.proto().make_client<unsigned()>(1);
         unsigned id;
         id = call_sg_id(c1).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg1));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg1));
         id = call_sg_id(c2).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg2));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg2));
         c1.stop().get();
         c2.stop().get();
     }).get();
@@ -689,17 +689,17 @@ SEASTAR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based_compatibility) {
                              sg1,
                              []() {
                                  return make_ready_future<unsigned>(
-                                     internal::scheduling_group_index(current_scheduling_group()));
+                                     detail::scheduling_group_index(current_scheduling_group()));
                              })
             .get();
         auto call_sg_id = env.proto().make_client<unsigned()>(1);
         unsigned id;
         id = call_sg_id(c1).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg1));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg1));
         id = call_sg_id(c2).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg2));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg2));
         id = call_sg_id(c3).get0();
-        BOOST_REQUIRE(id == internal::scheduling_group_index(sg1));
+        BOOST_REQUIRE(id == detail::scheduling_group_index(sg1));
         c1.stop().get();
         c2.stop().get();
         c3.stop().get();

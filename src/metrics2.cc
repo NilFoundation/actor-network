@@ -14,57 +14,57 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Bucket_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Counter_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Gauge_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Histogram_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LabelPair_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<6> scc_info_Metric_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Quantile_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Summary_metrics2_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Untyped_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Bucket_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Counter_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Gauge_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<1> scc_info_Histogram_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_LabelPair_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<6> scc_info_Metric_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Quantile_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<1> scc_info_Summary_metrics2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_metrics2_2eproto ::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Untyped_metrics2_2eproto;
 namespace io {
 namespace prometheus {
 namespace client {
 class LabelPairDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LabelPair> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<LabelPair> _instance;
 } _LabelPair_default_instance_;
 class GaugeDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Gauge> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Gauge> _instance;
 } _Gauge_default_instance_;
 class CounterDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Counter> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Counter> _instance;
 } _Counter_default_instance_;
 class QuantileDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Quantile> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Quantile> _instance;
 } _Quantile_default_instance_;
 class SummaryDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Summary> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Summary> _instance;
 } _Summary_default_instance_;
 class UntypedDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Untyped> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Untyped> _instance;
 } _Untyped_default_instance_;
 class HistogramDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Histogram> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Histogram> _instance;
 } _Histogram_default_instance_;
 class BucketDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Bucket> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Bucket> _instance;
 } _Bucket_default_instance_;
 class MetricDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Metric> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<Metric> _instance;
 } _Metric_default_instance_;
 class MetricFamilyDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<MetricFamily> _instance;
+  ::PROTOBUF_NAMESPACE_ID::detail::ExplicitlyConstructed<MetricFamily> _instance;
 } _MetricFamily_default_instance_;
 }  // namespace client
 }  // namespace prometheus
@@ -75,12 +75,12 @@ static void InitDefaultsscc_info_Bucket_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Bucket_default_instance_;
     new (ptr) ::io::prometheus::client::Bucket();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Bucket_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Bucket_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Bucket_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Bucket_metrics2_2eproto}, {}};
 
 static void InitDefaultsscc_info_Counter_metrics2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -88,12 +88,12 @@ static void InitDefaultsscc_info_Counter_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Counter_default_instance_;
     new (ptr) ::io::prometheus::client::Counter();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Counter_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Counter_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Counter_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Counter_metrics2_2eproto}, {}};
 
 static void InitDefaultsscc_info_Gauge_metrics2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -101,12 +101,12 @@ static void InitDefaultsscc_info_Gauge_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Gauge_default_instance_;
     new (ptr) ::io::prometheus::client::Gauge();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Gauge_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Gauge_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Gauge_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Gauge_metrics2_2eproto}, {}};
 
 static void InitDefaultsscc_info_Histogram_metrics2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -114,12 +114,12 @@ static void InitDefaultsscc_info_Histogram_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Histogram_default_instance_;
     new (ptr) ::io::prometheus::client::Histogram();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Histogram_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Histogram_metrics2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<1> scc_info_Histogram_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Histogram_metrics2_2eproto}, {
       &scc_info_Bucket_metrics2_2eproto.base,}};
 
 static void InitDefaultsscc_info_LabelPair_metrics2_2eproto() {
@@ -128,12 +128,12 @@ static void InitDefaultsscc_info_LabelPair_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_LabelPair_default_instance_;
     new (ptr) ::io::prometheus::client::LabelPair();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LabelPair_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_LabelPair_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_LabelPair_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_LabelPair_metrics2_2eproto}, {}};
 
 static void InitDefaultsscc_info_Metric_metrics2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -141,12 +141,12 @@ static void InitDefaultsscc_info_Metric_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Metric_default_instance_;
     new (ptr) ::io::prometheus::client::Metric();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<6> scc_info_Metric_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 6, 0, InitDefaultsscc_info_Metric_metrics2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<6> scc_info_Metric_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 6, 0, InitDefaultsscc_info_Metric_metrics2_2eproto}, {
       &scc_info_LabelPair_metrics2_2eproto.base,
       &scc_info_Gauge_metrics2_2eproto.base,
       &scc_info_Counter_metrics2_2eproto.base,
@@ -160,12 +160,12 @@ static void InitDefaultsscc_info_MetricFamily_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_MetricFamily_default_instance_;
     new (ptr) ::io::prometheus::client::MetricFamily();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MetricFamily_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_MetricFamily_metrics2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<1> scc_info_MetricFamily_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_MetricFamily_metrics2_2eproto}, {
       &scc_info_Metric_metrics2_2eproto.base,}};
 
 static void InitDefaultsscc_info_Quantile_metrics2_2eproto() {
@@ -174,12 +174,12 @@ static void InitDefaultsscc_info_Quantile_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Quantile_default_instance_;
     new (ptr) ::io::prometheus::client::Quantile();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Quantile_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Quantile_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Quantile_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Quantile_metrics2_2eproto}, {}};
 
 static void InitDefaultsscc_info_Summary_metrics2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -187,12 +187,12 @@ static void InitDefaultsscc_info_Summary_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Summary_default_instance_;
     new (ptr) ::io::prometheus::client::Summary();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Summary_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Summary_metrics2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<1> scc_info_Summary_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Summary_metrics2_2eproto}, {
       &scc_info_Quantile_metrics2_2eproto.base,}};
 
 static void InitDefaultsscc_info_Untyped_metrics2_2eproto() {
@@ -201,12 +201,12 @@ static void InitDefaultsscc_info_Untyped_metrics2_2eproto() {
   {
     void* ptr = &::io::prometheus::client::_Untyped_default_instance_;
     new (ptr) ::io::prometheus::client::Untyped();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+    ::PROTOBUF_NAMESPACE_ID::detail::OnShutdownDestroyMessage(ptr);
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Untyped_metrics2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Untyped_metrics2_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::detail::SCCInfo<0> scc_info_Untyped_metrics2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Untyped_metrics2_2eproto}, {}};
 
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_metrics2_2eproto[10];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_metrics2_2eproto[1];
@@ -316,7 +316,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_metrics2_2eproto::offsets[] PR
   2,
   ~0u,
 };
-static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+static const ::PROTOBUF_NAMESPACE_ID::detail::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::io::prometheus::client::LabelPair)},
   { 9, 15, sizeof(::io::prometheus::client::Gauge)},
   { 16, 22, sizeof(::io::prometheus::client::Counter)},
@@ -370,9 +370,9 @@ const char descriptor_table_protodef_metrics2_2eproto[] PROTOBUF_SECTION_VARIABL
   "\022\013\n\007SUMMARY\020\002\022\013\n\007UNTYPED\020\003\022\r\n\tHISTOGRAM\020"
   "\004B\026\n\024io.prometheus.client"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_metrics2_2eproto_deps[1] = {
+static const ::PROTOBUF_NAMESPACE_ID::detail::DescriptorTable*const descriptor_table_metrics2_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_metrics2_2eproto_sccs[10] = {
+static ::PROTOBUF_NAMESPACE_ID::detail::SCCInfoBase*const descriptor_table_metrics2_2eproto_sccs[10] = {
   &scc_info_Bucket_metrics2_2eproto.base,
   &scc_info_Counter_metrics2_2eproto.base,
   &scc_info_Gauge_metrics2_2eproto.base,
@@ -384,8 +384,8 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_met
   &scc_info_Summary_metrics2_2eproto.base,
   &scc_info_Untyped_metrics2_2eproto.base,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_metrics2_2eproto_once;
-const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_metrics2_2eproto = {
+static ::PROTOBUF_NAMESPACE_ID::detail::once_flag descriptor_table_metrics2_2eproto_once;
+const ::PROTOBUF_NAMESPACE_ID::detail::DescriptorTable descriptor_table_metrics2_2eproto = {
   false, false, descriptor_table_protodef_metrics2_2eproto, "metrics2.proto", 1025,
   &descriptor_table_metrics2_2eproto_once, descriptor_table_metrics2_2eproto_sccs, descriptor_table_metrics2_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_metrics2_2eproto::offsets,
@@ -393,12 +393,12 @@ const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_metric
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_metrics2_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_metrics2_2eproto)), true);
+static bool dynamic_init_dummy_metrics2_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::detail::AddDescriptors(&descriptor_table_metrics2_2eproto)), true);
 namespace io {
 namespace prometheus {
 namespace client {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_metrics2_2eproto);
+  ::PROTOBUF_NAMESPACE_ID::detail::AssignDescriptors(&descriptor_table_metrics2_2eproto);
   return file_level_enum_descriptors_metrics2_2eproto[0];
 }
 bool MetricType_IsValid(int value) {
@@ -438,23 +438,23 @@ LabelPair::LabelPair(const LabelPair& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
   if (from._internal_has_name()) {
-    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+    name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
       GetArena());
   }
-  value_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
   if (from._internal_has_value()) {
-    value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_value(), 
+    value_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, from._internal_value(), 
       GetArena());
   }
   // @@protoc_insertion_point(copy_constructor:io.prometheus.client.LabelPair)
 }
 
 void LabelPair::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_LabelPair_metrics2_2eproto.base);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  value_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&scc_info_LabelPair_metrics2_2eproto.base);
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
 }
 
 LabelPair::~LabelPair() {
@@ -465,8 +465,8 @@ LabelPair::~LabelPair() {
 
 void LabelPair::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
-  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  value_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
+  value_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
 }
 
 void LabelPair::ArenaDtor(void* object) {
@@ -479,7 +479,7 @@ void LabelPair::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const LabelPair& LabelPair::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_LabelPair_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_LabelPair_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -503,21 +503,21 @@ void LabelPair::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* LabelPair::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* LabelPair::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional string name = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_name();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::detail::InlineGreedyStringParser(str, ptr, ctx);
           #ifndef NDEBUG
-          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "io.prometheus.client.LabelPair.name");
+          ::PROTOBUF_NAMESPACE_ID::detail::VerifyUTF8(str, "io.prometheus.client.LabelPair.name");
           #endif  // !NDEBUG
           CHK_(ptr);
         } else goto handle_unusual;
@@ -526,9 +526,9 @@ const char* LabelPair::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_value();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::detail::InlineGreedyStringParser(str, ptr, ctx);
           #ifndef NDEBUG
-          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "io.prometheus.client.LabelPair.value");
+          ::PROTOBUF_NAMESPACE_ID::detail::VerifyUTF8(str, "io.prometheus.client.LabelPair.value");
           #endif  // !NDEBUG
           CHK_(ptr);
         } else goto handle_unusual;
@@ -565,9 +565,9 @@ failure:
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
   if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::SERIALIZE,
       "io.prometheus.client.LabelPair.name");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_name(), target);
@@ -575,16 +575,16 @@ failure:
 
   // optional string value = 2;
   if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_value().data(), static_cast<int>(this->_internal_value().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::SERIALIZE,
       "io.prometheus.client.LabelPair.value");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.LabelPair)
@@ -604,23 +604,23 @@ size_t LabelPair::ByteSizeLong() const {
     // optional string name = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::StringSize(
           this->_internal_name());
     }
 
     // optional string value = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::StringSize(
           this->_internal_value());
     }
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -633,7 +633,7 @@ void LabelPair::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.LabelPair)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.LabelPair)
     MergeFrom(*source);
@@ -680,8 +680,8 @@ void LabelPair::InternalSwap(LabelPair* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  value_.Swap(&other->value_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
+  value_.Swap(&other->value_, &::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata LabelPair::GetMetadata() const {
@@ -737,7 +737,7 @@ void Gauge::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Gauge& Gauge::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Gauge_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Gauge_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -753,19 +753,19 @@ void Gauge::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Gauge::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Gauge::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional double value = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
           _Internal::set_has_value(&has_bits);
-          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          value_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -802,11 +802,11 @@ failure:
   // optional double value = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Gauge)
@@ -828,10 +828,10 @@ size_t Gauge::ByteSizeLong() const {
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -844,7 +844,7 @@ void Gauge::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Gauge)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Gauge)
     MergeFrom(*source);
@@ -941,7 +941,7 @@ void Counter::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Counter& Counter::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Counter_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Counter_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -957,19 +957,19 @@ void Counter::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Counter::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Counter::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional double value = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
           _Internal::set_has_value(&has_bits);
-          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          value_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1006,11 +1006,11 @@ failure:
   // optional double value = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Counter)
@@ -1032,10 +1032,10 @@ size_t Counter::ByteSizeLong() const {
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -1048,7 +1048,7 @@ void Counter::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Counter)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Counter)
     MergeFrom(*source);
@@ -1153,7 +1153,7 @@ void Quantile::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Quantile& Quantile::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Quantile_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Quantile_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -1174,19 +1174,19 @@ void Quantile::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Quantile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Quantile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional double quantile = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
           _Internal::set_has_quantile(&has_bits);
-          quantile_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          quantile_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1194,7 +1194,7 @@ const char* Quantile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_value(&has_bits);
-          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          value_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1231,17 +1231,17 @@ failure:
   // optional double quantile = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_quantile(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(1, this->_internal_quantile(), target);
   }
 
   // optional double value = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(2, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Quantile)
@@ -1270,10 +1270,10 @@ size_t Quantile::ByteSizeLong() const {
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -1286,7 +1286,7 @@ void Quantile::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Quantile)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Quantile)
     MergeFrom(*source);
@@ -1334,7 +1334,7 @@ void Quantile::InternalSwap(Quantile* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::PROTOBUF_NAMESPACE_ID::detail::memswap<
       PROTOBUF_FIELD_OFFSET(Quantile, value_)
       + sizeof(Quantile::value_)
       - PROTOBUF_FIELD_OFFSET(Quantile, quantile_)>(
@@ -1379,7 +1379,7 @@ Summary::Summary(const Summary& from)
 }
 
 void Summary::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Summary_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&scc_info_Summary_metrics2_2eproto.base);
   ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
       reinterpret_cast<char*>(&sample_count_) - reinterpret_cast<char*>(this)),
       0, static_cast<size_t>(reinterpret_cast<char*>(&sample_sum_) -
@@ -1406,7 +1406,7 @@ void Summary::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Summary& Summary::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Summary_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Summary_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -1428,19 +1428,19 @@ void Summary::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Summary::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Summary::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional uint64 sample_count = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_sample_count(&has_bits);
-          sample_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          sample_count_ = ::PROTOBUF_NAMESPACE_ID::detail::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1448,7 +1448,7 @@ const char* Summary::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_sample_sum(&has_bits);
-          sample_sum_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          sample_sum_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1461,7 +1461,7 @@ const char* Summary::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             ptr = ctx->ParseMessage(_internal_add_quantile(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::detail::ExpectTag<26>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -1497,25 +1497,25 @@ failure:
   // optional uint64 sample_count = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_sample_count(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteUInt64ToArray(1, this->_internal_sample_count(), target);
   }
 
   // optional double sample_sum = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_sample_sum(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(2, this->_internal_sample_sum(), target);
   }
 
   // repeated .io.prometheus.client.Quantile quantile = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_quantile_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(3, this->_internal_quantile(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Summary)
@@ -1534,7 +1534,7 @@ size_t Summary::ByteSizeLong() const {
   total_size += 1UL * this->_internal_quantile_size();
   for (const auto& msg : this->quantile_) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(msg);
   }
 
   cached_has_bits = _has_bits_[0];
@@ -1542,7 +1542,7 @@ size_t Summary::ByteSizeLong() const {
     // optional uint64 sample_count = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::UInt64Size(
           this->_internal_sample_count());
     }
 
@@ -1553,10 +1553,10 @@ size_t Summary::ByteSizeLong() const {
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -1569,7 +1569,7 @@ void Summary::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Summary)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Summary)
     MergeFrom(*source);
@@ -1619,7 +1619,7 @@ void Summary::InternalSwap(Summary* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   quantile_.InternalSwap(&other->quantile_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::PROTOBUF_NAMESPACE_ID::detail::memswap<
       PROTOBUF_FIELD_OFFSET(Summary, sample_sum_)
       + sizeof(Summary::sample_sum_)
       - PROTOBUF_FIELD_OFFSET(Summary, sample_count_)>(
@@ -1680,7 +1680,7 @@ void Untyped::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Untyped& Untyped::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Untyped_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Untyped_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -1696,19 +1696,19 @@ void Untyped::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Untyped::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Untyped::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional double value = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
           _Internal::set_has_value(&has_bits);
-          value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          value_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1745,11 +1745,11 @@ failure:
   // optional double value = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(1, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Untyped)
@@ -1771,10 +1771,10 @@ size_t Untyped::ByteSizeLong() const {
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -1787,7 +1787,7 @@ void Untyped::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Untyped)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Untyped)
     MergeFrom(*source);
@@ -1868,7 +1868,7 @@ Histogram::Histogram(const Histogram& from)
 }
 
 void Histogram::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Histogram_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&scc_info_Histogram_metrics2_2eproto.base);
   ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
       reinterpret_cast<char*>(&sample_count_) - reinterpret_cast<char*>(this)),
       0, static_cast<size_t>(reinterpret_cast<char*>(&sample_sum_) -
@@ -1895,7 +1895,7 @@ void Histogram::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Histogram& Histogram::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Histogram_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Histogram_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -1917,19 +1917,19 @@ void Histogram::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Histogram::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Histogram::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional uint64 sample_count = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_sample_count(&has_bits);
-          sample_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          sample_count_ = ::PROTOBUF_NAMESPACE_ID::detail::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1937,7 +1937,7 @@ const char* Histogram::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_sample_sum(&has_bits);
-          sample_sum_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          sample_sum_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -1950,7 +1950,7 @@ const char* Histogram::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
             ptr = ctx->ParseMessage(_internal_add_bucket(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::detail::ExpectTag<26>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -1986,25 +1986,25 @@ failure:
   // optional uint64 sample_count = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_sample_count(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteUInt64ToArray(1, this->_internal_sample_count(), target);
   }
 
   // optional double sample_sum = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_sample_sum(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(2, this->_internal_sample_sum(), target);
   }
 
   // repeated .io.prometheus.client.Bucket bucket = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_bucket_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(3, this->_internal_bucket(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Histogram)
@@ -2023,7 +2023,7 @@ size_t Histogram::ByteSizeLong() const {
   total_size += 1UL * this->_internal_bucket_size();
   for (const auto& msg : this->bucket_) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(msg);
   }
 
   cached_has_bits = _has_bits_[0];
@@ -2031,7 +2031,7 @@ size_t Histogram::ByteSizeLong() const {
     // optional uint64 sample_count = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::UInt64Size(
           this->_internal_sample_count());
     }
 
@@ -2042,10 +2042,10 @@ size_t Histogram::ByteSizeLong() const {
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -2058,7 +2058,7 @@ void Histogram::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Histogram)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Histogram)
     MergeFrom(*source);
@@ -2108,7 +2108,7 @@ void Histogram::InternalSwap(Histogram* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   bucket_.InternalSwap(&other->bucket_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::PROTOBUF_NAMESPACE_ID::detail::memswap<
       PROTOBUF_FIELD_OFFSET(Histogram, sample_sum_)
       + sizeof(Histogram::sample_sum_)
       - PROTOBUF_FIELD_OFFSET(Histogram, sample_count_)>(
@@ -2177,7 +2177,7 @@ void Bucket::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Bucket& Bucket::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Bucket_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Bucket_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -2198,19 +2198,19 @@ void Bucket::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Bucket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Bucket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional uint64 cumulative_count = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           _Internal::set_has_cumulative_count(&has_bits);
-          cumulative_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          cumulative_count_ = ::PROTOBUF_NAMESPACE_ID::detail::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2218,7 +2218,7 @@ const char* Bucket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
           _Internal::set_has_upper_bound(&has_bits);
-          upper_bound_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          upper_bound_ = ::PROTOBUF_NAMESPACE_ID::detail::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
@@ -2255,17 +2255,17 @@ failure:
   // optional uint64 cumulative_count = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cumulative_count(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cumulative_count(), target);
   }
 
   // optional double upper_bound = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_upper_bound(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteDoubleToArray(2, this->_internal_upper_bound(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Bucket)
@@ -2285,7 +2285,7 @@ size_t Bucket::ByteSizeLong() const {
     // optional uint64 cumulative_count = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::UInt64Size(
           this->_internal_cumulative_count());
     }
 
@@ -2296,10 +2296,10 @@ size_t Bucket::ByteSizeLong() const {
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -2312,7 +2312,7 @@ void Bucket::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Bucket)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Bucket)
     MergeFrom(*source);
@@ -2360,7 +2360,7 @@ void Bucket::InternalSwap(Bucket* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::PROTOBUF_NAMESPACE_ID::detail::memswap<
       PROTOBUF_FIELD_OFFSET(Bucket, upper_bound_)
       + sizeof(Bucket::upper_bound_)
       - PROTOBUF_FIELD_OFFSET(Bucket, cumulative_count_)>(
@@ -2465,7 +2465,7 @@ Metric::Metric(const Metric& from)
 }
 
 void Metric::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Metric_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&scc_info_Metric_metrics2_2eproto.base);
   ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
       reinterpret_cast<char*>(&gauge_) - reinterpret_cast<char*>(this)),
       0, static_cast<size_t>(reinterpret_cast<char*>(&timestamp_ms_) -
@@ -2497,7 +2497,7 @@ void Metric::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const Metric& Metric::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Metric_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_Metric_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -2537,12 +2537,12 @@ void Metric::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Metric::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Metric::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // repeated .io.prometheus.client.LabelPair label = 1;
@@ -2554,7 +2554,7 @@ const char* Metric::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
             ptr = ctx->ParseMessage(_internal_add_label(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::detail::ExpectTag<10>(ptr));
         } else goto handle_unusual;
         continue;
       // optional .io.prometheus.client.Gauge gauge = 2;
@@ -2589,7 +2589,7 @@ const char* Metric::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
           _Internal::set_has_timestamp_ms(&has_bits);
-          timestamp_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          timestamp_ms_ = ::PROTOBUF_NAMESPACE_ID::detail::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2633,7 +2633,7 @@ failure:
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_label_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(1, this->_internal_label(i), target, stream);
   }
 
@@ -2641,7 +2641,7 @@ failure:
   // optional .io.prometheus.client.Gauge gauge = 2;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(
         2, _Internal::gauge(this), target, stream);
   }
@@ -2649,7 +2649,7 @@ failure:
   // optional .io.prometheus.client.Counter counter = 3;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(
         3, _Internal::counter(this), target, stream);
   }
@@ -2657,7 +2657,7 @@ failure:
   // optional .io.prometheus.client.Summary summary = 4;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(
         4, _Internal::summary(this), target, stream);
   }
@@ -2665,7 +2665,7 @@ failure:
   // optional .io.prometheus.client.Untyped untyped = 5;
   if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(
         5, _Internal::untyped(this), target, stream);
   }
@@ -2673,19 +2673,19 @@ failure:
   // optional int64 timestamp_ms = 6;
   if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(6, this->_internal_timestamp_ms(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteInt64ToArray(6, this->_internal_timestamp_ms(), target);
   }
 
   // optional .io.prometheus.client.Histogram histogram = 7;
   if (cached_has_bits & 0x00000010u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(
         7, _Internal::histogram(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.Metric)
@@ -2704,7 +2704,7 @@ size_t Metric::ByteSizeLong() const {
   total_size += 1UL * this->_internal_label_size();
   for (const auto& msg : this->label_) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(msg);
   }
 
   cached_has_bits = _has_bits_[0];
@@ -2712,51 +2712,51 @@ size_t Metric::ByteSizeLong() const {
     // optional .io.prometheus.client.Gauge gauge = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(
           *gauge_);
     }
 
     // optional .io.prometheus.client.Counter counter = 3;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(
           *counter_);
     }
 
     // optional .io.prometheus.client.Summary summary = 4;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(
           *summary_);
     }
 
     // optional .io.prometheus.client.Untyped untyped = 5;
     if (cached_has_bits & 0x00000008u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(
           *untyped_);
     }
 
     // optional .io.prometheus.client.Histogram histogram = 7;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(
           *histogram_);
     }
 
     // optional int64 timestamp_ms = 6;
     if (cached_has_bits & 0x00000020u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::Int64Size(
           this->_internal_timestamp_ms());
     }
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -2769,7 +2769,7 @@ void Metric::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.Metric)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.Metric)
     MergeFrom(*source);
@@ -2831,7 +2831,7 @@ void Metric::InternalSwap(Metric* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   label_.InternalSwap(&other->label_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::PROTOBUF_NAMESPACE_ID::detail::memswap<
       PROTOBUF_FIELD_OFFSET(Metric, timestamp_ms_)
       + sizeof(Metric::timestamp_ms_)
       - PROTOBUF_FIELD_OFFSET(Metric, gauge_)>(
@@ -2872,14 +2872,14 @@ MetricFamily::MetricFamily(const MetricFamily& from)
       _has_bits_(from._has_bits_),
       metric_(from.metric_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
   if (from._internal_has_name()) {
-    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+    name_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
       GetArena());
   }
-  help_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  help_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
   if (from._internal_has_help()) {
-    help_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_help(), 
+    help_.Set(::PROTOBUF_NAMESPACE_ID::detail::ArenaStringPtr::EmptyDefault{}, from._internal_help(), 
       GetArena());
   }
   type_ = from.type_;
@@ -2887,9 +2887,9 @@ MetricFamily::MetricFamily(const MetricFamily& from)
 }
 
 void MetricFamily::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MetricFamily_metrics2_2eproto.base);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  help_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&scc_info_MetricFamily_metrics2_2eproto.base);
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
+  help_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
   type_ = 0;
 }
 
@@ -2901,8 +2901,8 @@ MetricFamily::~MetricFamily() {
 
 void MetricFamily::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
-  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  help_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
+  help_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited());
 }
 
 void MetricFamily::ArenaDtor(void* object) {
@@ -2915,7 +2915,7 @@ void MetricFamily::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 const MetricFamily& MetricFamily::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_MetricFamily_metrics2_2eproto.base);
+  ::PROTOBUF_NAMESPACE_ID::detail::InitSCC(&::scc_info_MetricFamily_metrics2_2eproto.base);
   return *internal_default_instance();
 }
 
@@ -2941,21 +2941,21 @@ void MetricFamily::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* MetricFamily::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* MetricFamily::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::detail::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::PROTOBUF_NAMESPACE_ID::detail::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
       // optional string name = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_name();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::detail::InlineGreedyStringParser(str, ptr, ctx);
           #ifndef NDEBUG
-          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "io.prometheus.client.MetricFamily.name");
+          ::PROTOBUF_NAMESPACE_ID::detail::VerifyUTF8(str, "io.prometheus.client.MetricFamily.name");
           #endif  // !NDEBUG
           CHK_(ptr);
         } else goto handle_unusual;
@@ -2964,9 +2964,9 @@ const char* MetricFamily::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           auto str = _internal_mutable_help();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::detail::InlineGreedyStringParser(str, ptr, ctx);
           #ifndef NDEBUG
-          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "io.prometheus.client.MetricFamily.help");
+          ::PROTOBUF_NAMESPACE_ID::detail::VerifyUTF8(str, "io.prometheus.client.MetricFamily.help");
           #endif  // !NDEBUG
           CHK_(ptr);
         } else goto handle_unusual;
@@ -2974,12 +2974,12 @@ const char* MetricFamily::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
       // optional .io.prometheus.client.MetricType type = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::detail::ReadVarint64(&ptr);
           CHK_(ptr);
           if (PROTOBUF_PREDICT_TRUE(::io::prometheus::client::MetricType_IsValid(val))) {
             _internal_set_type(static_cast<::io::prometheus::client::MetricType>(val));
           } else {
-            ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(3, val, mutable_unknown_fields());
+            ::PROTOBUF_NAMESPACE_ID::detail::WriteVarint(3, val, mutable_unknown_fields());
           }
         } else goto handle_unusual;
         continue;
@@ -2992,7 +2992,7 @@ const char* MetricFamily::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
             ptr = ctx->ParseMessage(_internal_add_metric(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::detail::ExpectTag<34>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -3027,9 +3027,9 @@ failure:
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
   if (cached_has_bits & 0x00000001u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::SERIALIZE,
       "io.prometheus.client.MetricFamily.name");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_name(), target);
@@ -3037,9 +3037,9 @@ failure:
 
   // optional string help = 2;
   if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_help().data(), static_cast<int>(this->_internal_help().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::SERIALIZE,
       "io.prometheus.client.MetricFamily.help");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_help(), target);
@@ -3048,7 +3048,7 @@ failure:
   // optional .io.prometheus.client.MetricType type = 3;
   if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::WriteEnumToArray(
       3, this->_internal_type(), target);
   }
 
@@ -3056,12 +3056,12 @@ failure:
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_metric_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::
       InternalWriteMessage(4, this->_internal_metric(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::detail::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:io.prometheus.client.MetricFamily)
@@ -3080,7 +3080,7 @@ size_t MetricFamily::ByteSizeLong() const {
   total_size += 1UL * this->_internal_metric_size();
   for (const auto& msg : this->metric_) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::MessageSize(msg);
   }
 
   cached_has_bits = _has_bits_[0];
@@ -3088,29 +3088,29 @@ size_t MetricFamily::ByteSizeLong() const {
     // optional string name = 1;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::StringSize(
           this->_internal_name());
     }
 
     // optional string help = 2;
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::StringSize(
           this->_internal_help());
     }
 
     // optional .io.prometheus.client.MetricType type = 3;
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+        ::PROTOBUF_NAMESPACE_ID::detail::WireFormatLite::EnumSize(this->_internal_type());
     }
 
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+    return ::PROTOBUF_NAMESPACE_ID::detail::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
   }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::detail::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
 }
@@ -3123,7 +3123,7 @@ void MetricFamily::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
           &from);
   if (source == nullptr) {
   // @@protoc_insertion_point(generalized_merge_from_cast_fail:io.prometheus.client.MetricFamily)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+    ::PROTOBUF_NAMESPACE_ID::detail::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:io.prometheus.client.MetricFamily)
     MergeFrom(*source);
@@ -3176,8 +3176,8 @@ void MetricFamily::InternalSwap(MetricFamily* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   metric_.InternalSwap(&other->metric_);
-  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  help_.Swap(&other->help_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
+  help_.Swap(&other->help_, &::PROTOBUF_NAMESPACE_ID::detail::GetEmptyStringAlreadyInited(), GetArena());
   swap(type_, other->type_);
 }
 

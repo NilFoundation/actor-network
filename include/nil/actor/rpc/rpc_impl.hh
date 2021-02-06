@@ -391,7 +391,7 @@ namespace nil {
                 template<typename... V>
                 void set_value(V &&...v) {
                     done = true;
-                    p.set_value(internal::untuple(std::forward<V>(v))...);
+                    p.set_value(detail::untuple(std::forward<V>(v))...);
                 }
                 ~rcv_reply_base() {
                     if (!done) {
