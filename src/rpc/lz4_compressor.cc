@@ -85,11 +85,14 @@ namespace nil {
                 // containing data that was written to the temporary buffer.
                 // Output should be either snd_buf or rcv_buf.
                 template<typename Output, typename Function>
-                ACTOR_CONCEPT(requires requires(Function fn, char *ptr) {
+#ifdef BOOST_HAS_CONCEPTS
+                requires requires(Function fn, char *ptr) {
                     { fn(ptr) }
                     ->std::convertible_to<size_t>;
-                } && (std::is_same<Output, snd_buf>::value || std::is_same<Output, rcv_buf>::value))
-                Output with_reserved(size_t max_size, Function &&fn) {
+                }
+                &&(std::is_same<Output, snd_buf>::value || std::is_same<Output, rcv_buf>::value)
+#endif
+                    Output with_reserved(size_t max_size, Function &&fn) {
                     if (max_size <= chunk_size) {
                         auto dst = temporary_buffer<char>(max_size);
                         size_t dst_size = fn(dst.get_write());

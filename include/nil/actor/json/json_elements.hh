@@ -314,10 +314,12 @@ namespace nil {
              * i.first}));
              */
             template<typename Container, typename Func>
-            ACTOR_CONCEPT(requires requires(Container c, Func aa, output_stream<char> s) {
+#ifdef BOOST_HAS_CONCEPTS
+            requires requires(Container c, Func aa, output_stream<char> s) {
                 { formatter::write(s, aa(*c.begin())) }
                 ->std::same_as<future<>>;
-            })
+            }
+#endif
             std::function<future<>(output_stream<char> &&)> stream_range_as_array(Container val, Func fun) {
                 return [val = std::move(val), fun = std::move(fun)](output_stream<char> &&s) {
                     return do_with(
