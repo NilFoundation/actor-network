@@ -83,10 +83,10 @@ namespace nil {
                 if (p != pe) {
                     _state = state::error;
                 }
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmisleading-indentation"
-#endif
+                //#ifdef __clang__
+                //#pragma clang diagnostic push
+                //#pragma clang diagnostic ignored "-Wmisleading-indentation"
+                //#endif
 
 #line 90 "include/nil/actor/network/http/request_parser.hh"
                 {
@@ -1152,9 +1152,9 @@ namespace nil {
 
 #line 162 "src/http/request_parser.rl"
 
-#ifdef __clang__
-#pragma clang diagnostic pop
-#endif
+                //#ifdef __clang__
+                //#pragma clang diagnostic pop
+                //#endif
                 if (!done) {
                     if (p == eof) {
                         _state = state::eof;

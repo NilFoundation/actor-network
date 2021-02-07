@@ -113,25 +113,25 @@ static future<> connect_to_ssl_google(::shared_ptr<tls::certificate_credentials>
     return connect_to_ssl_addr(std::move(certs), google);
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client) {
+ACTOR_TEST_CASE(test_simple_x509_client) {
     auto certs = ::make_shared<tls::certificate_credentials>();
     return certs->set_x509_trust_file(certfile("tls-ca-bundle.pem"), tls::x509_crt_format::PEM).then([certs]() {
         return connect_to_ssl_google(certs);
     });
 }
 
-SEASTAR_TEST_CASE(test_x509_client_with_system_trust) {
+ACTOR_TEST_CASE(test_x509_client_with_system_trust) {
     auto certs = ::make_shared<tls::certificate_credentials>();
     return certs->set_system_trust().then([certs]() { return connect_to_ssl_google(certs); });
 }
 
-SEASTAR_TEST_CASE(test_x509_client_with_builder_system_trust) {
+ACTOR_TEST_CASE(test_x509_client_with_builder_system_trust) {
     tls::credentials_builder b;
     (void)b.set_system_trust();
     return connect_to_ssl_google(b.build_certificate_credentials());
 }
 
-SEASTAR_TEST_CASE(test_x509_client_with_builder_system_trust_multiple) {
+ACTOR_TEST_CASE(test_x509_client_with_builder_system_trust_multiple) {
     tls::credentials_builder b;
     (void)b.set_system_trust();
     auto creds = b.build_certificate_credentials();
@@ -139,7 +139,7 @@ SEASTAR_TEST_CASE(test_x509_client_with_builder_system_trust_multiple) {
     return parallel_for_each(boost::irange(0, 20), [creds](auto i) { return connect_to_ssl_google(creds); });
 }
 
-SEASTAR_TEST_CASE(test_x509_client_with_priority_strings) {
+ACTOR_TEST_CASE(test_x509_client_with_priority_strings) {
     static std::vector<sstring> prios(
         {"NONE:+VERS-TLS-ALL:+MAC-ALL:+RSA:+AES-128-CBC:+SIGN-ALL:+COMP-NULL",
          "NORMAL:+ARCFOUR-128",                     // means normal ciphers plus ARCFOUR-128.
@@ -157,7 +157,7 @@ SEASTAR_TEST_CASE(test_x509_client_with_priority_strings) {
     });
 }
 
-SEASTAR_TEST_CASE(test_x509_client_with_priority_strings_fail) {
+ACTOR_TEST_CASE(test_x509_client_with_priority_strings_fail) {
     static std::vector<sstring> prios({"NONE", "NONE:+CURVE-SECP256R1"});
     return do_for_each(prios, [](const sstring &prio) {
         tls::credentials_builder b;
@@ -176,13 +176,13 @@ SEASTAR_TEST_CASE(test_x509_client_with_priority_strings_fail) {
     });
 }
 
-SEASTAR_TEST_CASE(test_failed_connect) {
+ACTOR_TEST_CASE(test_failed_connect) {
     tls::credentials_builder b;
     (void)b.set_system_trust();
     return connect_to_ssl_addr(b.build_certificate_credentials(), ipv4_addr()).handle_exception([](auto) {});
 }
 
-SEASTAR_TEST_CASE(test_non_tls) {
+ACTOR_TEST_CASE(test_non_tls) {
     ::listen_options opts;
     opts.reuse_address = true;
     auto addr = ::make_ipv4_address({0x7f000001, 4712});
@@ -211,7 +211,7 @@ SEASTAR_TEST_CASE(test_non_tls) {
             [server = std::move(server)](auto ep) { std::cerr << "Got expected exception" << std::endl; });
 }
 
-SEASTAR_TEST_CASE(test_abort_accept_before_handshake) {
+ACTOR_TEST_CASE(test_abort_accept_before_handshake) {
     auto certs = ::make_shared<tls::server_credentials>(::make_shared<tls::dh_params>());
     return certs->set_x509_key_file(certfile("test.crt"), certfile("test.key"), tls::x509_crt_format::PEM)
         .then([certs] {
@@ -232,7 +232,7 @@ SEASTAR_TEST_CASE(test_abort_accept_before_handshake) {
         });
 }
 
-SEASTAR_TEST_CASE(test_abort_accept_after_handshake) {
+ACTOR_TEST_CASE(test_abort_accept_after_handshake) {
     return async([] {
         auto certs = ::make_shared<tls::server_credentials>(::make_shared<tls::dh_params>());
         certs->set_x509_key_file(certfile("test.crt"), certfile("test.key"), tls::x509_crt_format::PEM).get();
@@ -264,7 +264,7 @@ SEASTAR_TEST_CASE(test_abort_accept_after_handshake) {
     });
 }
 
-SEASTAR_TEST_CASE(test_abort_accept_on_server_before_handshake) {
+ACTOR_TEST_CASE(test_abort_accept_on_server_before_handshake) {
     return async([] {
         ::listen_options opts;
         opts.reuse_address = true;
@@ -480,7 +480,7 @@ static future<> run_echo_test(sstring message,
  * catest == snakeoil root authority for these self-signed certs
  *
  */
-SEASTAR_TEST_CASE(test_simple_x509_client_server) {
+ACTOR_TEST_CASE(test_simple_x509_client_server) {
     // Make sure we load our own auth trust pem file, otherwise our certs
     // will not validate
     // Must match expected name with cert CA or give empty name to ignore
@@ -488,19 +488,19 @@ SEASTAR_TEST_CASE(test_simple_x509_client_server) {
     return run_echo_test(message, 20, certfile("catest.pem"), "test.scylladb.org");
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client_server_again) {
+ACTOR_TEST_CASE(test_simple_x509_client_server_again) {
     return run_echo_test(message, 20, certfile("catest.pem"), "test.scylladb.org");
 }
 
 #if GNUTLS_VERSION_NUMBER >= 0x030600
 // Test #769 - do not set dh_params in server certs - let gnutls negotiate.
-SEASTAR_TEST_CASE(test_simple_server_default_dhparams) {
+ACTOR_TEST_CASE(test_simple_server_default_dhparams) {
     return run_echo_test(message, 20, certfile("catest.pem"), "test.scylladb.org", certfile("test.crt"),
                          certfile("test.key"), tls::client_auth::NONE, {}, {}, true, /* use_dh_params */ false);
 }
 #endif
 
-SEASTAR_TEST_CASE(test_x509_client_server_cert_validation_fail) {
+ACTOR_TEST_CASE(test_x509_client_server_cert_validation_fail) {
     // Load a real trust authority here, which out certs are _not_ signed with.
     return run_echo_test(message, 1, certfile("tls-ca-bundle.pem"), {})
         .then([] { BOOST_FAIL("Should have gotten validation error"); })
@@ -515,7 +515,7 @@ SEASTAR_TEST_CASE(test_x509_client_server_cert_validation_fail) {
         });
 }
 
-SEASTAR_TEST_CASE(test_x509_client_server_cert_validation_fail_name) {
+ACTOR_TEST_CASE(test_x509_client_server_cert_validation_fail_name) {
     // Use trust store with our signer, but wrong host name
     return run_echo_test(message, 1, certfile("tls-ca-bundle.pem"), "nils.holgersson.gov")
         .then([] { BOOST_FAIL("Should have gotten validation error"); })
@@ -530,7 +530,7 @@ SEASTAR_TEST_CASE(test_x509_client_server_cert_validation_fail_name) {
         });
 }
 
-SEASTAR_TEST_CASE(test_large_message_x509_client_server) {
+ACTOR_TEST_CASE(test_large_message_x509_client_server) {
     // Make sure we load our own auth trust pem file, otherwise our certs
     // will not validate
     // Must match expected name with cert CA or give empty name to ignore
@@ -542,7 +542,7 @@ SEASTAR_TEST_CASE(test_large_message_x509_client_server) {
     return run_echo_test(std::move(msg), 20, certfile("catest.pem"), "test.scylladb.org");
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client_server_fail_client_auth) {
+ACTOR_TEST_CASE(test_simple_x509_client_server_fail_client_auth) {
     // Make sure we load our own auth trust pem file, otherwise our certs
     // will not validate
     // Must match expected name with cert CA or give empty name to ignore
@@ -556,7 +556,7 @@ SEASTAR_TEST_CASE(test_simple_x509_client_server_fail_client_auth) {
         });
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth) {
+ACTOR_TEST_CASE(test_simple_x509_client_server_client_auth) {
     // Make sure we load our own auth trust pem file, otherwise our certs
     // will not validate
     // Must match expected name with cert CA or give empty name to ignore
@@ -566,7 +566,7 @@ SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth) {
                          certfile("test.key"), tls::client_auth::REQUIRE, certfile("test.crt"), certfile("test.key"));
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth_with_dn_callback) {
+ACTOR_TEST_CASE(test_simple_x509_client_server_client_auth_with_dn_callback) {
     // In addition to the above test, the certificate's subject and issuer
     // Distinguished Names (DNs) will be checked for the occurrence of a specific
     // substring (in this case, the test.scylladb.org url)
@@ -579,7 +579,7 @@ SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth_with_dn_callback) {
                          });
 }
 
-SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth_dn_callback_fails) {
+ACTOR_TEST_CASE(test_simple_x509_client_server_client_auth_dn_callback_fails) {
     // Test throwing an exception from within the Distinguished Names callback
     return run_echo_test(message, 20, certfile("catest.pem"), "test.scylladb.org", certfile("test.crt"),
                          certfile("test.key"), tls::client_auth::REQUIRE, certfile("test.crt"), certfile("test.key"),
@@ -593,7 +593,7 @@ SEASTAR_TEST_CASE(test_simple_x509_client_server_client_auth_dn_callback_fails) 
         });
 }
 
-SEASTAR_TEST_CASE(test_many_large_message_x509_client_server) {
+ACTOR_TEST_CASE(test_many_large_message_x509_client_server) {
     // Make sure we load our own auth trust pem file, otherwise our certs
     // will not validate
     // Must match expected name with cert CA or give empty name to ignore
@@ -612,7 +612,7 @@ SEASTAR_TEST_CASE(test_many_large_message_x509_client_server) {
     });
 }
 
-SEASTAR_THREAD_TEST_CASE(test_close_timout) {
+ACTOR_THREAD_TEST_CASE(test_close_timout) {
     tls::credentials_builder b;
 
     b.set_x509_key_file(certfile("test.crt"), certfile("test.key"), tls::x509_crt_format::PEM).get();
@@ -696,7 +696,7 @@ SEASTAR_THREAD_TEST_CASE(test_close_timout) {
     sem.wait(2 * iterations).get();
 }
 
-SEASTAR_THREAD_TEST_CASE(test_reload_certificates) {
+ACTOR_THREAD_TEST_CASE(test_reload_certificates) {
     tmpdir tmp;
 
     namespace fs = std::filesystem;
@@ -804,7 +804,7 @@ SEASTAR_THREAD_TEST_CASE(test_reload_certificates) {
     }
 }
 
-SEASTAR_THREAD_TEST_CASE(test_reload_broken_certificates) {
+ACTOR_THREAD_TEST_CASE(test_reload_broken_certificates) {
     tmpdir tmp;
 
     namespace fs = std::filesystem;
@@ -862,7 +862,7 @@ using namespace std::chrono_literals;
 // the same as previous test, but we set a big tolerance for
 // reload errors, and verify that either our scheduling/fs is
 // super slow, or we got through the changes without failures.
-SEASTAR_THREAD_TEST_CASE(test_reload_tolerance) {
+ACTOR_THREAD_TEST_CASE(test_reload_tolerance) {
     tmpdir tmp;
 
     namespace fs = std::filesystem;
@@ -921,7 +921,7 @@ SEASTAR_THREAD_TEST_CASE(test_reload_tolerance) {
     BOOST_ASSERT(nfails == 0 || (end - start) > 4s);
 }
 
-SEASTAR_THREAD_TEST_CASE(test_reload_by_move) {
+ACTOR_THREAD_TEST_CASE(test_reload_by_move) {
     tmpdir tmp;
     tmpdir tmp2;
 

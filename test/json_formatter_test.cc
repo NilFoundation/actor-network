@@ -33,7 +33,7 @@
 using namespace nil::actor;
 using namespace json;
 
-SEASTAR_TEST_CASE(test_simple_values) {
+ACTOR_TEST_CASE(test_simple_values) {
     BOOST_CHECK_EQUAL("3", formatter::to_json(3));
     BOOST_CHECK_EQUAL("3", formatter::to_json(3.0));
     BOOST_CHECK_EQUAL("3.5", formatter::to_json(3.5));
@@ -44,7 +44,7 @@ SEASTAR_TEST_CASE(test_simple_values) {
     return make_ready_future();
 }
 
-SEASTAR_TEST_CASE(test_collections) {
+ACTOR_TEST_CASE(test_collections) {
     BOOST_CHECK_EQUAL("{1:2,3:4}", formatter::to_json(std::map<int, int>({{1, 2}, {3, 4}})));
     BOOST_CHECK_EQUAL("[1,2,3,4]", formatter::to_json(std::vector<int>({1, 2, 3, 4})));
     BOOST_CHECK_EQUAL("[{1:2},{3:4}]", formatter::to_json(std::vector<std::pair<int, int>>({{1, 2}, {3, 4}})));

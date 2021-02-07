@@ -85,7 +85,7 @@ namespace nil {
                 // containing data that was written to the temporary buffer.
                 // Output should be either snd_buf or rcv_buf.
                 template<typename Output, typename Function>
-                SEASTAR_CONCEPT(requires requires(Function fn, char *ptr) {
+                ACTOR_CONCEPT(requires requires(Function fn, char *ptr) {
                     { fn(ptr) }
                     ->std::convertible_to<size_t>;
                 } && (std::is_same<Output, snd_buf>::value || std::is_same<Output, rcv_buf>::value))
@@ -147,7 +147,7 @@ namespace nil {
                     auto src_size = data.size;
                     auto src = reusable_buffer_decompressed_data.prepare(data.bufs, data.size);
 
-#ifdef SEASTAR_HAVE_LZ4_COMPRESS_DEFAULT
+#ifdef ACTOR_HAVE_LZ4_COMPRESS_DEFAULT
                     auto size = LZ4_compress_default(src, dst + head_space, src_size, LZ4_compressBound(src_size));
 #else
         // Safe since output buffer is sized properly.

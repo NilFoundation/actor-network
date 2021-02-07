@@ -73,7 +73,7 @@ namespace nil {
                 std::unique_ptr<device> dev;
 
                 if (deprecated_config_used) {
-#ifdef SEASTAR_HAVE_DPDK
+#ifdef ACTOR_HAVE_DPDK
                     if (opts.count("dpdk-pmd")) {
                         dev =
                             create_dpdk_net_device(opts["dpdk-port-index"].as<unsigned>(), smp::count,
@@ -91,7 +91,7 @@ namespace nil {
 
                     for (auto &&device_config : device_configs) {
                         auto &hw_config = device_config.second.hw_cfg;
-#ifdef SEASTAR_HAVE_DPDK
+#ifdef ACTOR_HAVE_DPDK
                         if (hw_config.port_index || !hw_config.pci_address.empty()) {
                             dev = create_dpdk_net_device(hw_config);
                         } else
@@ -194,7 +194,7 @@ namespace nil {
 
             void add_native_net_options_description(boost::program_options::options_description &opts) {
                 opts.add(get_virtio_net_options_description());
-#ifdef SEASTAR_HAVE_DPDK
+#ifdef ACTOR_HAVE_DPDK
                 opts.add(get_dpdk_net_options_description());
 #endif
             }
@@ -331,7 +331,7 @@ namespace nil {
                     "hw-queue-weight",
                     boost::program_options::value<float>()->default_value(1.0f),
                     "Weighing of a hardware network queue relative to a software queue (0=no work, 1=equal share)")
-#ifdef SEASTAR_HAVE_DPDK
+#ifdef ACTOR_HAVE_DPDK
                     ("dpdk-pmd", "Use DPDK PMD drivers")
 #endif
                         ("lro", boost::program_options::value<std::string>()->default_value("on"), "Enable LRO");

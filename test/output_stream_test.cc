@@ -88,7 +88,7 @@ future<> assert_split(StreamConstructor stream_maker, std::initializer_list<T> w
         });
 }
 
-SEASTAR_TEST_CASE(test_splitting) {
+ACTOR_TEST_CASE(test_splitting) {
     auto ctor = stream_maker().trim(false).size(4);
     return now()
         .then([=] { return assert_split(ctor, {"1"}, {"1"}); })
@@ -128,7 +128,7 @@ SEASTAR_TEST_CASE(test_splitting) {
         });
 }
 
-SEASTAR_TEST_CASE(test_splitting_with_trimming) {
+ACTOR_TEST_CASE(test_splitting_with_trimming) {
     auto ctor = stream_maker().trim(true).size(4);
     return now()
         .then([=] { return assert_split(ctor, {"1"}, {"1"}); })
@@ -155,7 +155,7 @@ SEASTAR_TEST_CASE(test_splitting_with_trimming) {
         });
 }
 
-SEASTAR_TEST_CASE(test_flush_on_empty_buffer_does_not_push_empty_packet_down_stream) {
+ACTOR_TEST_CASE(test_flush_on_empty_buffer_does_not_push_empty_packet_down_stream) {
     auto v = make_shared<std::vector<packet>>();
     auto out = make_shared<output_stream<char>>(data_sink(std::make_unique<vector_data_sink>(*v)), 8);
 
@@ -167,7 +167,7 @@ SEASTAR_TEST_CASE(test_flush_on_empty_buffer_does_not_push_empty_packet_down_str
         .finally([out] {});
 }
 
-SEASTAR_THREAD_TEST_CASE(test_simple_write) {
+ACTOR_THREAD_TEST_CASE(test_simple_write) {
     auto vec = std::vector<net::packet> {};
     auto out = output_stream<char>(data_sink(std::make_unique<vector_data_sink>(vec)), 8);
 

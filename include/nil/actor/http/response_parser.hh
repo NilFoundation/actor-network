@@ -1,4 +1,3 @@
-#line 1 "src/http/response_parser.rl"
 //---------------------------------------------------------------------------//
 // Copyright (c) 2018-2021 Mikhail Komarov <nemo@nil.foundation>
 //
@@ -22,6 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //---------------------------------------------------------------------------//
+//
+//
+#pragma once
 
 #include <nil/actor/core/ragel.hh>
 #include <memory>

@@ -35,7 +35,7 @@ using namespace nil::actor;
 
 static logger niflog("network_interface_test");
 
-SEASTAR_TEST_CASE(list_interfaces) {
+ACTOR_TEST_CASE(list_interfaces) {
     // just verifying we have something. And can access all the stuff.
     auto interfaces = engine().net().network_interfaces();
     BOOST_REQUIRE_GT(interfaces.size(), 0);
@@ -54,7 +54,7 @@ SEASTAR_TEST_CASE(list_interfaces) {
     return make_ready_future();
 }
 
-SEASTAR_TEST_CASE(match_ipv6_scope) {
+ACTOR_TEST_CASE(match_ipv6_scope) {
     auto interfaces = engine().net().network_interfaces();
 
     for (auto &nif : interfaces) {

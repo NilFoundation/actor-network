@@ -302,7 +302,7 @@ struct cfactory : rpc::compressor::factory {
     }
 };
 
-SEASTAR_TEST_CASE(test_rpc_connect) {
+ACTOR_TEST_CASE(test_rpc_connect) {
     std::vector<future<>> fs;
 
     for (auto i = 0; i < 2; i++) {
@@ -339,7 +339,7 @@ SEASTAR_TEST_CASE(test_rpc_connect) {
     return when_all(fs.begin(), fs.end()).discard_result();
 }
 
-SEASTAR_TEST_CASE(test_rpc_connect_multi_compression_algo) {
+ACTOR_TEST_CASE(test_rpc_connect_multi_compression_algo) {
     auto factory1 = std::make_unique<cfactory>();
     auto factory2 = std::make_unique<cfactory>("LZ4NEW");
     rpc::server_options so;
@@ -365,7 +365,7 @@ SEASTAR_TEST_CASE(test_rpc_connect_multi_compression_algo) {
         });
 }
 
-SEASTAR_TEST_CASE(test_rpc_connect_abort) {
+ACTOR_TEST_CASE(test_rpc_connect_abort) {
     rpc_test_config cfg;
     cfg.connect = false;
     return rpc_test_env<>::do_with_thread(cfg, [](rpc_test_env<> &env) {
@@ -381,7 +381,7 @@ SEASTAR_TEST_CASE(test_rpc_connect_abort) {
     });
 }
 
-SEASTAR_TEST_CASE(test_rpc_cancel) {
+ACTOR_TEST_CASE(test_rpc_cancel) {
     using namespace std::chrono_literals;
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         bool rpc_executed = false;
@@ -417,7 +417,7 @@ SEASTAR_TEST_CASE(test_rpc_cancel) {
     });
 }
 
-SEASTAR_TEST_CASE(test_message_to_big) {
+ACTOR_TEST_CASE(test_message_to_big) {
     rpc_test_config cfg;
     cfg.resource_limits = {0, 1, 100};
     return rpc_test_env<>::do_with_thread(cfg, [](rpc_test_env<> &env, test_rpc_proto::client &c) {
@@ -542,7 +542,7 @@ future<stream_test_result>
     });
 }
 
-SEASTAR_TEST_CASE(test_stream_simple) {
+ACTOR_TEST_CASE(test_stream_simple) {
     rpc::server_options so;
     so.streaming_domain = rpc::streaming_domain_type(1);
     rpc_test_config cfg;
@@ -561,7 +561,7 @@ SEASTAR_TEST_CASE(test_stream_simple) {
     });
 }
 
-SEASTAR_TEST_CASE(test_stream_stop_client) {
+ACTOR_TEST_CASE(test_stream_stop_client) {
     rpc::server_options so;
     so.streaming_domain = rpc::streaming_domain_type(1);
     rpc_test_config cfg;
@@ -579,7 +579,7 @@ SEASTAR_TEST_CASE(test_stream_stop_client) {
     });
 }
 
-SEASTAR_TEST_CASE(test_stream_connection_error) {
+ACTOR_TEST_CASE(test_stream_connection_error) {
     rpc::server_options so;
     so.streaming_domain = rpc::streaming_domain_type(1);
     rpc_test_config cfg;
@@ -598,7 +598,7 @@ SEASTAR_TEST_CASE(test_stream_connection_error) {
     });
 }
 
-SEASTAR_TEST_CASE(test_rpc_scheduling) {
+ACTOR_TEST_CASE(test_rpc_scheduling) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         auto sg = create_scheduling_group("rpc", 100).get0();
         env.register_handler(1,
@@ -614,7 +614,7 @@ SEASTAR_TEST_CASE(test_rpc_scheduling) {
     });
 }
 
-SEASTAR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based) {
+ACTOR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based) {
     auto sg1 = create_scheduling_group("sg1", 100).get0();
     auto sg1_kill = defer([&] { destroy_scheduling_group(sg1).get(); });
     auto sg2 = create_scheduling_group("sg2", 100).get0();
@@ -655,7 +655,7 @@ SEASTAR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based) {
     }).get();
 }
 
-SEASTAR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based_compatibility) {
+ACTOR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based_compatibility) {
     auto sg1 = create_scheduling_group("sg1", 100).get0();
     auto sg1_kill = defer([&] { destroy_scheduling_group(sg1).get(); });
     auto sg2 = create_scheduling_group("sg2", 100).get0();
@@ -951,11 +951,11 @@ void test_compressor(std::function<std::unique_ptr<nil::actor::rpc::compressor>(
     }
 }
 
-SEASTAR_THREAD_TEST_CASE(test_lz4_compressor) {
+ACTOR_THREAD_TEST_CASE(test_lz4_compressor) {
     test_compressor([] { return std::make_unique<rpc::lz4_compressor>(); });
 }
 
-SEASTAR_THREAD_TEST_CASE(test_lz4_fragmented_compressor) {
+ACTOR_THREAD_TEST_CASE(test_lz4_fragmented_compressor) {
     test_compressor([] { return std::make_unique<rpc::lz4_fragmented_compressor>(); });
 }
 
@@ -964,7 +964,7 @@ SEASTAR_THREAD_TEST_CASE(test_lz4_fragmented_compressor) {
 // these calculations happen across a millisecond boundary, overflowed the
 // integer and mislead the receiver to think the requested timeout was
 // negative, and cause it drop its response, so the RPC call never completed.
-SEASTAR_TEST_CASE(test_max_absolute_timeout) {
+ACTOR_TEST_CASE(test_max_absolute_timeout) {
     // The typical failure of this test is a hang. So we use semaphore to
     // stop the test either when it succeeds, or after a long enough hang.
     auto success = make_lw_shared<bool>(false);
@@ -1000,7 +1000,7 @@ SEASTAR_TEST_CASE(test_max_absolute_timeout) {
 // Similar to the above test: Test that a relative timeout duration::max()
 // also works, and again doesn't cause the timeout wrapping around to the
 // past and causing dropped responses.
-SEASTAR_TEST_CASE(test_max_relative_timeout) {
+ACTOR_TEST_CASE(test_max_relative_timeout) {
     // The typical failure of this test is a hang. So we use semaphore to
     // stop the test either when it succeeds, or after a long enough hang.
     auto success = make_lw_shared<bool>(false);
@@ -1026,7 +1026,7 @@ SEASTAR_TEST_CASE(test_max_relative_timeout) {
     return done->wait().then([done, success] { BOOST_REQUIRE(*success); });
 }
 
-SEASTAR_TEST_CASE(test_rpc_tuple) {
+ACTOR_TEST_CASE(test_rpc_tuple) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         env.register_handler(
                1, []() { return make_ready_future<rpc::tuple<int, long>>(rpc::tuple<int, long>(1, 0x7'0000'0000L)); })
@@ -1038,7 +1038,7 @@ SEASTAR_TEST_CASE(test_rpc_tuple) {
     });
 }
 
-SEASTAR_TEST_CASE(test_rpc_nonvariadic_client_variadic_server) {
+ACTOR_TEST_CASE(test_rpc_nonvariadic_client_variadic_server) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         // Server is variadic
         env.register_handler(1,
@@ -1052,7 +1052,7 @@ SEASTAR_TEST_CASE(test_rpc_nonvariadic_client_variadic_server) {
     });
 }
 
-SEASTAR_TEST_CASE(test_rpc_variadic_client_nonvariadic_server) {
+ACTOR_TEST_CASE(test_rpc_variadic_client_nonvariadic_server) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         // Server is nonvariadic
         env.register_handler(
@@ -1066,7 +1066,7 @@ SEASTAR_TEST_CASE(test_rpc_variadic_client_nonvariadic_server) {
     });
 }
 
-SEASTAR_TEST_CASE(test_handler_registration) {
+ACTOR_TEST_CASE(test_handler_registration) {
     rpc_test_config cfg;
     cfg.connect = false;
     return rpc_test_env<>::do_with_thread(cfg, [](rpc_test_env<> &env) {
@@ -1104,7 +1104,7 @@ SEASTAR_TEST_CASE(test_handler_registration) {
     });
 }
 
-SEASTAR_TEST_CASE(test_unregister_handler) {
+ACTOR_TEST_CASE(test_unregister_handler) {
     using namespace std::chrono_literals;
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         promise<> handler_called;
@@ -1175,7 +1175,7 @@ SEASTAR_TEST_CASE(test_unregister_handler) {
     });
 }
 
-SEASTAR_TEST_CASE(test_loggers) {
+ACTOR_TEST_CASE(test_loggers) {
     static nil::actor::logger log("dummy");
     log.set_level(log_level::debug);
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {

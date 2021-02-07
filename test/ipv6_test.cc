@@ -41,7 +41,7 @@ static bool check_ipv6_support() {
     return true;
 }
 
-SEASTAR_TEST_CASE(udp_packet_test) {
+ACTOR_TEST_CASE(udp_packet_test) {
     if (!check_ipv6_support()) {
         return make_ready_future<>();
     }
@@ -72,7 +72,7 @@ SEASTAR_TEST_CASE(udp_packet_test) {
     });
 }
 
-SEASTAR_TEST_CASE(tcp_packet_test) {
+ACTOR_TEST_CASE(tcp_packet_test) {
     if (!check_ipv6_support()) {
         return make_ready_future<>();
     }

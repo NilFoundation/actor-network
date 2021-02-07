@@ -58,14 +58,14 @@ public:
     }
 };
 
-SEASTAR_TEST_CASE(test_reply) {
+ACTOR_TEST_CASE(test_reply) {
     reply r;
     r.set_content_type("txt");
     BOOST_REQUIRE_EQUAL(r._headers["Content-Type"], sstring("text/plain"));
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_str_matcher) {
+ACTOR_TEST_CASE(test_str_matcher) {
 
     str_matcher m("/hello");
     parameters param;
@@ -73,7 +73,7 @@ SEASTAR_TEST_CASE(test_str_matcher) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_param_matcher) {
+ACTOR_TEST_CASE(test_param_matcher) {
 
     param_matcher m("param");
     parameters param;
@@ -83,7 +83,7 @@ SEASTAR_TEST_CASE(test_param_matcher) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_match_rule) {
+ACTOR_TEST_CASE(test_match_rule) {
 
     parameters param;
     handl *h = new handl();
@@ -98,7 +98,7 @@ SEASTAR_TEST_CASE(test_match_rule) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_match_rule_order) {
+ACTOR_TEST_CASE(test_match_rule_order) {
     parameters param;
     routes route;
 
@@ -114,7 +114,7 @@ SEASTAR_TEST_CASE(test_match_rule_order) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_put_drop_rule) {
+ACTOR_TEST_CASE(test_put_drop_rule) {
     routes rts;
     auto h = std::make_unique<handl>();
     parameters params;
@@ -139,7 +139,7 @@ SEASTAR_TEST_CASE(test_put_drop_rule) {
 // The interface demands that the callee allocates the handle,
 // so it should also expect the callee to free it before
 // overwriting.
-SEASTAR_TEST_CASE(test_duplicated_exact_rule) {
+ACTOR_TEST_CASE(test_duplicated_exact_rule) {
     parameters param;
     routes route;
 
@@ -155,7 +155,7 @@ SEASTAR_TEST_CASE(test_duplicated_exact_rule) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_add_del_cookie) {
+ACTOR_TEST_CASE(test_add_del_cookie) {
     routes rts;
     handl *h = new handl();
     match_rule mr(h);
@@ -174,7 +174,7 @@ SEASTAR_TEST_CASE(test_add_del_cookie) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_formatter) {
+ACTOR_TEST_CASE(test_formatter) {
     BOOST_REQUIRE_EQUAL(json::formatter::to_json(true), "true");
     BOOST_REQUIRE_EQUAL(json::formatter::to_json(false), "false");
     BOOST_REQUIRE_EQUAL(json::formatter::to_json(1), "1");
@@ -201,7 +201,7 @@ SEASTAR_TEST_CASE(test_formatter) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_decode_url) {
+ACTOR_TEST_CASE(test_decode_url) {
     request req;
     req._url = "/a?q=%23%24%23";
     sstring url = http_server::connection::set_query_param(req);
@@ -214,7 +214,7 @@ SEASTAR_TEST_CASE(test_decode_url) {
     return make_ready_future<>();
 }
 
-SEASTAR_TEST_CASE(test_routes) {
+ACTOR_TEST_CASE(test_routes) {
     handl *h1 = new handl();
     handl *h2 = new handl();
     routes route;
@@ -249,7 +249,7 @@ SEASTAR_TEST_CASE(test_routes) {
         });
 }
 
-SEASTAR_TEST_CASE(test_json_path) {
+ACTOR_TEST_CASE(test_json_path) {
     shared_ptr<bool> res1 = make_shared<bool>(false);
     shared_ptr<bool> res2 = make_shared<bool>(false);
     shared_ptr<bool> res3 = make_shared<bool>(false);
@@ -347,7 +347,7 @@ future<> test_transformer_stream(std::stringstream &ss, content_replace &cr, std
         });
 }
 
-SEASTAR_TEST_CASE(test_transformer) {
+ACTOR_TEST_CASE(test_transformer) {
     return do_with(std::stringstream(), content_replace("json"), [](std::stringstream &ss, content_replace &cr) {
         return do_with(
                    output_stream<char>(cr.transform(std::make_unique<nil::actor::httpd::request>(), "html",
@@ -673,17 +673,17 @@ public:
     }
 };
 
-SEASTAR_TEST_CASE(test_message_with_error_non_empty_body) {
+ACTOR_TEST_CASE(test_message_with_error_non_empty_body) {
     std::vector<std::tuple<bool, size_t>> tests = {std::make_tuple(true, 100), std::make_tuple(false, 10000)};
     return test_client_server::run(tests);
 }
 
-SEASTAR_TEST_CASE(test_simple_chunked) {
+ACTOR_TEST_CASE(test_simple_chunked) {
     std::vector<std::tuple<bool, size_t>> tests = {std::make_tuple(true, 100000), std::make_tuple(true, 100)};
     return test_client_server::run(tests);
 }
 
-SEASTAR_TEST_CASE(test_http_client_server_full) {
+ACTOR_TEST_CASE(test_http_client_server_full) {
     std::vector<std::tuple<bool, size_t>> tests = {std::make_tuple(true, 100),  std::make_tuple(true, 10000),
                                                    std::make_tuple(true, 100),  std::make_tuple(true, 0),
                                                    std::make_tuple(true, 5000), std::make_tuple(true, 10000),
@@ -737,7 +737,7 @@ struct extra_big_object : public json::json_base {
     }
 };
 
-SEASTAR_TEST_CASE(json_stream) {
+ACTOR_TEST_CASE(json_stream) {
     std::vector<extra_big_object> vec;
     size_t num_objects = 1000;
     size_t total_size = num_objects * 1000001 + 1;
@@ -763,7 +763,7 @@ public:
     }
 };
 
-SEASTAR_TEST_CASE(content_length_limit) {
+ACTOR_TEST_CASE(content_length_limit) {
     return nil::actor::async([] {
         loopback_connection_factory lcf;
         http_server server("test");
@@ -806,7 +806,7 @@ SEASTAR_TEST_CASE(content_length_limit) {
     });
 }
 
-SEASTAR_TEST_CASE(test_100_continue) {
+ACTOR_TEST_CASE(test_100_continue) {
     return nil::actor::async([] {
         loopback_connection_factory lcf;
         http_server server("test");
@@ -873,7 +873,7 @@ SEASTAR_TEST_CASE(test_100_continue) {
     });
 }
 
-SEASTAR_TEST_CASE(test_unparsable_request) {
+ACTOR_TEST_CASE(test_unparsable_request) {
     // Test if a message that cannot be parsed as a http request is being replied with a 400 Bad Request response
     return nil::actor::async([] {
         loopback_connection_factory lcf;
@@ -905,7 +905,7 @@ SEASTAR_TEST_CASE(test_unparsable_request) {
     });
 }
 
-SEASTAR_TEST_CASE(case_insensitive_header) {
+ACTOR_TEST_CASE(case_insensitive_header) {
     std::unique_ptr<nil::actor::httpd::request> req = std::make_unique<nil::actor::httpd::request>();
     req->_headers["conTEnt-LengtH"] = "17";
     BOOST_REQUIRE_EQUAL(req->get_header("content-length"), "17");
@@ -914,7 +914,7 @@ SEASTAR_TEST_CASE(case_insensitive_header) {
     return make_ready_future<>();
 }
 
-SEASTAR_THREAD_TEST_CASE(multiple_connections) {
+ACTOR_THREAD_TEST_CASE(multiple_connections) {
     loopback_connection_factory lcf;
     http_server server("test");
     httpd::http_server_tester::listeners(server).emplace_back(lcf.get_server_socket());

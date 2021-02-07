@@ -44,8 +44,8 @@
 #include <stdexcept>
 #include <system_error>
 
-#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
-#include <cryptopp/md5.h>
+#include <nil/crypto3/hash/md5.hpp>
+#include <nil/crypto3/hash/algorithm/hash.hpp>
 
 namespace nil {
     namespace actor {
@@ -2099,12 +2099,13 @@ namespace nil {
                 //   ISN = M + F(localip, localport, remoteip, remoteport, secretkey)
                 //   M is the 4 microsecond timer
                 using namespace std::chrono;
-                uint32_t hash[4];
+                crypto3::hashes::md5::digest_type hash;
                 hash[0] = _local_ip.ip;
                 hash[1] = _foreign_ip.ip;
                 hash[2] = (_local_port << 16) + _foreign_port;
                 hash[3] = _isn_secret.key[15];
-                CryptoPP::Weak::MD5::Transform(hash, _isn_secret.key);
+                crypto3::hash<crypto3::hashes::md5>(_isn_secret.key, hash);
+                //                CryptoPP::Weak::MD5::Transform(hash, _isn_secret.key);
                 auto seq = hash[0];
                 auto m = duration_cast<microseconds>(clock_type::now().time_since_epoch());
                 seq += m.count() / 4;

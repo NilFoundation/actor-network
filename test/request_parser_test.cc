@@ -35,7 +35,7 @@
 
 using namespace nil::actor;
 
-SEASTAR_TEST_CASE(test_header_parsing) {
+ACTOR_TEST_CASE(test_header_parsing) {
     struct test_set {
         sstring msg;
         bool parsable;

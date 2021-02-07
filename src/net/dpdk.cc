@@ -22,7 +22,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#ifdef SEASTAR_HAVE_DPDK
+#ifdef ACTOR_HAVE_DPDK
 
 #include <cinttypes>
 #include <nil/actor/core/posix.hh>
@@ -2254,4 +2254,4 @@ namespace nil {
 
     }
 
-#endif    // SEASTAR_HAVE_DPDK
+#endif    // ACTOR_HAVE_DPDK

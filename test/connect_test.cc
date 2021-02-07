@@ -30,7 +30,7 @@
 using namespace nil::actor;
 using namespace net;
 
-SEASTAR_TEST_CASE(test_connection_attempt_is_shutdown) {
+ACTOR_TEST_CASE(test_connection_attempt_is_shutdown) {
     ipv4_addr server_addr("172.16.0.1");
     auto unconn = make_socket();
     auto f = unconn.connect(make_ipv4_address(server_addr)).then_wrapped([](auto &&f) {
@@ -44,7 +44,7 @@ SEASTAR_TEST_CASE(test_connection_attempt_is_shutdown) {
     return f.finally([unconn = std::move(unconn)] {});
 }
 
-SEASTAR_TEST_CASE(test_unconnected_socket_shutsdown_established_connection) {
+ACTOR_TEST_CASE(test_unconnected_socket_shutsdown_established_connection) {
     // Use a random port to reduce chance of conflict.
     // TODO: retry a few times on failure.
     std::default_random_engine &rnd = testing::local_random_engine;
@@ -73,7 +73,7 @@ SEASTAR_TEST_CASE(test_unconnected_socket_shutsdown_established_connection) {
     });
 }
 
-SEASTAR_TEST_CASE(test_accept_after_abort) {
+ACTOR_TEST_CASE(test_accept_after_abort) {
     std::default_random_engine &rnd = testing::local_random_engine;
     auto distr = std::uniform_int_distribution<uint16_t>(12000, 65000);
     auto sa = make_ipv4_address({"127.0.0.1", distr(rnd)});

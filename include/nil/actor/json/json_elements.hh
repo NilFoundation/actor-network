@@ -314,7 +314,7 @@ namespace nil {
              * i.first}));
              */
             template<typename Container, typename Func>
-            SEASTAR_CONCEPT(requires requires(Container c, Func aa, output_stream<char> s) {
+            ACTOR_CONCEPT(requires requires(Container c, Func aa, output_stream<char> s) {
                 { formatter::write(s, aa(*c.begin())) }
                 ->std::same_as<future<>>;
             })

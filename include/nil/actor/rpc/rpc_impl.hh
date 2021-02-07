@@ -518,14 +518,14 @@ namespace nil {
                 return shelper {xt, xsig};
             }
 
-            template<typename Serializer, typename SEASTAR_ELLIPSIS RetTypes>
-            inline future<> reply(wait_type, future<RetTypes SEASTAR_ELLIPSIS> &&ret, int64_t msg_id,
+            template<typename Serializer, typename ACTOR_ELLIPSIS RetTypes>
+            inline future<> reply(wait_type, future<RetTypes ACTOR_ELLIPSIS> &&ret, int64_t msg_id,
                                   shared_ptr<server::connection> client,
                                   std::optional<rpc_clock_type::time_point> timeout) {
                 if (!client->error()) {
                     snd_buf data;
                     try {
-#if SEASTAR_API_LEVEL < 6
+#if ACTOR_API_LEVEL < 6
                         if constexpr (sizeof...(RetTypes) == 0) {
 #else
                         if constexpr (std::is_void_v<RetTypes>) {
@@ -534,7 +534,7 @@ namespace nil {
                             data = std::invoke(marshall<Serializer>,
                                                std::ref(client->template serializer<Serializer>()), 12);
                         } else {
-                            data = std::invoke(marshall<Serializer, const RetTypes & SEASTAR_ELLIPSIS>,
+                            data = std::invoke(marshall<Serializer, const RetTypes & ACTOR_ELLIPSIS>,
                                                std::ref(client->template serializer<Serializer>()), 12,
                                                std::move(ret.get0()));
                         }

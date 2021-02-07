@@ -65,15 +65,15 @@ static future<> test_bad_name(dns_resolver::options opts) {
         .finally([d] { return d->close(); });
 }
 
-SEASTAR_TEST_CASE(test_resolve_udp) {
+ACTOR_TEST_CASE(test_resolve_udp) {
     return test_resolve(dns_resolver::options());
 }
 
-SEASTAR_TEST_CASE(test_bad_name_udp) {
+ACTOR_TEST_CASE(test_bad_name_udp) {
     return test_bad_name(dns_resolver::options());
 }
 
-SEASTAR_TEST_CASE(test_timeout_udp) {
+ACTOR_TEST_CASE(test_timeout_udp) {
     dns_resolver::options opts;
     opts.servers = std::vector<inet_address>({inet_address("1.2.3.4")});    // not a server
     opts.udp_port = 29953;                                                  // not a dns port
@@ -94,14 +94,14 @@ SEASTAR_TEST_CASE(test_timeout_udp) {
 
 // Currently failing, disable until fixed (#521)
 #if 0
-SEASTAR_TEST_CASE(test_resolve_tcp) {
+ACTOR_TEST_CASE(test_resolve_tcp) {
     dns_resolver::options opts;
     opts.use_tcp_query = true;
     return test_resolve(opts);
 }
 #endif
 
-SEASTAR_TEST_CASE(test_bad_name_tcp) {
+ACTOR_TEST_CASE(test_bad_name_tcp) {
     dns_resolver::options opts;
     opts.use_tcp_query = true;
     return test_bad_name(opts);
@@ -126,6 +126,6 @@ static future<> test_srv() {
         .finally([d] { return d->close(); });
 }
 
-SEASTAR_TEST_CASE(test_srv_tcp) {
+ACTOR_TEST_CASE(test_srv_tcp) {
     return test_srv();
 }
