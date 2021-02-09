@@ -26,7 +26,7 @@
 
 #include <nil/actor/http/request_parser.hh>
 #include <nil/actor/http/request.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/core/sstring.hh>
 #include <nil/actor/core/app-template.hh>
 #include <nil/actor/core/circular_buffer.hh>

@@ -28,10 +28,13 @@
  */
 #include <ostream>
 #include <arpa/inet.h>
+
 #include <nil/actor/net/socket_defs.hh>
 #include <nil/actor/net/inet_address.hh>
 #include <nil/actor/net/ip.hh>
+
 #include <nil/actor/core/print.hh>
+
 #include <boost/functional/hash.hpp>
 
 using namespace std::string_literals;
@@ -45,9 +48,9 @@ size_t std::hash<nil::actor::socket_address>::operator()(const nil::actor::socke
 namespace nil {
     namespace actor {
 
-        static_assert(std::is_nothrow_default_constructible_v<socket_address>);
-        static_assert(std::is_nothrow_copy_constructible_v<socket_address>);
-        static_assert(std::is_nothrow_move_constructible_v<socket_address>);
+        static_assert(std::is_nothrow_default_constructible<socket_address>::value);
+        static_assert(std::is_nothrow_copy_constructible<socket_address>::value);
+        static_assert(std::is_nothrow_move_constructible<socket_address>::value);
 
         socket_address::socket_address() noexcept
             // set max addr_length, as we (probably) want to use the constructed object

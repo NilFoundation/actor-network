@@ -27,7 +27,7 @@
 #include <nil/actor/json/formatter.hh>
 #include <nil/actor/http/transformers.hh>
 #include <nil/actor/core/fstream.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/http/transformers.hh>
 #include <nil/actor/core/loop.hh>
 

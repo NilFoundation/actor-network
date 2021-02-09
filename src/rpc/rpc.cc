@@ -24,7 +24,7 @@
 
 #include <nil/actor/rpc/rpc.hh>
 #include <nil/actor/core/align.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/core/print.hh>
 #include <nil/actor/core/future-util.hh>
 #include <nil/actor/detail/defer.hh>

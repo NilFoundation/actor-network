@@ -25,9 +25,23 @@
 #include <random>
 
 #include <sys/socket.h>
+#if defined(__linux__)
 #include <linux/if.h>
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+#elif defined(__FreeBSD__) || defined(__APPLE__)
+
+#include <net/if.h>
+
+#if !defined(SOL_TCP) && defined(IPPROTO_TCP)
+#define SOL_TCP IPPROTO_TCP
+#endif
+
+#if !defined(TCP_KEEPIDLE) && defined(TCP_KEEPALIVE)
+#define TCP_KEEPIDLE TCP_KEEPALIVE
+#endif
+
+#endif
 #include <net/route.h>
 
 #include <nil/actor/core/loop.hh>
@@ -38,8 +52,12 @@
 #include <nil/actor/net/api.hh>
 #include <nil/actor/net/inet_address.hh>
 #include <nil/actor/detail/std-compat.hh>
+
 #include <netinet/tcp.h>
+
+#if defined(__linux__)
 #include <netinet/sctp.h>
+#endif
 
 namespace std {
 

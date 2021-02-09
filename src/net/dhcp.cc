@@ -139,7 +139,7 @@ namespace nil {
             } __attribute__((packed));
 
             struct mtu_option : public option {
-                mtu_option(uint16_t v) : option(opt_type::INTERFACE_MTU, 2), mtu((::htons)(v)) {
+                mtu_option(uint16_t v) : option(opt_type::INTERFACE_MTU, 2), mtu(htons(v)) {
                 }
                 packed<uint16_t> mtu;
             } __attribute__((packed));
@@ -264,7 +264,7 @@ namespace nil {
                             case opt_type::INTERFACE_MTU: {
                                 auto mo = p.get_header<mtu_option>(off);
                                 if (mo != nullptr) {
-                                    mtu = (::ntohs)(uint16_t(mo->mtu));
+                                    mtu = ntohs(uint16_t(mo->mtu));
                                 }
                             } break;
                             case opt_type::LEASE_TIME:
@@ -341,7 +341,7 @@ namespace nil {
                 const auto opt_off = ipl + sizeof(*udp) + sizeof(dhcp_payload);
 
                 if (udp == nullptr || dhp == nullptr || iph->ip_proto != uint8_t(ip_protocol_num::udp) ||
-                    (::ntohs)(udp->dst_port) != client_port || iph->len < (opt_off + sizeof(option_mark)) ||
+                    ntohs(udp->dst_port) != client_port || iph->len < (opt_off + sizeof(option_mark)) ||
                     dhp->magic != options_magic) {
                     return make_ready_future<>();
                 }

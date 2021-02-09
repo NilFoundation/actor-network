@@ -26,8 +26,6 @@
 
 #include <boost/asio/ip/address_v4.hpp>
 
-#include <arpa/inet.h>
-
 #include <unordered_map>
 #include <cstdint>
 #include <array>

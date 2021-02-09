@@ -26,7 +26,7 @@
 #include <iostream>
 
 #include <nil/actor/http/file_handler.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/fstream.hh>
 #include <nil/actor/core/shared_ptr.hh>

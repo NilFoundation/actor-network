@@ -29,7 +29,7 @@
 #include <list>
 
 #include <nil/actor/core/future.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/net/api.hh>
 #include <nil/actor/core/iostream.hh>
 #include <nil/actor/core/shared_ptr.hh>

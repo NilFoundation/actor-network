@@ -28,7 +28,7 @@
 
 #include <nil/actor/core/loop.hh>
 #include <nil/actor/core/reactor.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/core/file.hh>
 #include <nil/actor/core/thread.hh>
 #include <nil/actor/core/sstring.hh>
@@ -38,13 +38,14 @@
 #include <nil/actor/core/with_timeout.hh>
 #include <nil/actor/net/tls.hh>
 #include <nil/actor/net/stack.hh>
+
 #include <nil/actor/detail/std-compat.hh>
 #include <nil/actor/detail/variant_utils.hh>
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/adaptor/map.hpp>
 
-#include <nil/actor/core/fsnotify.hh>
+#include <nil/actor/core/detail/fsnotify.hh>
 
 namespace nil {
     namespace actor {

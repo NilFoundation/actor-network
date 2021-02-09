@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/testing/test_case.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/net/api.hh>
 #include <nil/actor/net/inet_address.hh>
 #include <nil/actor/core/print.hh>

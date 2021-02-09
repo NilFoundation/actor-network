@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/core/reactor.hh>
-#include <nil/actor/core/seastar.hh>
+#include <nil/actor/core/core.hh>
 #include <nil/actor/core/app-template.hh>
 #include <nil/actor/core/print.hh>
 #include <nil/actor/core/memory.hh>

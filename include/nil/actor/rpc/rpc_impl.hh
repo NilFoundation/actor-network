@@ -360,9 +360,9 @@ namespace nil {
 
                 uint32_t v32;
                 data.read(reinterpret_cast<char *>(&v32), 4);
-                exception_type ex_type = exception_type(le_to_cpu(v32));
+                exception_type ex_type = exception_type(boost::endian::little_to_native(v32));
                 data.read(reinterpret_cast<char *>(&v32), 4);
-                uint32_t ex_len = le_to_cpu(v32);
+                uint32_t ex_len = boost::endian::little_to_native(v32);
 
                 switch (ex_type) {
                     case exception_type::USER: {
@@ -374,7 +374,7 @@ namespace nil {
                     case exception_type::UNKNOWN_VERB: {
                         uint64_t v64;
                         data.read(reinterpret_cast<char *>(&v64), 8);
-                        ex = std::make_exception_ptr(unknown_verb_error(le_to_cpu(v64)));
+                        ex = std::make_exception_ptr(unknown_verb_error(boost::native::little_to_native(v64)));
                         break;
                     }
                     default:
