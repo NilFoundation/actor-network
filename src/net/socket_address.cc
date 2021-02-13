@@ -37,6 +37,19 @@
 
 #include <boost/functional/hash.hpp>
 
+/*
+ * Equality
+ * NOTE: Some of kernel programming environment (for example, openbsd/sparc)
+ * does not supply memcmp().  For userland memcmp() is preferred as it is
+ * in ANSI standard.
+ *
+ * This modification is specific to FreeBSD's struct sin6_addr implementation.
+ */
+#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
+#define SIN6_ARE_ADDR_EQUAL(a, b) \
+    (memcmp(&(a)->sin6_addr.s6_addr[0], &(b)->sin6_addr.s6_addr[0], sizeof(struct in6_addr)) == 0)
+#endif /* (_POSIX_C_SOURCE && !_DARWIN_C_SOURCE) */
+
 using namespace std::string_literals;
 
 size_t std::hash<nil::actor::socket_address>::operator()(const nil::actor::socket_address &a) const {
@@ -145,7 +158,11 @@ namespace nil {
             auto &in1 = as_posix_sockaddr_in6();
             auto &in2 = a.as_posix_sockaddr_in6();
 
+#if defined(__APPLE__) || defined(__FreeBSD__)
+            return SIN6_ARE_ADDR_EQUAL(&in1, &in2);
+#elif defined(__linux__)
             return IN6_ARE_ADDR_EQUAL(&in1, &in2);
+#endif
         }
 
         std::string unix_domain_addr_text(const socket_address &sa) {

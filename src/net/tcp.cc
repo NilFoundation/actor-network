@@ -27,7 +27,7 @@
 #include <nil/actor/net/ip.hh>
 #include <nil/actor/core/align.hh>
 #include <nil/actor/core/future.hh>
-#include <nil/actor/net/native-stack-impl.hh>
+#include <nil/actor/net/detail/native-stack-impl.hh>
 
 namespace nil {
     namespace actor {

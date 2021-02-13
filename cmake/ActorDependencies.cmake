@@ -81,4 +81,3 @@ macro(seastar_find_dependencies)
         find_package("${third_party}" ${_seastar_dep_args_${third_party}})
     endforeach()
 endmacro()
-

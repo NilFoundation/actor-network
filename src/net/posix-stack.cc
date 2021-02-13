@@ -25,10 +25,13 @@
 #include <random>
 
 #include <sys/socket.h>
+
 #if defined(__linux__)
+
 #include <linux/if.h>
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+
 #elif defined(__FreeBSD__) || defined(__APPLE__)
 
 #include <net/if.h>
@@ -42,6 +45,7 @@
 #endif
 
 #endif
+
 #include <net/route.h>
 
 #include <nil/actor/core/loop.hh>
