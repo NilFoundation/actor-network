@@ -28,25 +28,51 @@
 
 #if defined(__linux__)
 
+#include <net/route.h>
+
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/sctp.h>
+
 #include <linux/if.h>
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
 
-#elif defined(__FreeBSD__) || defined(__APPLE__)
+#elif defined(__APPLE__)
 
 #include <net/if.h>
+#include <net/route.h>
+
+#define __APPLE_USE_RFC_3542 1
+
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 #if !defined(SOL_TCP) && defined(IPPROTO_TCP)
 #define SOL_TCP IPPROTO_TCP
+#endif
+
+#if !defined(SOL_IP) && defined(IPPROTO_IP)
+#define SOL_IP IPPROTO_IP
+#endif
+
+#ifndef SOCK_NONBLOCK
+#include <fcntl.h>
+#define SOCK_NONBLOCK O_NONBLOCK
 #endif
 
 #if !defined(TCP_KEEPIDLE) && defined(TCP_KEEPALIVE)
 #define TCP_KEEPIDLE TCP_KEEPALIVE
 #endif
 
+/* for IPv6 */
+#if !defined(RTF_FLOW)
+#define RTF_FLOW 0x02000000 /* flow significant route	*/
 #endif
-
-#include <net/route.h>
+#if !defined(RTF_POLICY)
+#define RTF_POLICY 0x04000000 /* policy route			*/
+#endif
+#endif
 
 #include <nil/actor/core/loop.hh>
 #include <nil/actor/core/reactor.hh>
@@ -56,12 +82,6 @@
 #include <nil/actor/net/api.hh>
 #include <nil/actor/net/inet_address.hh>
 #include <nil/actor/detail/std-compat.hh>
-
-#include <netinet/tcp.h>
-
-#if defined(__linux__)
-#include <netinet/sctp.h>
-#endif
 
 namespace std {
 
@@ -145,6 +165,7 @@ namespace nil {
                 }
             };
 
+#if defined(__linux__)
             class posix_sctp_connected_socket_operations : public posix_connected_socket_operations {
             public:
                 virtual void set_nodelay(file_desc &_fd, bool nodelay) const override {
@@ -178,6 +199,7 @@ namespace nil {
                                                   params.spp_pathmaxrxt};
                 }
             };
+#endif
 
             class posix_unix_stream_connected_socket_operations : public posix_connected_socket_operations {
             public:
@@ -202,7 +224,9 @@ namespace nil {
             static const posix_connected_socket_operations *get_posix_connected_socket_ops(sa_family_t family,
                                                                                            int protocol) {
                 static posix_tcp_connected_socket_operations tcp_ops;
+#if defined(__linux__)
                 static posix_sctp_connected_socket_operations sctp_ops;
+#endif
                 static posix_unix_stream_connected_socket_operations unix_ops;
                 switch (family) {
                     case AF_INET:
@@ -211,7 +235,11 @@ namespace nil {
                             case IPPROTO_TCP:
                                 return &tcp_ops;
                             case IPPROTO_SCTP:
+#if defined(__linux__)
                                 return &sctp_ops;
+#else
+                                return &tcp_ops;
+#endif
                             default:
                                 abort();
                         }
@@ -791,7 +819,15 @@ namespace nil {
                 posix_udp_channel(const socket_address &bind_address) : _closed(false) {
                     auto sa = bind_address.is_unspecified() ? socket_address(inet_address(inet_address::family::INET)) :
                                                               bind_address;
+#if defined(__linux__)
                     file_desc fd = file_desc::socket(sa.u.sa.sa_family, SOCK_DGRAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
+#elif defined(__APPLE__) || defined(__FreeBSD__)
+                    file_desc fd = file_desc::socket(sa.u.sa.sa_family, SOCK_DGRAM | SOCK_NONBLOCK, 0);
+                    int ret = fcntl(fd.get(), F_SETFD, FD_CLOEXEC);
+                    if (ret == -1) {
+                        fprintf(stderr, "fcntl failed on setting FD_CLOEXEC - %s\n", strerror(errno));
+                    }
+#endif
                     fd.setsockopt(SOL_IP, IP_PKTINFO, true);
                     if (engine().posix_reuseport_available()) {
                         fd.setsockopt(SOL_SOCKET, SO_REUSEPORT, 1);

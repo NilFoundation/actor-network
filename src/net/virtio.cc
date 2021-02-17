@@ -25,7 +25,7 @@
 #include <nil/actor/net/virtio.hh>
 #include <nil/actor/core/posix.hh>
 #include <nil/actor/core/detail/pollable_fd.hh>
-#include <nil/actor/core/vla.hh>
+#include <nil/actor/core/detail/vla.hh>
 #include <nil/actor/net/virtio-interface.hh>
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/stream.hh>

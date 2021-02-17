@@ -55,8 +55,8 @@ namespace nil {
         }
 
     }    // namespace actor
-
-    size_t std::hash<nil::actor::unix_domain_addr>::operator()(const nil::actor::unix_domain_addr &a) const {
-        return std::hash<std::string>()(a.name);
-    }
 }    // namespace nil
+
+size_t std::hash<nil::actor::unix_domain_addr>::operator()(const nil::actor::unix_domain_addr &a) const {
+    return std::hash<std::string>()(a.name);
+}
