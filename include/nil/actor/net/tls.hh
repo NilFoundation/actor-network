@@ -128,9 +128,6 @@ namespace nil {
                                                         const sstring &password);
             };
 
-            template<typename Base>
-            class reloadable_credentials;
-
             /**
              * Enum like tls::session::type but independent of gnutls headers
              *
@@ -220,8 +217,7 @@ namespace nil {
                 friend class server_session;
                 friend class server_credentials;
                 friend class credentials_builder;
-                template<typename Base>
-                friend class reloadable_credentials;
+
                 shared_ptr<impl> _impl;
             };
 
@@ -251,8 +247,6 @@ namespace nil {
 
                 void set_client_auth(client_auth);
             };
-
-            class reloadable_credentials_base;
 
             using reload_callback = std::function<void(const std::unordered_set<sstring> &, std::exception_ptr)>;
 
@@ -299,8 +293,6 @@ namespace nil {
                                                         std::optional<std::chrono::milliseconds> tolerance = {}) const;
 
             private:
-                friend class reloadable_credentials_base;
-
                 std::multimap<sstring, boost::any> _blobs;
                 client_auth _client_auth = client_auth::NONE;
                 sstring _priority;
