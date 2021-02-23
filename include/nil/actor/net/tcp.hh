@@ -2104,7 +2104,7 @@ namespace nil {
                 hash[1] = _foreign_ip.ip;
                 hash[2] = (_local_port << 16) + _foreign_port;
                 hash[3] = _isn_secret.key[15];
-                crypto3::hash<crypto3::hashes::md5>(_isn_secret.key, hash);
+                crypto3::hash<crypto3::hashes::md5>(std::begin(_isn_secret.key), std::end(_isn_secret.key), &hash[4]);
                 //                CryptoPP::Weak::MD5::Transform(hash, _isn_secret.key);
                 auto seq = hash[0];
                 auto m = duration_cast<microseconds>(clock_type::now().time_since_epoch());

@@ -30,6 +30,7 @@
 #include <nil/actor/core/when_all.hh>
 #include <nil/actor/detail/is_smart_ptr.hh>
 #include <nil/actor/core/simple-stream.hh>
+#include <boost/endian/conversion.hpp>
 #include <boost/range/numeric.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <nil/actor/net/packet-data-source.hh>
@@ -374,7 +375,7 @@ namespace nil {
                     case exception_type::UNKNOWN_VERB: {
                         uint64_t v64;
                         data.read(reinterpret_cast<char *>(&v64), 8);
-                        ex = std::make_exception_ptr(unknown_verb_error(boost::native::little_to_native(v64)));
+                        ex = std::make_exception_ptr(unknown_verb_error(boost::endian::little_to_native(v64)));
                         break;
                     }
                     default:
@@ -543,9 +544,9 @@ namespace nil {
                         data = snd_buf(20 + len);
                         auto os = make_serializer_stream(data);
                         os.skip(12);
-                        uint32_t v32 = cpu_to_le(uint32_t(exception_type::USER));
+                        uint32_t v32 = boost::endian::native_to_little(uint32_t(exception_type::USER));
                         os.write(reinterpret_cast<char *>(&v32), sizeof(v32));
-                        v32 = cpu_to_le(len);
+                        v32 = boost::endian::native_to_little(len);
                         os.write(reinterpret_cast<char *>(&v32), sizeof(v32));
                         os.write(ex.what(), len);
                         msg_id = -msg_id;

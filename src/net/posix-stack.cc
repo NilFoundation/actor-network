@@ -1003,6 +1003,9 @@ namespace nil {
                 // For now, keep an immutable set of interfaces created on start, shared across
                 // shards
                 static const std::vector<posix_network_interface_impl> global_interfaces = [] {
+                    std::vector<posix_network_interface_impl> res;
+
+#if defined(__linux__)
                     auto fd = ::socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
                     throw_system_error_on(fd < 0, "could not open netlink socket");
 
@@ -1021,8 +1024,6 @@ namespace nil {
                                           "could not bind netlink socket");
 
                     /* RTNL socket is ready for use, prepare and send requests */
-
-                    std::vector<posix_network_interface_impl> res;
 
                     for (auto msg : {RTM_GETLINK, RTM_GETADDR}) {
                         struct nl_req {
@@ -1188,6 +1189,8 @@ namespace nil {
                             }
                         }
                     }
+
+#endif
 
                     return res;
                 }();

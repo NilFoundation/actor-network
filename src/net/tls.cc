@@ -27,8 +27,6 @@
 
 #include <system_error>
 
-#include <libfswatch/c++/monitor_factory.hpp>
-
 #include <nil/actor/core/loop.hh>
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/core.hh>
@@ -114,9 +112,15 @@ namespace nil {
                                             std::move(buf),
                                             file_info {
                                                 std::move(name),
+#if defined(__APPLE__) || defined(__NetBSD__)
+                                                std::chrono::system_clock::from_time_t(s.st_mtimespec.tv_sec) +
+                                                    std::chrono::duration_cast<std::chrono::system_clock::duration>(
+                                                        std::chrono::nanoseconds(s.st_mtimespec.tv_nsec))}};
+#elif defined(__linux__)
                                                 std::chrono::system_clock::from_time_t(s.st_mtim.tv_sec) +
                                                     std::chrono::duration_cast<std::chrono::system_clock::duration>(
                                                         std::chrono::nanoseconds(s.st_mtim.tv_nsec))}};
+#endif
                                     });
                             })
                             .finally([&f]() { return f.close(); });
