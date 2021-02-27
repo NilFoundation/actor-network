@@ -263,24 +263,12 @@ option(BUILD_WITH_UNUSED_RESULT_ERROR
     "Make [[nodiscard]] violations an error (instead of a warning)."
     OFF)
 
-set(BUILD_WITH_STACK_GUARDS
-    "DEFAULT"
-    CACHE
-    STRING
-    "Enable stack guards. Can be ON, OFF or DEFAULT (which enables it for non release builds)")
-
-set(BUILD_WITH_SANITIZE
-    "DEFAULT"
-    CACHE
-    STRING
-    "Enable ASAN and UBSAN. Can be ON, OFF or DEFAULT (which enables it for Debug and Sanitize)")
-
-set(BUILD_WITH_DEBUG_SHARED_PTR
-    "DEFAULT"
-    CACHE
-    STRING
-    "Enable shared_ptr debugging. Can be ON, OFF or DEFAULT (which enables it for Debug and Sanitize)")
-
+option(BUILD_WITH_STACK_GUARDS "Enable stack guards" FALSE)
+    
+option(BUILD_WITH_SANITIZE "Enable ASAN and UBSAN." FALSE)
+    
+option(BUILD_WITH_DEBUG_SHARED_PTR "Enable shared_ptr debugging." FALSE)
+    
 #
 # Useful (non-cache) variables.
 #
@@ -334,8 +322,6 @@ set(${CURRENT_PROJECT_NAME}_HEADERS
     include/nil/actor/net/inet_address.hh
     include/nil/actor/net/ip.hh
     include/nil/actor/net/ip_checksum.hh
-    include/nil/actor/net/native-stack.hh
-    include/nil/actor/net/detail/native-stack-impl.hh
     include/nil/actor/net/net.hh
     include/nil/actor/net/packet-data-source.hh
     include/nil/actor/net/packet-util.hh
@@ -350,8 +336,6 @@ set(${CURRENT_PROJECT_NAME}_HEADERS
     include/nil/actor/net/toeplitz.hh
     include/nil/actor/net/udp.hh
     include/nil/actor/net/unix_address.hh
-    include/nil/actor/net/virtio-interface.hh
-    include/nil/actor/net/virtio.hh
     include/nil/actor/rpc/lz4_compressor.hh
     include/nil/actor/rpc/lz4_fragmented_compressor.hh
     include/nil/actor/rpc/multi_algo_compressor_factory.hh
@@ -371,8 +355,10 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/http/reply.cc
     src/http/routes.cc
     src/http/transformers.cc
+
     src/json/formatter.cc
     src/json/json_elements.cc
+
     src/net/arp.cc
     src/net/config.cc
     src/net/dhcp.cc
@@ -382,7 +368,6 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/net/inet_address.cc
     src/net/ip.cc
     src/net/ip_checksum.cc
-    src/net/native-stack.cc
     src/net/net.cc
     src/net/packet.cc
     src/net/posix-stack.cc
@@ -393,10 +378,23 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/net/tls.cc
     src/net/udp.cc
     src/net/unix_address.cc
-    src/net/virtio.cc
+
     src/rpc/lz4_compressor.cc
     src/rpc/lz4_fragmented_compressor.cc
     src/rpc/rpc.cc)
+
+if(UNIX AND (CMAKE_SYSTEM_NAME STREQUAL "Linux"))
+    list(APPEND ${CURRENT_PROJECT_NAME}_HEADERS
+        include/nil/actor/net/native-stack.hh
+        include/nil/actor/net/detail/native-stack-impl.hh
+
+        include/nil/actor/net/virtio-interface.hh
+        include/nil/actor/net/virtio.hh)
+
+    list(APPEND ${CURRENT_PROJECT_NAME}_SOURCES
+        src/net/native-stack.cc
+        src/net/virtio.cc)
+endif()
 
 set(${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS
     -fvisibility=hidden

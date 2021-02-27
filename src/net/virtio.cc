@@ -40,10 +40,8 @@
 #include <queue>
 #include <fcntl.h>
 
-#ifdef __linux__
 #include <linux/vhost.h>
 #include <linux/if_tun.h>
-#endif
 
 #include <nil/actor/net/ip.hh>
 #include <nil/actor/net/const.hh>
