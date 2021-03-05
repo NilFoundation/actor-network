@@ -59,6 +59,10 @@ option(BUILD_WITH_SSTRING
     "Use seastar's own string implementation"
     ON)
 
+option(BUILD_WITH_VALGRIND
+    "Build with Valgrind support"
+    FALSE)
+
 set(BUILD_WITH_API_LEVEL
     "6"
     CACHE
@@ -279,6 +283,13 @@ set(BUILD_WITH_GEN_BINARY_DIR ${BUILD_WITH_BINARY_DIR}/gen)
 
 include(ActorDependencies)
 seastar_find_dependencies()
+
+if(BUILD_WITH_VALGRIND)
+    find_package(Valgrind)
+    if (VALGRIND_FOUND)
+        list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_HAS_VALGRIND)
+    endif()
+endif()
 
 # Private build dependencies not visible to consumers
 find_package(ragel 6.10 REQUIRED)
