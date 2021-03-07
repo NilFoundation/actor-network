@@ -59,10 +59,6 @@ option(BUILD_WITH_SSTRING
     "Use seastar's own string implementation"
     ON)
 
-option(BUILD_WITH_VALGRIND
-    "Build with Valgrind support"
-    FALSE)
-
 set(BUILD_WITH_API_LEVEL
     "6"
     CACHE
@@ -208,6 +204,10 @@ option(BUILD_WITH_HWLOC
     "Enable hwloc support."
     ON)
 
+option(BUILD_WITH_EXCEPTION_SCALABILITY_WORKAROUND 
+    "Override the dl_iterate_phdr symbol to workaround C++ exception scalability issues." 
+    FALSE) 
+
 set(BUILD_WITH_LD_FLAGS
     ""
     CACHE
@@ -284,11 +284,9 @@ set(BUILD_WITH_GEN_BINARY_DIR ${BUILD_WITH_BINARY_DIR}/gen)
 include(ActorDependencies)
 seastar_find_dependencies()
 
-if(BUILD_WITH_VALGRIND)
-    find_package(Valgrind)
-    if (VALGRIND_FOUND)
-        list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_HAS_VALGRIND)
-    endif()
+find_package(Valgrind REQUIRED)
+if (VALGRIND_FOUND)
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_HAS_VALGRIND)
 endif()
 
 # Private build dependencies not visible to consumers
@@ -494,6 +492,10 @@ if(BUILD_WITH_COMPRESS_DEBUG)
     # info being enabled.
     list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS -gz)
 endif()
+
+if (NOT ${BUILD_WITH_EXCEPTION_SCALABILITY_WORKAROUND}) 
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_NO_EXCEPTION_HACK) 
+endif() 
 
 function(seastar_supports_flag flag var)
     set(CMAKE_REQUIRED_FLAGS ${flag})
