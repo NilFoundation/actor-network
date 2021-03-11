@@ -165,7 +165,7 @@ namespace nil {
                 }
             };
 
-#if defined(__linux__)
+#if BOOST_OS_LINUX
             class posix_sctp_connected_socket_operations : public posix_connected_socket_operations {
             public:
                 virtual void set_nodelay(file_desc &_fd, bool nodelay) const override {
@@ -224,7 +224,7 @@ namespace nil {
             static const posix_connected_socket_operations *get_posix_connected_socket_ops(sa_family_t family,
                                                                                            int protocol) {
                 static posix_tcp_connected_socket_operations tcp_ops;
-#if defined(__linux__)
+#if BOOST_OS_LINUX
                 static posix_sctp_connected_socket_operations sctp_ops;
 #endif
                 static posix_unix_stream_connected_socket_operations unix_ops;
@@ -235,7 +235,7 @@ namespace nil {
                             case IPPROTO_TCP:
                                 return &tcp_ops;
                             case IPPROTO_SCTP:
-#if defined(__linux__)
+#if BOOST_OS_LINUX
                                 return &sctp_ops;
 #else
                                 return &tcp_ops;
@@ -254,18 +254,18 @@ namespace nil {
                 pollable_fd _fd;
                 const posix_connected_socket_operations *_ops;
                 conntrack::handle _handle;
-                std::pmr::polymorphic_allocator<char> *_allocator;
+                boost::container::pmr::polymorphic_allocator<char> *_allocator;
 
             private:
                 explicit posix_connected_socket_impl(
                     sa_family_t family, int protocol, pollable_fd fd,
-                    std::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
+                    boost::container::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
                     _fd(std::move(fd)),
                     _ops(get_posix_connected_socket_ops(family, protocol)), _allocator(allocator) {
                 }
                 explicit posix_connected_socket_impl(
                     sa_family_t family, int protocol, pollable_fd fd, conntrack::handle &&handle,
-                    std::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
+                    boost::container::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
                     _fd(std::move(fd)),
                     _ops(get_posix_connected_socket_ops(family, protocol)), _handle(std::move(handle)),
                     _allocator(allocator) {
@@ -429,7 +429,7 @@ namespace nil {
 
             class posix_socket_impl final : public socket_impl {
                 pollable_fd _fd;
-                std::pmr::polymorphic_allocator<char> *_allocator;
+                boost::container::pmr::polymorphic_allocator<char> *_allocator;
                 bool _reuseaddr = false;
 
                 future<> find_port_and_connect(socket_address sa, socket_address local,
@@ -485,7 +485,7 @@ namespace nil {
 
             public:
                 explicit posix_socket_impl(
-                    std::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
+                    boost::container::pmr::polymorphic_allocator<char> *allocator = memory::malloc_allocator) :
                     _allocator(allocator) {
                 }
 
@@ -627,9 +627,9 @@ namespace nil {
                 return _lfd.get_file_desc().get_address();
             }
 
-            void posix_ap_server_socket_impl::move_connected_socket(int protocol, socket_address sa, pollable_fd fd,
-                                                                    socket_address addr, conntrack::handle cth,
-                                                                    std::pmr::polymorphic_allocator<char> *allocator) {
+            void posix_ap_server_socket_impl::move_connected_socket(
+                int protocol, socket_address sa, pollable_fd fd, socket_address addr, conntrack::handle cth,
+                boost::container::pmr::polymorphic_allocator<char> *allocator) {
                 auto t_sa = std::make_tuple(protocol, sa);
                 auto i = sockets.find(t_sa);
                 if (i != sockets.end()) {
@@ -703,7 +703,7 @@ namespace nil {
             }
 
             posix_network_stack::posix_network_stack(boost::program_options::variables_map opts,
-                                                     std::pmr::polymorphic_allocator<char> *allocator) :
+                                                     boost::container::pmr::polymorphic_allocator<char> *allocator) :
                 _reuseport(engine().posix_reuseport_available()),
                 _allocator(allocator) {
             }
@@ -730,8 +730,9 @@ namespace nil {
                 return ::nil::actor::socket(std::make_unique<posix_socket_impl>(_allocator));
             }
 
-            posix_ap_network_stack::posix_ap_network_stack(boost::program_options::variables_map opts,
-                                                           std::pmr::polymorphic_allocator<char> *allocator) :
+            posix_ap_network_stack::posix_ap_network_stack(
+                boost::program_options::variables_map opts,
+                boost::container::pmr::polymorphic_allocator<char> *allocator) :
                 posix_network_stack(std::move(opts), allocator),
                 _reuseport(engine().posix_reuseport_available()) {
             }

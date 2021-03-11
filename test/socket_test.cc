@@ -62,7 +62,7 @@ future<> echo_server_loop() {
                    });
 }
 
-class my_malloc_allocator : public std::pmr::memory_resource {
+class my_malloc_allocator : public boost::container::pmr::memory_resource {
 public:
     int allocs;
     int frees;
@@ -80,7 +80,7 @@ public:
 };
 
 my_malloc_allocator malloc_allocator;
-std::pmr::polymorphic_allocator<char> allocator {&malloc_allocator};
+boost::container::pmr::polymorphic_allocator<char> allocator {&malloc_allocator};
 
 int main(int ac, char **av) {
     register_network_stack(
