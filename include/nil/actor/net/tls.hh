@@ -284,14 +284,6 @@ namespace nil {
                 shared_ptr<certificate_credentials> build_certificate_credentials() const;
                 shared_ptr<server_credentials> build_server_credentials() const;
 
-                // same as above, but any files used for certs/keys etc will be watched
-                // for modification and reloaded if changed
-                future<shared_ptr<certificate_credentials>> build_reloadable_certificate_credentials(
-                    reload_callback = {}, std::optional<std::chrono::milliseconds> tolerance = {}) const;
-                future<shared_ptr<server_credentials>>
-                    build_reloadable_server_credentials(reload_callback = {},
-                                                        std::optional<std::chrono::milliseconds> tolerance = {}) const;
-
             private:
                 std::multimap<sstring, boost::any> _blobs;
                 client_auth _client_auth = client_auth::NONE;

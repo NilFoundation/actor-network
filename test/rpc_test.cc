@@ -601,12 +601,10 @@ ACTOR_TEST_CASE(test_stream_connection_error) {
 ACTOR_TEST_CASE(test_rpc_scheduling) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         auto sg = create_scheduling_group("rpc", 100).get0();
-        env.register_handler(1,
-                             sg,
-                             []() {
-                                 return make_ready_future<unsigned>(
-                                     detail::scheduling_group_index(current_scheduling_group()));
-                             })
+        env.register_handler(
+               1,
+               sg,
+               []() { return make_ready_future<unsigned>(detail::scheduling_group_index(current_scheduling_group())); })
             .get();
         auto call_sg_id = env.proto().make_client<unsigned()>(1);
         auto id = call_sg_id(c1).get0();
@@ -685,12 +683,10 @@ ACTOR_THREAD_TEST_CASE(test_rpc_scheduling_connection_based_compatibility) {
         rpc::client_options co3;
         test_rpc_proto::client c3(env.proto(), co3, env.make_socket(), ipv4_addr());
         // A server that uses sg1 if the client is old
-        env.register_handler(1,
-                             sg1,
-                             []() {
-                                 return make_ready_future<unsigned>(
-                                     detail::scheduling_group_index(current_scheduling_group()));
-                             })
+        env.register_handler(
+               1,
+               sg1,
+               []() { return make_ready_future<unsigned>(detail::scheduling_group_index(current_scheduling_group())); })
             .get();
         auto call_sg_id = env.proto().make_client<unsigned()>(1);
         unsigned id;
@@ -1028,10 +1024,13 @@ ACTOR_TEST_CASE(test_max_relative_timeout) {
 
 ACTOR_TEST_CASE(test_rpc_tuple) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
-        env.register_handler(
-               1, []() { return make_ready_future<rpc::tuple<int, long>>(rpc::tuple<int, long>(1, 0x7'0000'0000L)); })
+        env.register_handler(1,
+                             []() {
+                                 return make_ready_future<rpc::tuple<int, int32_t>>(
+                                     rpc::tuple<int, int32_t>(1, 0x7'0000'0000L));
+                             })
             .get();
-        auto f1 = env.proto().make_client<rpc::tuple<int, long>()>(1);
+        auto f1 = env.proto().make_client<rpc::tuple<int, int32_t>()>(1);
         auto result = f1(c1).get0();
         BOOST_REQUIRE_EQUAL(std::get<0>(result), 1);
         BOOST_REQUIRE_EQUAL(std::get<1>(result), 0x7'0000'0000L);
@@ -1041,11 +1040,12 @@ ACTOR_TEST_CASE(test_rpc_tuple) {
 ACTOR_TEST_CASE(test_rpc_nonvariadic_client_variadic_server) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         // Server is variadic
-        env.register_handler(1,
-                             []() { return make_ready_future<rpc::tuple<int, long>>(rpc::tuple(1, 0x7'0000'0000L)); })
+        env.register_handler(
+               1,
+               []() { return make_ready_future<rpc::tuple<int, int32_t>>(rpc::tuple<int, int32_t>(1, 0x7'0000'0000)); })
             .get();
         // Client is non-variadic
-        auto f1 = env.proto().make_client<future<rpc::tuple<int, long>>()>(1);
+        auto f1 = env.proto().make_client<future<rpc::tuple<int, int32_t>>()>(1);
         auto result = f1(c1).get0();
         BOOST_REQUIRE_EQUAL(std::get<0>(result), 1);
         BOOST_REQUIRE_EQUAL(std::get<1>(result), 0x7'0000'0000L);
@@ -1056,10 +1056,11 @@ ACTOR_TEST_CASE(test_rpc_variadic_client_nonvariadic_server) {
     return rpc_test_env<>::do_with_thread(rpc_test_config(), [](rpc_test_env<> &env, test_rpc_proto::client &c1) {
         // Server is nonvariadic
         env.register_handler(
-               1, []() { return make_ready_future<rpc::tuple<int, long>>(rpc::tuple<int, long>(1, 0x7'0000'0000L)); })
+               1,
+               []() { return make_ready_future<rpc::tuple<int, int32_t>>(rpc::tuple<int, int32_t>(1, 0x7'0000'0000)); })
             .get();
         // Client is variadic
-        auto f1 = env.proto().make_client<future<rpc::tuple<int, long>>()>(1);
+        auto f1 = env.proto().make_client<future<rpc::tuple<int, int32_t>>()>(1ull);
         auto result = f1(c1).get0();
         BOOST_REQUIRE_EQUAL(std::get<0>(result), 1);
         BOOST_REQUIRE_EQUAL(std::get<1>(result), 0x7'0000'0000L);

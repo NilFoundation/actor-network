@@ -74,7 +74,7 @@ public:
         frees++;
         return free(ptr);
     }
-    virtual bool do_is_equal(const std::pmr::memory_resource &__other) const noexcept override {
+    virtual bool do_is_equal(const boost::container::pmr::memory_resource &__other) const noexcept override {
         abort();
     }
 };

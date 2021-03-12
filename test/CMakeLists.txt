@@ -90,26 +90,29 @@ function(seastar_add_test name)
 
     set(args "")
     if(parsed_args_KIND STREQUAL "ACTOR")
-      list (APPEND libraries
-        ${CMAKE_WORKSPACE_NAME}_testing
-        ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_private)
+      list(APPEND libraries
+        ${CMAKE_WORKSPACE_NAME}::core
+        ${CMAKE_WORKSPACE_NAME}::network
+        ${CMAKE_WORKSPACE_NAME}::testing)
 
       if(NOT (Seastar_JENKINS STREQUAL ""))
-        list (APPEND args ${jenkins_args})
+        list(APPEND args ${jenkins_args})
       endif()
 
-      list (APPEND args -- -c ${BUILD_WITH_UNIT_TEST_SMP})
+      list(APPEND args -- -c ${BUILD_WITH_UNIT_TEST_SMP})
     elseif(parsed_args_KIND STREQUAL "BOOST")
-      list (APPEND libraries
+      list(APPEND libraries
         Boost::unit_test_framework
-        ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_private)
+        ${CMAKE_WORKSPACE_NAME}::core
+        ${CMAKE_WORKSPACE_NAME}::network
+        ${CMAKE_WORKSPACE_NAME}::testing)
 
       if(NOT (Seastar_JENKINS STREQUAL ""))
-        list (APPEND args ${jenkins_args})
+        list(APPEND args ${jenkins_args})
       endif()
     endif()
 
-    list (APPEND args ${parsed_args_RUN_ARGS})
+    list(APPEND args ${parsed_args_RUN_ARGS})
 
     set(executable_target ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_test_unit_${name})
     add_executable (${executable_target} ${parsed_args_SOURCES})
@@ -117,13 +120,12 @@ function(seastar_add_test name)
     target_link_libraries (${executable_target}
       PRIVATE ${libraries})
 
-    target_compile_definitions (${executable_target}
-      PRIVATE ACTOR_TESTING_MAIN)
+    target_compile_definitions(${executable_target} PRIVATE ACTOR_TESTING_MAIN)
 
     if((BUILD_WITH_STACK_GUARDS STREQUAL "ON") OR
         ((BUILD_WITH_STACK_GUARDS STREQUAL "DEFAULT") AND
          (CMAKE_BUILD_TYPE IN_LIST Seastar_STACK_GUARD_MODES)))
-      target_compile_definitions (${executable_target}
+      target_compile_definitions(${executable_target}
         PRIVATE
           ACTOR_THREAD_STACK_GUARDS)
     endif()
@@ -154,7 +156,7 @@ function(seastar_add_test name)
   set(target ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_test_unit_${name}_run)
 
   if(parsed_args_WORKING_DIRECTORY)
-    list (APPEND forwarded_args WORKING_DIRECTORY ${parsed_args_WORKING_DIRECTORY})
+    list(APPEND forwarded_args WORKING_DIRECTORY ${parsed_args_WORKING_DIRECTORY})
   endif()
 
   if(parsed_args_DEPENDS)
@@ -165,7 +167,7 @@ function(seastar_add_test name)
     ${forwarded_args}
     USES_TERMINAL)
 
-  add_test (
+  add_test(
     NAME Seastar.unit.${name}
     COMMAND ${CMAKE_COMMAND} --build ${BUILD_WITH_BINARY_DIR} --target ${target})
 
@@ -199,7 +201,9 @@ function(seastar_add_app_test name)
     KIND CUSTOM
     SOURCES ${parsed_args_SOURCES}
     LIBRARIES
-      ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_private
+      ${CMAKE_WORKSPACE_NAME}::core
+      ${CMAKE_WORKSPACE_NAME}::network
+      ${CMAKE_WORKSPACE_NAME}::testing
       ${parsed_args_LIBRARIES}
     RUN_ARGS
       -c ${BUILD_WITH_UNIT_TEST_SMP}
@@ -210,7 +214,7 @@ function(prepend_each var prefix)
   set(result "")
 
   foreach(x ${ARGN})
-    list (APPEND result ${prefix}/${x})
+    list(APPEND result ${prefix}/${x})
   endforeach()
 
   set(${var} ${result} PARENT_SCOPE)
@@ -369,7 +373,7 @@ function(seastar_add_certgen name)
   add_custom_target(${name} DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CERT_CERT}")
 endfunction()
 
-seastar_add_certgen(testcrt DOMAIN scylladb.org SERVER test)
+seastar_add_certgen(testcrt DOMAIN nil.foundation SERVER test)
 seastar_add_certgen(othercrt DOMAIN apa.org SERVER other)
 
 set(tls_certificate_files tls-ca-bundle.pem)
@@ -392,10 +396,14 @@ add_custom_target(tls_files
   DEPENDS ${out_tls_certificate_files}
 )
 
+if (NOT Boost_FILESYSTEM_FOUND)
+    find_package(Boost 1.64.0 REQUIRED COMPONENTS filesystem)
+endif()
+
 seastar_add_test(tls
   DEPENDS tls_files testcrt othercrt
   SOURCES tls_test.cc
-  LIBRARIES boost_filesystem
+  LIBRARIES ${Boost_LIBRARIES} 
   WORKING_DIRECTORY ${BUILD_WITH_BINARY_DIR})
 
 seastar_add_test(unix_domain
