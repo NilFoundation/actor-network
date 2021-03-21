@@ -33,7 +33,7 @@ set(BUILD_WITH_UNIT_TEST_SMP
 #
 # Define a new unit test with the given name.
 #
-# seastar_add_test(name
+# actor_add_test(name
 #   [KIND {ACTOR,BOOST,CUSTOM}]
 #   [SOURCES source1 source2 ... sourcen]
 #   [WORKING_DIRECTORY dir]
@@ -62,7 +62,7 @@ set(BUILD_WITH_UNIT_TEST_SMP
 # CUSTOM tests with no SOURCES, this parameter can be used to specify the executable name as well as its arguments since
 # no executable is compiled.
 #
-function(seastar_add_test name)
+function(actor_add_test name)
   set(test_kinds
     ACTOR
     BOOST
@@ -94,10 +94,6 @@ function(seastar_add_test name)
         ${CMAKE_WORKSPACE_NAME}::network
         ${CMAKE_WORKSPACE_NAME}::testing)
 
-      if(NOT (Seastar_JENKINS STREQUAL ""))
-        list(APPEND args ${jenkins_args})
-      endif()
-
       list(APPEND args -- -c ${BUILD_WITH_UNIT_TEST_SMP})
     elseif(parsed_args_KIND STREQUAL "BOOST")
       list(APPEND libraries
@@ -105,10 +101,6 @@ function(seastar_add_test name)
         ${CMAKE_WORKSPACE_NAME}::core
         ${CMAKE_WORKSPACE_NAME}::network
         ${CMAKE_WORKSPACE_NAME}::testing)
-
-      if(NOT (Seastar_JENKINS STREQUAL ""))
-        list(APPEND args ${jenkins_args})
-      endif()
     endif()
 
     list(APPEND args ${parsed_args_RUN_ARGS})
@@ -123,7 +115,7 @@ function(seastar_add_test name)
 
     if((BUILD_WITH_STACK_GUARDS STREQUAL "ON") OR
         ((BUILD_WITH_STACK_GUARDS STREQUAL "DEFAULT") AND
-         (CMAKE_BUILD_TYPE IN_LIST Seastar_STACK_GUARD_MODES)))
+         (CMAKE_BUILD_TYPE IN_LIST ACTOR_STACK_GUARD_MODES)))
       target_compile_definitions(${CMAKE_WORKSPACE_NAME}_${name}_test
         PRIVATE
           ACTOR_THREAD_STACK_GUARDS)
@@ -138,48 +130,17 @@ function(seastar_add_test name)
         PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED TRUE)
-
-    set(forwarded_args COMMAND ${CMAKE_WORKSPACE_NAME}_${name}_test ${args})
   else ()
     if(NOT (parsed_args_KIND STREQUAL "CUSTOM"))
       message (FATAL_ERROR "SOURCES are required for ${parsed_args_KIND} tests")
     endif()
-
-    set(forwarded_args COMMAND ${parsed_args_RUN_ARGS})
   endif()
-
-  #
-  # We expect `forwarded_args` to be populated correctly at this point.
-  #
-
-  set(target ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_test_unit_${name}_run)
-
-  if(parsed_args_WORKING_DIRECTORY)
-    list(APPEND forwarded_args WORKING_DIRECTORY ${parsed_args_WORKING_DIRECTORY})
-  endif()
-
-  if(parsed_args_DEPENDS)
-    add_dependencies(${CMAKE_WORKSPACE_NAME}_${name}_test ${parsed_args_DEPENDS})
-  endif()
-
-  add_custom_target(${target}
-    ${forwarded_args}
-    USES_TERMINAL)
-
-  add_test(
-    NAME Seastar.unit.${name}
-    COMMAND ${CMAKE_COMMAND} --build ${BUILD_WITH_BINARY_DIR} --target ${target})
-
-  set_tests_properties(Seastar.unit.${name}
-    PROPERTIES
-      TIMEOUT ${BUILD_WITH_TEST_TIMEOUT}
-      ENVIRONMENT "${BUILD_WITH_TEST_ENVIRONMENT}")
 endfunction()
 
 #
 # Define a new custom unit test whose entry point is a Seastar application.
 #
-# seastar_add_app_test(name
+# actor_add_app_test(name
 #   [SOURCES source1 source2 ... sourcen]
 #   [LIBRARIES library1 library2 ... libraryn]
 #   [RUN_ARGS arg1 arg2 ... argn])
@@ -189,14 +150,14 @@ endfunction()
 # These tests always link against `seastar_private` and are always invoked with
 # `-c ${BUILD_WITH_UNIT_TEST_SMP}`.
 #
-function(seastar_add_app_test name)
+function(actor_add_app_test name)
   cmake_parse_arguments (parsed_args
     ""
     ""
     "RUN_ARGS;SOURCES;LIBRARIES"
     ${ARGN})
 
-  seastar_add_test(${name}
+  actor_add_test(${name}
     KIND CUSTOM
     SOURCES ${parsed_args_SOURCES}
     LIBRARIES
@@ -219,10 +180,6 @@ function(prepend_each var prefix)
   set(${var} ${result} PARENT_SCOPE)
 endfunction()
 
-add_custom_target(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}_test_unit
-  COMMAND ctest --verbose -R Seastar.unit
-  USES_TERMINAL)
-
 if(NOT Seastar_EXECUTE_ONLY_FAST_TESTS)
   set(allocator_test_args "")
 else ()
@@ -233,46 +190,46 @@ else ()
   endif()
 endif()
 
-seastar_add_test(connect
+actor_add_test(connect
   SOURCES connect_test.cc)
 
-seastar_add_test(dns
+actor_add_test(dns
   SOURCES dns_test.cc)
 
-seastar_add_test(httpd
+actor_add_test(httpd
   SOURCES
     httpd_test.cc
     loopback_socket.hh)
 
-seastar_add_test(ipv6
+actor_add_test(ipv6
   SOURCES ipv6_test.cc)
 
-seastar_add_test(network_interface
+actor_add_test(network_interface
   SOURCES network_interface_test.cc)
 
-seastar_add_test(json_formatter
+actor_add_test(json_formatter
   SOURCES json_formatter_test.cc)
 
-seastar_add_test(net_config
+actor_add_test(net_config
   KIND BOOST
   SOURCES net_config_test.cc)
 
-seastar_add_test(output_stream
+actor_add_test(output_stream
   SOURCES output_stream_test.cc)
 
-seastar_add_test(packet
+actor_add_test(packet
   KIND BOOST
   SOURCES packet_test.cc)
 
-seastar_add_test(request_parser
+actor_add_test(request_parser
   SOURCES request_parser_test.cc)
 
-seastar_add_test(rpc
+actor_add_test(rpc
   SOURCES
     loopback_socket.hh
     rpc_test.cc)
 
-seastar_add_app_test(socket
+actor_add_app_test(socket
   SOURCES socket_test.cc)
 
 function(seastar_add_certgen name)
@@ -399,11 +356,11 @@ if (NOT Boost_FILESYSTEM_FOUND)
     find_package(Boost 1.64.0 REQUIRED COMPONENTS filesystem)
 endif()
 
-seastar_add_test(tls
+actor_add_test(tls
   DEPENDS tls_files testcrt othercrt
   SOURCES tls_test.cc
   LIBRARIES ${Boost_LIBRARIES} 
   WORKING_DIRECTORY ${BUILD_WITH_BINARY_DIR})
 
-seastar_add_test(unix_domain
+actor_add_test(unix_domain
   SOURCES unix_domain_test.cc)

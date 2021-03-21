@@ -1,64 +1,66 @@
+#---------------------------------------------------------------------------//
+# Copyright (c) 2018-2021 Mikhail Komarov <nemo@nil.foundation>
 #
-# This file is open source software, licensed to you under the terms
-# of the Apache License, Version 2.0 (the "License").  See the NOTICE file
-# distributed with this work for additional information regarding copyright
-# ownership.  You may not use this file except in compliance with the License.
+# MIT License
 #
-# You may obtain a copy of the License at
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
-
-#
-# Copyright (C) 2018 Scylladb, Ltd.
-#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#---------------------------------------------------------------------------//
 
 # Logical target for all perf tests.
-add_custom_target (perf_tests)
+add_custom_target(perf_tests)
 
-macro (seastar_add_test name)
-  set (args ${ARGN})
+macro(actor_add_test name)
+  set(args ${ARGN})
 
-  cmake_parse_arguments (
+  cmake_parse_arguments(
     parsed_args
     "NO_ACTOR_PERF_TESTING_LIBRARY"
     ""
     "SOURCES"
     ${args})
 
-  set (target test_perf_${name})
-  add_executable (${target} ${parsed_args_SOURCES})
+  set(target test_perf_${name})
+  add_executable(${target} ${parsed_args_SOURCES})
 
-  if (parsed_args_NO_ACTOR_PERF_TESTING_LIBRARY)
-    set (libraries seastar_private)
-  else ()
-    set (libraries
+  if(parsed_args_NO_ACTOR_PERF_TESTING_LIBRARY)
+    set(libraries seastar_private)
+  else()
+    set(libraries
       seastar_private
       seastar_perf_testing)
-  endif ()
+  endif()
 
-  target_link_libraries (${target}
+  target_link_libraries(${target}
     PRIVATE ${libraries})
 
-  target_include_directories (${target}
+  target_include_directories(${target}
     PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}
       ${Seastar_SOURCE_DIR}/src)
 
-  set_target_properties (${target}
+  set_target_properties(${target}
     PROPERTIES
       OUTPUT_NAME ${name}_perf)
 
-  add_dependencies (perf_tests ${target})
-  set (${name}_test ${target})
+  add_dependencies(perf_tests ${target})
+  set(${name}_test ${target})
 endmacro ()
 
-seastar_add_test(rpc
+actor_add_test(rpc
   SOURCES rpc_perf.cc)
