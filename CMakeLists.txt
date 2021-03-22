@@ -581,19 +581,19 @@ if(BUILD_WITH_DPDK)
     # The DPDK architecture needs to be transitively applied to consumers of Seastar as well.
     #
 
-    set(Seastar_ARCH_FOR_native "native")
-    set(Seastar_ARCH_FOR_nhm "nehalem")
-    set(Seastar_ARCH_FOR_wsm "westmere")
-    set(Seastar_ARCH_FOR_snb "sandybridge")
-    set(Seastar_ARCH_FOR_ivb "ivybridge")
-    set(Seastar_ARCH_FOR_armv8a "armv8-a")
-    set(Seastar_ARCH ${Seastar_ARCH_FOR_${BUILD_WITH_DPDK_MACHINE}})
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_native "native")
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_nhm "nehalem")
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_wsm "westmere")
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_snb "sandybridge")
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_ivb "ivybridge")
+    set(${CURRENT_PROJECT_NAME}_ARCH_FOR_armv8a "armv8-a")
+    set(${CURRENT_PROJECT_NAME}_ARCH ${${CURRENT_PROJECT_NAME}_ARCH_FOR_${BUILD_WITH_DPDK_MACHINE}})
 
-    if(NOT Seastar_ARCH)
+    if(NOT ${CURRENT_PROJECT_NAME}_ARCH)
         message(FATAL_ERROR "Unrecognized DPDK machine identifier: ${BUILD_WITH_DPDK_MACHINE}")
     endif()
 
-    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS -march=${Seastar_ARCH})
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_OPTIONS -march=${${CURRENT_PROJECT_NAME}_ARCH})
     list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_HAVE_DPDK)
 
     # No pmd driver code will be pulled in without "--whole-archive". To
