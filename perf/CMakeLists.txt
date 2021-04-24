@@ -52,7 +52,7 @@ macro(actor_add_test name)
   target_include_directories(${target}
     PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}
-      ${Seastar_SOURCE_DIR}/src)
+      ${ACTOR_SOURCE_DIR}/src)
 
   set_target_properties(${target}
     PROPERTIES

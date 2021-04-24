@@ -184,7 +184,7 @@ function(prepend_each var prefix)
     set(${var} ${result} PARENT_SCOPE)
 endfunction()
 
-if(NOT Seastar_EXECUTE_ONLY_FAST_TESTS)
+if(NOT ACTOR_EXECUTE_ONLY_FAST_TESTS)
     set(allocator_test_args "")
 else ()
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")

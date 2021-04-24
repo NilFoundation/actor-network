@@ -462,7 +462,7 @@ if((BUILD_WITH_SANITIZE STREQUAL "ON") OR
     if(NOT Sanitizers_FOUND)
         message(FATAL_ERROR "Sanitizers not found!")
     endif()
-    set(Seastar_Sanitizers_OPTIONS ${Sanitizers_COMPILER_OPTIONS})
+    set(ACTOR_Sanitizers_OPTIONS ${Sanitizers_COMPILER_OPTIONS})
     list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES
         Sanitizers::address
         Sanitizers::undefined_behavior)
@@ -478,9 +478,9 @@ include(CTest)
 # We want asserts enabled on all modes, but cmake defaults to passing
 # -DNDEBUG in some modes. We add -UNDEBUG to our private options to
 # reenable it. To force asserts off pass -DNDEBUG in
-# Seastar_CXX_FLAGS.
+# ACTOR_CXX_FLAGS.
 #
-# To disable -Werror, pass -Wno-error to Seastar_CXX_FLAGS.
+# To disable -Werror, pass -Wno-error to ACTOR_CXX_FLAGS.
 #
 # We disable _FORTIFY_SOURCE because it generates false positives with longjmp() (src/core/thread.cc)
 #
@@ -659,8 +659,8 @@ if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "Sanitize")
         ACTOR_SHUFFLE_TASK_QUEUE)
 endif()
 
-set(Seastar_DEBUG_SHARED_PTR_MODES "Debug" "Sanitize")
-if(BUILD_WITH_DEBUG_SHARED_PTR OR (CMAKE_BUILD_TYPE IN_LIST Seastar_DEBUG_SHARED_PTR_MODES))
+set(ACTOR_DEBUG_SHARED_PTR_MODES "Debug" "Sanitize")
+if(BUILD_WITH_DEBUG_SHARED_PTR OR (CMAKE_BUILD_TYPE IN_LIST ACTOR_DEBUG_SHARED_PTR_MODES))
     list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_DEBUG_SHARED_PTR)
 endif()
 
