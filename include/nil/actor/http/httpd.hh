@@ -229,7 +229,7 @@ namespace nil {
              *              }).then([server, port] {
              *                  server->listen(port);
              *              }).then([port] {
-             *                  std::cout << "Seastar HTTP server listening on port " << port << " ...\n";
+             *                  std::cout << "Actor HTTP server listening on port " << port << " ...\n";
              *              });
              */
             class http_server_control {

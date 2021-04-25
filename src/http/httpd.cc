@@ -389,7 +389,7 @@ namespace nil {
             }
 
             void connection::set_headers(reply &resp) {
-                resp._headers["Server"] = "Seastar httpd";
+                resp._headers["Server"] = "Actor httpd";
                 resp._headers["Date"] = _server._date;
             }
 
