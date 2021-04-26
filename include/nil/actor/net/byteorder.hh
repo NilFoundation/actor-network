@@ -43,6 +43,7 @@ namespace nil {
             return __builtin_bswap64(v);
 #endif
         }
+
         inline uint64_t htonq(uint64_t v) {
             // htonq and ntohq have identical implementations
             return ntohq(v);
@@ -157,8 +158,6 @@ namespace nil {
                 tmp.adjust_endianness([](auto &&...what) { hton_inplace(std::forward<decltype(what) &>(what)...); });
                 return tmp;
             }
-
         }    // namespace net
-
     }    // namespace actor
 }    // namespace nil

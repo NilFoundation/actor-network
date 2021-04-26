@@ -31,7 +31,6 @@
 
 namespace nil {
     namespace actor {
-
         namespace net {
 
             uint16_t ip_checksum(const void *data, size_t len);
@@ -74,8 +73,6 @@ namespace nil {
                 }
                 uint16_t get() const;
             };
-
         }    // namespace net
-
     }    // namespace actor
 }    // namespace nil
