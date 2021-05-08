@@ -431,13 +431,13 @@ list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES
      ${c-ares_LIBRARIES}
      ${lz4_LIBRARIES}
      ${StdAtomic_LIBRARIES}
+     ${Protobuf_LIBRARIES}
 
      fmt::fmt
      libfswatch)
 
 list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES
      ${GnuTLS_LIBRARIES}
-     ${Protobuf_LIBRARIES}
      ${yaml-cpp_LIBRARIES})
 
 if(NOT (UNIX AND (CMAKE_SYSTEM_NAME STREQUAL "Linux")))
@@ -449,8 +449,8 @@ if(BUILD_SHARED_LIBS)
     #    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES ${CMAKE_WORKSPACE_NAME}::core)
 #    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES Threads::Threads)
 else()
-    list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES Threads::Threads ${CMAKE_DL_LIBS})
-#endif()
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES Threads::Threads ${CMAKE_DL_LIBS})
+endif()
 
 list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES crypto3::block
      crypto3::hash)
