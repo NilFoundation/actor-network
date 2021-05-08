@@ -433,8 +433,7 @@ list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES
      ${StdAtomic_LIBRARIES}
      ${Protobuf_LIBRARIES}
 
-     fmt::fmt
-     libfswatch)
+     fmt::fmt)
 
 list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES
      ${GnuTLS_LIBRARIES}
