@@ -704,8 +704,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    // copy the wrong certs. We don't trust these
 //    // blocking calls, but this is a test and seastar does not have a copy
 //    // util and I am lazy...
-//    fs::copy_file(certfile("other.crt"), tmp.path() / "test.crt");
-//    fs::copy_file(certfile("other.key"), tmp.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("other.crt"), tmp.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("other.key"), tmp.path() / "test.key");
 //
 //    auto cert = (tmp.path() / "test.crt").native();
 //    auto key = (tmp.path() / "test.key").native();
@@ -775,8 +775,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    }
 //
 //    // copy the right (trusted) certs over the old ones.
-//    fs::copy_file(certfile("test.crt"), tmp.path() / "test0.crt");
-//    fs::copy_file(certfile("test.key"), tmp.path() / "test0.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp.path() / "test0.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp.path() / "test0.key");
 //
 //    rename_file((tmp.path() / "test0.crt").native(), (tmp.path() / "test.crt").native()).get();
 //    rename_file((tmp.path() / "test0.key").native(), (tmp.path() / "test.key").native()).get();
@@ -809,8 +809,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    namespace fs = boost::filesystem;
 //
-//    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
-//    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp.path() / "test.key");
 //
 //    auto cert = (tmp.path() / "test.crt").native();
 //    auto key = (tmp.path() / "test.key").native();
@@ -838,8 +838,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    // very intentionally use blocking calls. We want all our modifications to happen
 //    // before any other continuation is allowed to process.
 //
-//    fs::remove(cert);
-//    fs::remove(key);
+//    boost::filesystem::remove(cert);
+//    boost::filesystem::remove(key);
 //
 //    std::ofstream(cert.c_str()) << "lala land" << std::endl;
 //    std::ofstream(key.c_str()) << "lala land" << std::endl;
@@ -847,11 +847,11 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    // should get one or two exceptions
 //    q.pop_eventually().get();
 //
-//    fs::remove(cert);
-//    fs::remove(key);
+//    boost::filesystem::remove(cert);
+//    boost::filesystem::remove(key);
 //
-//    fs::copy_file(certfile("test.crt"), cert);
-//    fs::copy_file(certfile("test.key"), key);
+//    boost::filesystem::copy_file(certfile("test.crt"), cert);
+//    boost::filesystem::copy_file(certfile("test.key"), key);
 //
 //    // now it should reload
 //    p.get_future().get();
@@ -867,8 +867,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    namespace fs = boost::filesystem;
 //
-//    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
-//    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp.path() / "test.key");
 //
 //    auto cert = (tmp.path() / "test.crt").native();
 //    auto key = (tmp.path() / "test.key").native();
@@ -901,17 +901,17 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    auto start = std::chrono::system_clock::now();
 //
-//    fs::remove(cert);
-//    fs::remove(key);
+//    boost::filesystem::remove(cert);
+//    boost::filesystem::remove(key);
 //
 //    std::ofstream(cert.c_str()) << "lala land" << std::endl;
 //    std::ofstream(key.c_str()) << "lala land" << std::endl;
 //
-//    fs::remove(cert);
-//    fs::remove(key);
+//    boost::filesystem::remove(cert);
+//    boost::filesystem::remove(key);
 //
-//    fs::copy_file(certfile("test.crt"), cert);
-//    fs::copy_file(certfile("test.key"), key);
+//    boost::filesystem::copy_file(certfile("test.crt"), cert);
+//    boost::filesystem::copy_file(certfile("test.key"), key);
 //
 //    // now it should reload
 //    p.get_future().get();
@@ -927,10 +927,10 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    namespace fs = boost::filesystem;
 //
-//    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
-//    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
-//    fs::copy_file(certfile("test.crt"), tmp2.path() / "test.crt");
-//    fs::copy_file(certfile("test.key"), tmp2.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp2.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp2.path() / "test.key");
 //
 //    auto cert = (tmp.path() / "test.crt").native();
 //    auto key = (tmp.path() / "test.key").native();
@@ -964,8 +964,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    // very intentionally use blocking calls. We want all our modifications to happen
 //    // before any other continuation is allowed to process.
 //
-//    fs::remove(cert);
-//    fs::remove(key);
+//    boost::filesystem::remove(cert);
+//    boost::filesystem::remove(key);
 //
 //    // deletes should _not_ cause errors/reloads
 //    try {
@@ -979,8 +979,8 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    p = promise();
 //
-//    fs::rename(cert2, cert);
-//    fs::rename(key2, key);
+//    boost::filesystem::rename(cert2, cert);
+//    boost::filesystem::rename(key2, key);
 //
 //    // now it should reload
 //    p.get_future().get();
@@ -990,13 +990,13 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //
 //    // again, without delete
 //
-//    fs::copy_file(certfile("test.crt"), tmp2.path() / "test.crt");
-//    fs::copy_file(certfile("test.key"), tmp2.path() / "test.key");
+//    boost::filesystem::copy_file(certfile("test.crt"), tmp2.path() / "test.crt");
+//    boost::filesystem::copy_file(certfile("test.key"), tmp2.path() / "test.key");
 //
 //    p = promise();
 //
-//    fs::rename(cert2, cert);
-//    fs::rename(key2, key);
+//    boost::filesystem::rename(cert2, cert);
+//    boost::filesystem::rename(key2, key);
 //
 //    // it should reload here as well.
 //    p.get_future().get();

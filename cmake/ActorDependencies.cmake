@@ -61,6 +61,7 @@ macro(actor_find_dependencies)
     set(_actor_dep_args_Boost
         1.64.0
         COMPONENTS
+        filesystem
         program_options
         thread
         unit_test_framework
