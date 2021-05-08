@@ -699,7 +699,7 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 // ACTOR_THREAD_TEST_CASE(test_reload_certificates) {
 //    tmpdir tmp;
 //
-//    namespace fs = std::filesystem;
+//    namespace fs = boost::filesystem;
 //
 //    // copy the wrong certs. We don't trust these
 //    // blocking calls, but this is a test and seastar does not have a copy
@@ -807,7 +807,7 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 // ACTOR_THREAD_TEST_CASE(test_reload_broken_certificates) {
 //    tmpdir tmp;
 //
-//    namespace fs = std::filesystem;
+//    namespace fs = boost::filesystem;
 //
 //    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
 //    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
@@ -865,7 +865,7 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 // ACTOR_THREAD_TEST_CASE(test_reload_tolerance) {
 //    tmpdir tmp;
 //
-//    namespace fs = std::filesystem;
+//    namespace fs = boost::filesystem;
 //
 //    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
 //    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
@@ -925,7 +925,7 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    tmpdir tmp;
 //    tmpdir tmp2;
 //
-//    namespace fs = std::filesystem;
+//    namespace fs = boost::filesystem;
 //
 //    fs::copy_file(certfile("test.crt"), tmp.path() / "test.crt");
 //    fs::copy_file(certfile("test.key"), tmp.path() / "test.key");
