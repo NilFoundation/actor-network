@@ -31,7 +31,7 @@
 #include <nil/actor/core/queue.hh>
 #include <nil/actor/core/loop.hh>
 #include <nil/actor/core/do_with.hh>
-#include <nil/actor/net/stack.hh>
+#include <nil/actor/network/stack.hh>
 #include <nil/actor/core/sharded.hh>
 
 namespace nil {

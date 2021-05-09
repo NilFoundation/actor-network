@@ -22,32 +22,47 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/detail/tmp_file.hh>
+#pragma once
+
+#include <unordered_map>
+#include <assert.h>
+#include <nil/actor/core/shared_ptr.hh>
+#include <nil/actor/network/api.hh>
+#include <nil/actor/network/const.hh>
+#include <nil/actor/network/net.hh>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        namespace net {
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
+            struct udp_hdr {
+                packed<uint16_t> src_port;
+                packed<uint16_t> dst_port;
+                packed<uint16_t> len;
+                packed<uint16_t> cksum;
 
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
-            }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
+                template<typename Adjuster>
+                auto adjust_endianness(Adjuster a) {
+                    return a(src_port, dst_port, len, cksum);
+                }
+            } __attribute__((packed));
+
+            struct udp_channel_state {
+                queue<udp_datagram> _queue;
+                // Limit number of data queued into send queue
+                semaphore _user_queue_space = {212992};
+                udp_channel_state(size_t queue_size) : _queue(queue_size) {
+                }
+                future<> wait_for_send_buffer(size_t len) {
+                    return _user_queue_space.wait(len);
+                }
+                void complete_send(size_t len) {
+                    _user_queue_space.signal(len);
+                }
+            };
+
+        }    // namespace net
+
     }    // namespace actor
 }    // namespace nil

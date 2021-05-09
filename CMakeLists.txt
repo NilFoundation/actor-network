@@ -139,11 +139,10 @@ set(CMAKE_SHARED_LINKER_FLAGS_SANITIZE
     "Flags used by the shared libraries linker during sanitize builds."
     FORCE)
 
-mark_as_advanced(
-        CMAKE_CXX_FLAGS_SANITIZE
-        CMAKE_C_FLAGS_SANITIZE
-        CMAKE_EXE_LINKER_FLAGS_SANITIZE
-        CMAKE_SHARED_LINKER_FLAGS_SANITIZE)
+mark_as_advanced(CMAKE_CXX_FLAGS_SANITIZE
+                 CMAKE_C_FLAGS_SANITIZE
+                 CMAKE_EXE_LINKER_FLAGS_SANITIZE
+                 CMAKE_SHARED_LINKER_FLAGS_SANITIZE)
 
 set(CMAKE_BUILD_TYPE
     "${CMAKE_BUILD_TYPE}"
@@ -265,12 +264,9 @@ set(BUILD_WITH_TEST_ENVIRONMENT
 
 option(BUILD_WITH_UNUSED_RESULT_ERROR
        "Make [[nodiscard]] violations an error (instead of a warning)."
-       OFF)
-
+       FALSE)
 option(BUILD_WITH_STACK_GUARDS "Enable stack guards" FALSE)
-
 option(BUILD_WITH_SANITIZE "Enable ASAN and UBSAN." FALSE)
-
 option(BUILD_WITH_DEBUG_SHARED_PTR "Enable shared_ptr debugging." FALSE)
 
 #
@@ -319,32 +315,32 @@ set(${CURRENT_PROJECT_NAME}_HEADERS
     include/nil/actor/http/transformers.hh
     include/nil/actor/json/formatter.hh
     include/nil/actor/json/json_elements.hh
-    include/nil/actor/net/api.hh
-    include/nil/actor/net/arp.hh
-    include/nil/actor/net/byteorder.hh
-    include/nil/actor/net/config.hh
-    include/nil/actor/net/const.hh
-    include/nil/actor/net/dhcp.hh
-    include/nil/actor/net/dns.hh
-    include/nil/actor/net/dpdk.hh
-    include/nil/actor/net/ethernet.hh
-    include/nil/actor/net/inet_address.hh
-    include/nil/actor/net/ip.hh
-    include/nil/actor/net/ip_checksum.hh
-    include/nil/actor/net/net.hh
-    include/nil/actor/net/packet-data-source.hh
-    include/nil/actor/net/packet-util.hh
-    include/nil/actor/net/packet.hh
-    include/nil/actor/net/posix-stack.hh
-    include/nil/actor/net/proxy.hh
-    include/nil/actor/net/socket_defs.hh
-    include/nil/actor/net/stack.hh
-    include/nil/actor/net/tcp-stack.hh
-    include/nil/actor/net/tcp.hh
-    include/nil/actor/net/tls.hh
-    include/nil/actor/net/toeplitz.hh
-    include/nil/actor/net/udp.hh
-    include/nil/actor/net/unix_address.hh
+    include/nil/actor/network/api.hh
+    include/nil/actor/network/arp.hh
+    include/nil/actor/network/byteorder.hh
+    include/nil/actor/network/config.hh
+    include/nil/actor/network/const.hh
+    include/nil/actor/network/dhcp.hh
+    include/nil/actor/network/dns.hh
+    include/nil/actor/network/dpdk.hh
+    include/nil/actor/network/ethernet.hh
+    include/nil/actor/network/inet_address.hh
+    include/nil/actor/network/ip.hh
+    include/nil/actor/network/ip_checksum.hh
+    include/nil/actor/network/net.hh
+    include/nil/actor/network/packet-data-source.hh
+    include/nil/actor/network/packet-util.hh
+    include/nil/actor/network/packet.hh
+    include/nil/actor/network/posix-stack.hh
+    include/nil/actor/network/proxy.hh
+    include/nil/actor/network/socket_defs.hh
+    include/nil/actor/network/stack.hh
+    include/nil/actor/network/tcp-stack.hh
+    include/nil/actor/network/tcp.hh
+    include/nil/actor/network/tls.hh
+    include/nil/actor/network/toeplitz.hh
+    include/nil/actor/network/udp.hh
+    include/nil/actor/network/unix_address.hh
     include/nil/actor/rpc/lz4_compressor.hh
     include/nil/actor/rpc/lz4_fragmented_compressor.hh
     include/nil/actor/rpc/multi_algo_compressor_factory.hh
@@ -368,25 +364,25 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
     src/json/formatter.cc
     src/json/json_elements.cc
 
-    src/net/arp.cc
-    src/net/config.cc
-    src/net/dhcp.cc
-    src/net/dns.cc
-    src/net/dpdk.cc
-    src/net/ethernet.cc
-    src/net/inet_address.cc
-    src/net/ip.cc
-    src/net/ip_checksum.cc
-    src/net/net.cc
-    src/net/packet.cc
-    src/net/posix-stack.cc
-    src/net/proxy.cc
-    src/net/socket_address.cc
-    src/net/stack.cc
-    src/net/tcp.cc
-    src/net/tls.cc
-    src/net/udp.cc
-    src/net/unix_address.cc
+    src/network/arp.cc
+    src/network/config.cc
+    src/network/dhcp.cc
+    src/network/dns.cc
+    src/network/dpdk.cc
+    src/network/ethernet.cc
+    src/network/inet_address.cc
+    src/network/ip.cc
+    src/network/ip_checksum.cc
+    src/network/net.cc
+    src/network/packet.cc
+    src/network/posix-stack.cc
+    src/network/proxy.cc
+    src/network/socket_address.cc
+    src/network/stack.cc
+    src/network/tcp.cc
+    src/network/tls.cc
+    src/network/udp.cc
+    src/network/unix_address.cc
 
     src/rpc/lz4_compressor.cc
     src/rpc/lz4_fragmented_compressor.cc
@@ -394,15 +390,15 @@ set(${CURRENT_PROJECT_NAME}_SOURCES
 
 if(UNIX AND (CMAKE_SYSTEM_NAME STREQUAL "Linux"))
     list(APPEND ${CURRENT_PROJECT_NAME}_HEADERS
-         include/nil/actor/net/native-stack.hh
-         include/nil/actor/net/detail/native-stack-impl.hh
+         include/nil/actor/network/native-stack.hh
+         include/nil/actor/network/detail/native-stack-impl.hh
 
-         include/nil/actor/net/virtio-interface.hh
-         include/nil/actor/net/virtio.hh)
+         include/nil/actor/network/virtio-interface.hh
+         include/nil/actor/network/virtio.hh)
 
     list(APPEND ${CURRENT_PROJECT_NAME}_SOURCES
-         src/net/native-stack.cc
-         src/net/virtio.cc)
+         src/network/native-stack.cc
+         src/network/virtio.cc)
 endif()
 
 set(${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS

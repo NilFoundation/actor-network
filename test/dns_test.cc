@@ -30,8 +30,8 @@
 #include <nil/actor/core/sstring.hh>
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/do_with.hh>
-#include <nil/actor/net/dns.hh>
-#include <nil/actor/net/inet_address.hh>
+#include <nil/actor/network/dns.hh>
+#include <nil/actor/network/inet_address.hh>
 
 using namespace nil::actor;
 using namespace nil::actor::net;

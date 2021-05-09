@@ -28,7 +28,7 @@
 #include <nil/actor/core/loop.hh>
 #include <nil/actor/detail/later.hh>
 #include <nil/actor/core/sstring.hh>
-#include <nil/actor/net/packet.hh>
+#include <nil/actor/network/packet.hh>
 #include <nil/actor/testing/test_case.hh>
 #include <nil/actor/testing/thread_test_case.hh>
 #include <vector>

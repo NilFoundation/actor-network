@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <nil/actor/net/api.hh>
+#include <nil/actor/network/api.hh>
 #include <stdexcept>
 #include <string>
 #include <boost/any.hpp>

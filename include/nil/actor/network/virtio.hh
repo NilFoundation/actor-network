@@ -22,32 +22,19 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/detail/tmp_file.hh>
+#pragma once
+
+#include <memory>
+
+#include <nil/actor/network/net.hh>
+#include <nil/actor/core/sstring.hh>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        std::unique_ptr<net::device> create_virtio_net_device(
+            boost::program_options::variables_map opts = boost::program_options::variables_map());
+        boost::program_options::options_description get_virtio_net_options_description();
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
-
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
-            }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
     }    // namespace actor
 }    // namespace nil

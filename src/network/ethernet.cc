@@ -22,32 +22,40 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/detail/tmp_file.hh>
+#include <nil/actor/core/print.hh>
+#include <nil/actor/network/ethernet.hh>
+
+#include <boost/algorithm/string.hpp>
+#include <string>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        namespace net {
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
+            std::ostream &operator<<(std::ostream &os, ethernet_address ea) {
+                auto &m = ea.mac;
+                using u = uint32_t;
+                return fmt_print(os, "{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}", u(m[0]), u(m[1]), u(m[2]), u(m[3]),
+                                 u(m[4]), u(m[5]));
+            }
 
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
+            ethernet_address parse_ethernet_address(std::string addr) {
+                std::vector<std::string> v;
+                boost::split(v, addr, boost::algorithm::is_any_of(":"));
+
+                if (v.size() != 6) {
+                    throw std::runtime_error("invalid mac address\n");
+                }
+
+                ethernet_address a;
+                unsigned i = 0;
+                for (auto &x : v) {
+                    a.mac[i++] = std::stoi(x, nullptr, 16);
+                }
+                return a;
             }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
+        }    // namespace net
+
     }    // namespace actor
 }    // namespace nil

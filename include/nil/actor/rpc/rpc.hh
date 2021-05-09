@@ -30,7 +30,7 @@
 
 #include <nil/actor/core/future.hh>
 #include <nil/actor/core/core.hh>
-#include <nil/actor/net/api.hh>
+#include <nil/actor/network/api.hh>
 #include <nil/actor/core/iostream.hh>
 #include <nil/actor/core/shared_ptr.hh>
 #include <nil/actor/core/condition-variable.hh>

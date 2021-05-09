@@ -22,32 +22,36 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/detail/tmp_file.hh>
+#pragma once
+
+#ifdef ACTOR_HAVE_DPDK
+
+#include <memory>
+
+#include <nil/actor/network/config.hh>
+#include <nil/actor/network/net.hh>
+#include <nil/actor/core/sstring.hh>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        std::unique_ptr<net::device> create_dpdk_net_device(uint16_t port_idx = 0,
+                                                            uint16_t num_queues = 1,
+                                                            bool use_lro = true,
+                                                            bool enable_fc = true);
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
+        std::unique_ptr<net::device> create_dpdk_net_device(const net::hw_config &hw_cfg);
 
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
-            }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
+        boost::program_options::options_description get_dpdk_net_options_description();
+
+        namespace dpdk {
+            /**
+             * @return Number of bytes needed for mempool objects of each QP.
+             */
+            uint32_t qp_mempool_obj_size(bool hugetlbfs_membackend);
+        }    // namespace dpdk
+
     }    // namespace actor
 }    // namespace nil
+
+#endif    // ACTOR_HAVE_DPDK

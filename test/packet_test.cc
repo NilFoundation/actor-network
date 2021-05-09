@@ -25,7 +25,7 @@
 #define BOOST_TEST_MODULE core
 
 #include <boost/test/included/unit_test.hpp>
-#include <nil/actor/net/packet.hh>
+#include <nil/actor/network/packet.hh>
 #include <array>
 
 using namespace nil::actor;

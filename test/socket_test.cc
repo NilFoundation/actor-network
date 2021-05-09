@@ -29,7 +29,7 @@
 #include <nil/actor/core/memory.hh>
 #include <nil/actor/detail/std-compat.hh>
 
-#include <nil/actor/net/posix-stack.hh>
+#include <nil/actor/network/posix-stack.hh>
 
 using namespace nil::actor;
 

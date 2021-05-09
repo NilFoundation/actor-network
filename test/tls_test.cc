@@ -36,9 +36,9 @@
 #include <nil/actor/core/iostream.hh>
 #include <nil/actor/core/with_timeout.hh>
 #include <nil/actor/detail/std-compat.hh>
-#include <nil/actor/net/tls.hh>
-#include <nil/actor/net/dns.hh>
-#include <nil/actor/net/inet_address.hh>
+#include <nil/actor/network/tls.hh>
+#include <nil/actor/network/dns.hh>
+#include <nil/actor/network/inet_address.hh>
 #include <nil/actor/testing/test_case.hh>
 #include <nil/actor/testing/thread_test_case.hh>
 

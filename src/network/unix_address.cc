@@ -21,33 +21,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //---------------------------------------------------------------------------//
+/*! \file
+  \brief unix-domain address structures, to be used for creating socket_address-es for unix-domain
+         sockets.
 
-#include <nil/actor/detail/tmp_file.hh>
+  Note that the path in a unix-domain address may start with a null character.
+*/
+
+#include <ostream>
+#include <cassert>
+
+#include <nil/actor/network/socket_defs.hh>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        std::ostream &operator<<(std::ostream &os, const unix_domain_addr &addr) {
+            if (addr.path_length() == 0) {
+                return os << "{unnamed}";
+            }
+            if (addr.name[0]) {
+                // regular (filesystem-namespace) path
+                return os << addr.name;
+            }
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
+            os << '@';
+            const char *src = addr.path_bytes() + 1;
 
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
+            for (auto k = addr.path_length(); --k > 0; src++) {
+                os << (std::isprint(*src) ? *src : '_');
             }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
+            return os;
+        }
+
     }    // namespace actor
 }    // namespace nil
+
+size_t std::hash<nil::actor::unix_domain_addr>::operator()(const nil::actor::unix_domain_addr &a) const {
+    return std::hash<std::string>()(a.name);
+}

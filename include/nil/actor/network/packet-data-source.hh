@@ -22,32 +22,39 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/detail/tmp_file.hh>
+#pragma once
+
+#include <nil/actor/network/packet.hh>
+#include <nil/actor/core/iostream.hh>
 
 namespace nil {
     namespace actor {
 
-        /**
-         * Temp dir helper for RAII usage when doing tests
-         * in seastar threads. Will not work in "normal" mode.
-         * Just use tmp_dir::do_with for that.
-         */
-        class tmpdir {
-            nil::actor::tmp_dir _tmp;
+        namespace net {
 
-        public:
-            tmpdir(tmpdir &&) = default;
-            tmpdir(const tmpdir &) = delete;
+            class packet_data_source final : public data_source_impl {
+                size_t _cur_frag = 0;
+                packet _p;
 
-            tmpdir(const sstring &name = sstring(nil::actor::default_tmpdir().string()) + "/testXXXX") {
-                _tmp.create(boost::filesystem::path(name)).get();
+            public:
+                explicit packet_data_source(net::packet &&p) : _p(std::move(p)) {
+                }
+
+                virtual future<temporary_buffer<char>> get() override {
+                    if (_cur_frag != _p.nr_frags()) {
+                        auto &f = _p.fragments()[_cur_frag++];
+                        return make_ready_future<temporary_buffer<char>>(temporary_buffer<char>(
+                            f.base, f.size, make_deleter(deleter(), [p = _p.share()]() mutable {})));
+                    }
+                    return make_ready_future<temporary_buffer<char>>(temporary_buffer<char>());
+                }
+            };
+
+            static inline input_stream<char> as_input_stream(packet &&p) {
+                return input_stream<char>(data_source(std::make_unique<packet_data_source>(std::move(p))));
             }
-            ~tmpdir() {
-                _tmp.remove().get();
-            }
-            auto path() const {
-                return _tmp.get_path();
-            }
-        };
+
+        }    // namespace net
+
     }    // namespace actor
 }    // namespace nil

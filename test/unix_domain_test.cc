@@ -24,8 +24,8 @@
 
 #include <nil/actor/testing/test_case.hh>
 #include <nil/actor/core/core.hh>
-#include <nil/actor/net/api.hh>
-#include <nil/actor/net/inet_address.hh>
+#include <nil/actor/network/api.hh>
+#include <nil/actor/network/inet_address.hh>
 #include <nil/actor/core/print.hh>
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/thread.hh>

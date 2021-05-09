@@ -33,7 +33,7 @@
 #include <boost/endian/conversion.hpp>
 #include <boost/range/numeric.hpp>
 #include <boost/range/adaptor/transformed.hpp>
-#include <nil/actor/net/packet-data-source.hh>
+#include <nil/actor/network/packet-data-source.hh>
 #include <nil/actor/core/print.hh>
 
 namespace nil {

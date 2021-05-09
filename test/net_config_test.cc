@@ -24,7 +24,7 @@
 
 #define BOOST_TEST_MODULE core
 
-#include <nil/actor/net/config.hh>
+#include <nil/actor/network/config.hh>
 #include <boost/test/included/unit_test.hpp>
 #include <exception>
 #include <sstream>

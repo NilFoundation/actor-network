@@ -25,7 +25,7 @@
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/testing/test_case.hh>
 #include <nil/actor/testing/test_runner.hh>
-#include <nil/actor/net/ip.hh>
+#include <nil/actor/network/ip.hh>
 
 using namespace nil::actor;
 using namespace net;

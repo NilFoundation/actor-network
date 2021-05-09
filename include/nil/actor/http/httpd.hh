@@ -48,7 +48,7 @@
 #include <boost/intrusive/list.hpp>
 
 #include <nil/actor/http/routes.hh>
-#include <nil/actor/net/tls.hh>
+#include <nil/actor/network/tls.hh>
 #include <nil/actor/core/shared_ptr.hh>
 
 namespace nil {
