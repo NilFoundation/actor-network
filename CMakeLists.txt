@@ -23,7 +23,7 @@ macro(cm_find_package NAME)
     if(NOT "${NAME}" MATCHES "^${CMAKE_WORKSPACE_NAME}_.*$" AND NOT "${NAME}" STREQUAL CM)
         find_package(${ARGV})
     else()
-        set(${ARGV0}_FOUND ON CACHE BOOL "")
+        set(${ARGV0}_FOUND TRUE CACHE BOOL "")
     endif()
 endmacro()
 
@@ -45,19 +45,19 @@ set(BUILD_WITH_ALLOC_FAILURE_INJECTION
     "DEFAULT"
     CACHE
     STRING
-    "Enable failure injection into the Actor allocator. Can be ON, OFF or DEFAULT (which enables it for Dev mode)")
+    "Enable failure injection into the Actor allocator. Can be TRUE, FALSE or DEFAULT (which enables it for Dev mode)")
 
 option(BUILD_WITH_TASK_BACKTRACE
        "Collect backtrace at deferring points."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_DEBUG_ALLOCATIONS
        "For now just writes 0xab to newly allocated memory"
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_SSTRING
        "Use seastar's own string implementation"
-       ON)
+       TRUE)
 
 set(BUILD_WITH_API_LEVEL
     "6"
@@ -170,7 +170,7 @@ if(BUILD_WITH_CXX_DIALECT)
     # extract CXX standard (14/17/...) from BUILD_WITH_CXX_DIALECT
     string(REGEX MATCH "[0-9]+" STANDARD ${BUILD_WITH_CXX_DIALECT})
     set(CMAKE_CXX_STANDARD ${STANDARD})
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 endif()
 
 set(BUILD_WITH_CXX_FLAGS
@@ -181,27 +181,27 @@ set(BUILD_WITH_CXX_FLAGS
 
 option(BUILD_WITH_DPDK
        "Enable DPDK support."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_EXCLUDE_APPS_FROM_ALL
        "When enabled alongside BUILD_WITH_APPS, do not build applications by default."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_EXCLUDE_DEMOS_FROM_ALL
        "When enabled alongside BUILD_WITH_DEMOS, do not build demonstrations by default."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_EXCLUDE_TESTS_FROM_ALL
        "When enabled alongside BUILD_WITH_TESTING, do not build tests by default."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_EXECUTE_ONLY_FAST_TESTS
        "Only execute tests which run quickly."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_HWLOC
        "Enable hwloc support."
-       ON)
+       TRUE)
 
 option(BUILD_WITH_EXCEPTION_SCALABILITY_WORKAROUND
        "Override the dl_iterate_phdr symbol to workaround C++ exception scalability issues."
@@ -215,19 +215,19 @@ set(BUILD_WITH_LD_FLAGS
 
 option(BUILD_WITH_NUMA
        "Enable NUMA support."
-       ON)
+       TRUE)
 
 option(BUILD_WITH_COMPRESS_DEBUG
        "Compress debug info."
-       ON)
+       TRUE)
 
 option(BUILD_WITH_SPLIT_DWARF
        "Use split dwarf."
-       OFF)
+       FALSE)
 
 option(BUILD_WITH_HEAP_PROFILING
        "Enable heap profiling. No effect when Actor is compiled with the default allocator."
-       OFF)
+       FALSE)
 
 set(BUILD_WITH_TEST_TIMEOUT
     "300"
@@ -407,7 +407,8 @@ set(${CURRENT_PROJECT_NAME}_PRIVATE_CXX_FLAGS
     -Wall
     -Werror
     -Wno-array-bounds # Disabled because of https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93437
-    -Wno-error=deprecated-declarations)
+    -Wno-error=deprecated-declarations
+    -fPIC)
 
 list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_INCLUDES
      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
@@ -451,7 +452,7 @@ list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES crypto3::block
      crypto3::hash)
 
 set(BUILD_WITH_SANITIZE_MODES "Debug" "Sanitize")
-if((BUILD_WITH_SANITIZE STREQUAL "ON") OR
+if((BUILD_WITH_SANITIZE STREQUAL "TRUE") OR
 ((BUILD_WITH_SANITIZE STREQUAL "DEFAULT") AND
 (CMAKE_BUILD_TYPE IN_LIST BUILD_WITH_SANITIZE_MODES)))
     if(NOT Sanitizers_FOUND)
@@ -655,7 +656,7 @@ endif()
 
 if(BUILD_WITH_LD_FLAGS)
     # In newer versions of CMake, there is `target_link_options`.
-    list(APPEND ${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES ${BUILD_WITH_LD_FLAGS})
+    list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LINK_OPTIONS ${BUILD_WITH_LD_FLAGS})
 endif()
 
 if(BUILD_WITH_NUMA)
@@ -746,6 +747,9 @@ target_link_libraries(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
                       PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES} ${CMAKE_WORKSPACE_NAME}::core
                       PRIVATE ${${CURRENT_PROJECT_NAME}_PRIVATE_LIBRARIES}
                       INTERFACE ${${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES})
+
+target_link_options(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
+                    PUBLIC ${${CURRENT_PROJECT_NAME}_PUBLIC_LINK_OPTIONS})
 
 cm_deploy(TARGETS ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME}
           INCLUDE include
