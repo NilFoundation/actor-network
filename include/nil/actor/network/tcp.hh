@@ -376,12 +376,12 @@ namespace nil {
                         bool closed = false;
                         promise<> _window_opened;
                         // Wait for all data are acked
-                        std::optional<promise<>> _all_data_acked_promise;
+                        boost::optional<promise<>> _all_data_acked_promise;
                         // Limit number of data queued into send queue
                         size_t max_queue_space = 212992;
                         size_t current_queue_space = 0;
                         // wait for there is at least one byte available in the queue
-                        std::optional<promise<>> _send_available_promise;
+                        boost::optional<promise<>> _send_available_promise;
                         // Round-trip time variation
                         std::chrono::milliseconds rttvar;
                         // Smoothed round-trip time
@@ -413,7 +413,7 @@ namespace nil {
                         // The total size of data stored in std::deque<packet> data
                         size_t data_size = 0;
                         tcp_packet_merger out_of_order;
-                        std::optional<promise<>> _data_received_promise;
+                        boost::optional<promise<>> _data_received_promise;
                         // The maximun memory buffer size allowed for receiving
                         // Currently, it is the same as default receive window size when window scaling is enabled
                         size_t max_receive_buf_size = 3737600;
@@ -477,7 +477,7 @@ namespace nil {
                         auto id = connid {_local_ip, _foreign_ip, _local_port, _foreign_port};
                         _tcp._tcbs.erase(id);
                     }
-                    std::optional<typename InetTraits::l4packet> get_packet();
+                    boost::optional<typename InetTraits::l4packet> get_packet();
                     void output() {
                         if (!_poll_active) {
                             _poll_active = true;
@@ -633,15 +633,15 @@ namespace nil {
                         cleanup();
                         if (_rcv._data_received_promise) {
                             _rcv._data_received_promise->set_exception(tcp_reset_error());
-                            _rcv._data_received_promise = std::nullopt;
+                            _rcv._data_received_promise = boost::none;
                         }
                         if (_snd._all_data_acked_promise) {
                             _snd._all_data_acked_promise->set_exception(tcp_reset_error());
-                            _snd._all_data_acked_promise = std::nullopt;
+                            _snd._all_data_acked_promise = boost::none;
                         }
                         if (_snd._send_available_promise) {
                             _snd._send_available_promise->set_exception(tcp_reset_error());
-                            _snd._send_available_promise = std::nullopt;
+                            _snd._send_available_promise = boost::none;
                         }
                     }
                     void do_time_wait() {
@@ -828,7 +828,7 @@ namespace nil {
                                                               "everage number of lineraizations per TCP packet."))});
 
                 _inet.register_packet_provider([this, tcb_polled = 0u]() mutable {
-                    std::optional<typename InetTraits::l4packet> l4p;
+                    boost::optional<typename InetTraits::l4packet> l4p;
                     auto c = _poll_tcbs.size();
                     if (!_packetq.empty() && (!(tcb_polled % 128) || c == 0)) {
                         l4p = std::move(_packetq.front());
@@ -1776,7 +1776,7 @@ namespace nil {
                 if (_rcv._data_received_promise) {
                     _rcv._data_received_promise->set_exception(
                         std::make_exception_ptr(std::system_error(ECONNABORTED, std::system_category())));
-                    _rcv._data_received_promise = std::nullopt;
+                    _rcv._data_received_promise = boost::none;
                 }
             }
 
@@ -2113,14 +2113,14 @@ namespace nil {
             }
 
             template<typename InetTraits>
-            std::optional<typename InetTraits::l4packet> tcp<InetTraits>::tcb::get_packet() {
+            boost::optional<typename InetTraits::l4packet> tcp<InetTraits>::tcb::get_packet() {
                 _poll_active = false;
                 if (_packetq.empty()) {
                     output_one();
                 }
 
                 if (in_state(CLOSED)) {
-                    return std::optional<typename InetTraits::l4packet>();
+                    return boost::optional<typename InetTraits::l4packet>();
                 }
 
                 assert(!_packetq.empty());

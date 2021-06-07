@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <nil/actor/detail/std-compat.hh>
-
 #include <istream>
 #include <string>
 #include <unordered_map>
+
+#include <boost/optional.hpp>
 
 namespace nil {
     namespace actor {
@@ -43,14 +43,14 @@ namespace nil {
 
             struct hw_config {
                 std::string pci_address;
-                std::optional<unsigned> port_index;
+                boost::optional<unsigned> port_index;
                 bool lro {true};
                 bool tso {true};
                 bool ufo {true};
                 bool hw_fc {true};
                 bool event_index {true};
                 bool csum_offload {true};
-                std::optional<unsigned> ring_size;
+                boost::optional<unsigned> ring_size;
             };
 
             struct device_config {

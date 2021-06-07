@@ -1152,7 +1152,7 @@ namespace nil {
                                             if (nwif._index == addr->ifa_index) {
                                                 for (auto *attribute = IFA_RTA(addr); RTA_OK(attribute, ilen);
                                                      attribute = RTA_NEXT(attribute, ilen)) {
-                                                    std::optional<inet_address> ia;
+                                                    boost::optional<inet_address> ia;
 
                                                     switch (attribute->rta_type) {
                                                         case IFA_LOCAL:

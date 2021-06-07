@@ -895,15 +895,15 @@ namespace nil {
             struct tcp_entry {
                 tcp_entry(connected_socket s) : socket(std::move(s)) {};
                 connected_socket socket;
-                std::optional<input_stream<char>> in;
-                std::optional<output_stream<char>> out;
+                boost::optional<input_stream<char>> in;
+                boost::optional<output_stream<char>> out;
                 temporary_buffer<char> indata;
             };
             struct udp_entry {
                 udp_entry(net::udp_channel c) : channel(std::move(c)) {
                 }
                 net::udp_channel channel;
-                std::optional<net::udp_datagram> in;
+                boost::optional<net::udp_datagram> in;
                 ;
                 socket_address dst;
             };

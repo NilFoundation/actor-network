@@ -72,7 +72,7 @@ namespace nil {
             _in_family(family::INET6), _in6(i), _scope(scope) {
         }
 
-        std::optional<net::inet_address> net::inet_address::parse_numerical(const sstring &addr) {
+        boost::optional<net::inet_address> net::inet_address::parse_numerical(const sstring &addr) {
             inet_address in;
             if (::inet_pton(AF_INET, addr.c_str(), &in._in)) {
                 in._in_family = family::INET;

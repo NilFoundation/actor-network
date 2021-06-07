@@ -24,14 +24,17 @@
 
 #pragma once
 
+#include <boost/optional.hpp>
+
 #include <nil/actor/core/deleter.hh>
 #include <nil/actor/core/temporary_buffer.hh>
+
 #include <nil/actor/network/const.hh>
+
 #include <vector>
 #include <cassert>
 #include <algorithm>
 #include <iosfwd>
-#include <nil/actor/detail/std-compat.hh>
 #include <functional>
 
 namespace nil {
@@ -54,7 +57,7 @@ namespace nil {
                 bool reassembled = false;
                 uint16_t tso_seg_size = 0;
                 // HW stripped VLAN header (CPU order)
-                std::optional<uint16_t> vlan_tci;
+                boost::optional<uint16_t> vlan_tci;
             };
 
             // Zero-copy friendly packet class
@@ -108,7 +111,7 @@ namespace nil {
                     uint16_t _nr_frags = 0;
                     uint16_t _allocated_frags;
                     offload_info _offload_info;
-                    std::optional<uint32_t> _rss_hash;
+                    boost::optional<uint32_t> _rss_hash;
                     char _data[internal_data_size];             // only _frags[0] may use
                     unsigned _headroom = internal_data_size;    // in _data
                     // FIXME: share _data/_frags space
@@ -304,10 +307,10 @@ namespace nil {
                         _impl = impl::allocate_if_needed(std::move(_impl), extra);
                     }
                 }
-                std::optional<uint32_t> rss_hash() {
+                boost::optional<uint32_t> rss_hash() {
                     return _impl->_rss_hash;
                 }
-                std::optional<uint32_t> set_rss_hash(uint32_t hash) {
+                boost::optional<uint32_t> set_rss_hash(uint32_t hash) {
                     return _impl->_rss_hash = hash;
                 }
                 // Call `func` for each fragment, avoiding data copies when possible

@@ -63,7 +63,7 @@ namespace nil {
                     uint16_t mtu = 0;
                 };
 
-                typedef future<std::optional<lease>> result_type;
+                typedef future<boost::optional<lease>> result_type;
 
                 /**
                  * Runs a discover/request sequence on the ipv4 "stack".

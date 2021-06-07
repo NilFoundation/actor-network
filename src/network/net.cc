@@ -235,7 +235,7 @@ namespace nil {
                     return;
                 }
                 register_packet_provider([this] {
-                    std::optional<packet> p;
+                    boost::optional<packet> p;
                     if (!_proxy_packetq.empty()) {
                         p = std::move(_proxy_packetq.front());
                         _proxy_packetq.pop_front();
@@ -292,7 +292,7 @@ namespace nil {
                 // FIXME: ignored future
                 (void)_dev->receive([this](packet p) { return dispatch_packet(std::move(p)); });
                 dev->local_queue().register_packet_provider([this, idx = 0u]() mutable {
-                    std::optional<packet> p;
+                    boost::optional<packet> p;
                     for (size_t i = 0; i < _pkt_providers.size(); i++) {
                         auto l3p = _pkt_providers[idx++]();
                         if (idx == _pkt_providers.size())

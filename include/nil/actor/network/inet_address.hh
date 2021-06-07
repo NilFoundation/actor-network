@@ -30,6 +30,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <nil/actor/core/future.hh>
 #include <nil/actor/core/sstring.hh>
 
@@ -115,7 +117,7 @@ namespace nil {
                 static future<std::vector<inet_address>> find_all(const sstring &);
                 static future<std::vector<inet_address>> find_all(const sstring &, family);
 
-                static std::optional<inet_address> parse_numerical(const sstring &);
+                static boost::optional<inet_address> parse_numerical(const sstring &);
             };
 
             std::ostream &operator<<(std::ostream &, const inet_address &);

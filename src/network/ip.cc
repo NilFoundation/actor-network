@@ -292,7 +292,7 @@ namespace nil {
                 }
             }
 
-            std::optional<l3_protocol::l3packet> ipv4::get_packet() {
+            boost::optional<l3_protocol::l3packet> ipv4::get_packet() {
                 // _packetq will be mostly empty here unless it hold remnants of previously
                 // fragmented packet
                 if (_packetq.empty()) {
@@ -309,7 +309,7 @@ namespace nil {
                     }
                 }
 
-                std::optional<l3_protocol::l3packet> p;
+                boost::optional<l3_protocol::l3packet> p;
                 if (!_packetq.empty()) {
                     p = std::move(_packetq.front());
                     _packetq.pop_front();

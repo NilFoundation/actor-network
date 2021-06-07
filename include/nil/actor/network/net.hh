@@ -103,7 +103,7 @@ namespace nil {
                     ethernet_address to;
                     packet p;
                 };
-                using packet_provider_type = std::function<std::optional<l3packet>()>;
+                using packet_provider_type = std::function<boost::optional<l3packet>()>;
 
             private:
                 interface *_netif;
@@ -235,9 +235,9 @@ namespace nil {
             };
 
             class qp {
-                using packet_provider_type = std::function<std::optional<packet>()>;
+                using packet_provider_type = std::function<boost::optional<packet>()>;
                 std::vector<packet_provider_type> _pkt_providers;
-                std::optional<std::array<uint8_t, 128>> _sw_reta;
+                boost::optional<std::array<uint8_t, 128>> _sw_reta;
                 circular_buffer<packet> _proxy_packetq;
                 stream<packet> _rx_stream;
                 std::unique_ptr<detail::poller> _tx_poller;

@@ -137,7 +137,7 @@ namespace nil {
 
             ipv4_udp::ipv4_udp(ipv4 &inet) : _inet(inet) {
                 _inet.register_packet_provider([this] {
-                    std::optional<ipv4_traits::l4packet> l4p;
+                    boost::optional<ipv4_traits::l4packet> l4p;
                     if (!_packetq.empty()) {
                         l4p = std::move(_packetq.front());
                         _packetq.pop_front();

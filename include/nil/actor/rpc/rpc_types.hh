@@ -136,16 +136,16 @@ namespace nil {
             /// @{
 
             template<typename T>
-            class optional : public std::optional<T> {
+            class optional : public boost::optional<T> {
             public:
-                using std::optional<T>::optional;
+                using boost::optional<T>::optional;
             };
 
-            class opt_time_point : public std::optional<rpc_clock_type::time_point> {
+            class opt_time_point : public boost::optional<rpc_clock_type::time_point> {
             public:
-                using std::optional<rpc_clock_type::time_point>::optional;
-                opt_time_point(std::optional<rpc_clock_type::time_point> time_point) {
-                    static_cast<std::optional<rpc_clock_type::time_point> &>(*this) = time_point;
+                using boost::optional<rpc_clock_type::time_point>::optional;
+                opt_time_point(boost::optional<rpc_clock_type::time_point> time_point) {
+                    static_cast<boost::optional<rpc_clock_type::time_point> &>(*this) = time_point;
                 }
             };
 
@@ -191,7 +191,7 @@ namespace nil {
 
             struct rcv_buf {
                 uint32_t size = 0;
-                std::optional<semaphore_units<>> su;
+                boost::optional<semaphore_units<>> su;
                 std::variant<std::vector<temporary_buffer<char>>, temporary_buffer<char>> bufs;
                 using iterator = std::vector<temporary_buffer<char>>::iterator;
                 rcv_buf() {
@@ -345,7 +345,7 @@ namespace nil {
                 public:
                     virtual ~impl() {
                     }
-                    virtual future<std::optional<std::tuple<In...>>> operator()() = 0;
+                    virtual future<boost::optional<std::tuple<In...>>> operator()() = 0;
                     friend source;
                 };
 
@@ -355,7 +355,7 @@ namespace nil {
             public:
                 source(shared_ptr<impl> impl) : _impl(std::move(impl)) {
                 }
-                future<std::optional<std::tuple<In...>>> operator()() {
+                future<boost::optional<std::tuple<In...>>> operator()() {
                     return _impl->operator()();
                 };
                 connection_id get_id() const;

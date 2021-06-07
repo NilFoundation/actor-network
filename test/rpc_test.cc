@@ -765,7 +765,7 @@ void test_compressor(std::function<std::unique_ptr<nil::actor::rpc::compressor>(
     *snd.front().get_write() = 'a';
     inputs.emplace_back("one byte, 128k of headroom", 128 * 1024, std::move(snd));
 
-    auto gen_fill = [&](size_t s, sstring msg, std::optional<size_t> split = {}) {
+    auto gen_fill = [&](size_t s, sstring msg, boost::optional<size_t> split = {}) {
         auto buf = temporary_buffer<char>(s);
         std::fill_n(buf.get_write(), s, 'a');
 
@@ -781,7 +781,7 @@ void test_compressor(std::function<std::unique_ptr<nil::actor::rpc::compressor>(
 
     gen_fill(16 * 1024, "single 16 kB buffer of \'a\'");
 
-    auto gen_rand = [&](size_t s, sstring msg, std::optional<size_t> split = {}) {
+    auto gen_rand = [&](size_t s, sstring msg, boost::optional<size_t> split = {}) {
         auto buf = temporary_buffer<char>(s);
         std::generate_n(buf.get_write(), s, [&] { return dist(eng); });
 
@@ -797,7 +797,7 @@ void test_compressor(std::function<std::unique_ptr<nil::actor::rpc::compressor>(
 
     gen_rand(16 * 1024, "single 16 kB buffer of random");
 
-    auto gen_text = [&](size_t s, sstring msg, std::optional<size_t> split = {}) {
+    auto gen_text = [&](size_t s, sstring msg, boost::optional<size_t> split = {}) {
         static const std::string_view text =
             "The quick brown fox wants bananas for his long term health but sneaks bacon behind his wife's back. ";
 

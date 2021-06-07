@@ -255,14 +255,14 @@ namespace nil {
                 return _params.get();
             }
 #if GNUTLS_VERSION_NUMBER >= 0x030506
-            std::optional<gnutls_sec_param_t> sec_param() const {
+            boost::optional<gnutls_sec_param_t> sec_param() const {
                 return _sec_param;
             }
 #endif
         private:
             dh_ptr _params;
 #if GNUTLS_VERSION_NUMBER >= 0x030506
-            std::optional<gnutls_sec_param_t> _sec_param;
+            boost::optional<gnutls_sec_param_t> _sec_param;
 #endif
         };
 

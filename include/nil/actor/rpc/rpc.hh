@@ -107,7 +107,7 @@ namespace nil {
             };
 
             struct client_options {
-                std::optional<net::tcp_keepalive_params> keepalive;
+                boost::optional<net::tcp_keepalive_params> keepalive;
                 bool tcp_nodelay = true;
                 bool reuseaddr = false;
                 compressor::factory *compressor_factory = nullptr;
@@ -150,7 +150,7 @@ namespace nil {
             struct server_options {
                 compressor::factory *compressor_factory = nullptr;
                 bool tcp_nodelay = true;
-                std::optional<streaming_domain_type> streaming_domain;
+                boost::optional<streaming_domain_type> streaming_domain;
                 server_socket::load_balancing_algorithm load_balancing_algorithm =
                     server_socket::load_balancing_algorithm::default_;
             };
@@ -244,13 +244,13 @@ namespace nil {
                 struct outgoing_entry {
                     timer<rpc_clock_type> t;
                     snd_buf buf;
-                    std::optional<promise<>> p = promise<>();
+                    boost::optional<promise<>> p = promise<>();
                     cancellable *pcancel = nullptr;
                     outgoing_entry(snd_buf b) : buf(std::move(b)) {
                     }
                     outgoing_entry(outgoing_entry &&o) noexcept :
                         t(std::move(o.t)), buf(std::move(o.buf)), p(std::move(o.p)), pcancel(o.pcancel) {
-                        o.p = std::nullopt;
+                        o.p = boost::none;
                     }
                     ~outgoing_entry() {
                         if (p) {
@@ -293,7 +293,7 @@ namespace nil {
                 template<outgoing_queue_type QueueType>
                 void send_loop();
                 future<> stop_send_loop();
-                future<std::optional<rcv_buf>> read_stream_frame_compressed(input_stream<char> &in);
+                future<boost::optional<rcv_buf>> read_stream_frame_compressed(input_stream<char> &in);
                 bool stream_check_twoway_closed() {
                     return _sink_closed && _source_closed;
                 }
@@ -315,7 +315,7 @@ namespace nil {
                 future<> send_negotiation_frame(feature_map features);
                 // functions below are public because they are used by external heavily templated functions
                 // and I am not smart enough to know how to define them as friends
-                future<> send(snd_buf buf, std::optional<rpc_clock_type::time_point> timeout = {},
+                future<> send(snd_buf buf, boost::optional<rpc_clock_type::time_point> timeout = {},
                               cancellable *cancel = nullptr);
                 bool error() {
                     return _error;
@@ -390,7 +390,7 @@ namespace nil {
                 source_impl(xshard_connection_ptr con) : source<In...>::impl(std::move(con)) {
                     this->_con->get()->_source_closed = false;
                 }
-                future<std::optional<std::tuple<In...>>> operator()() override;
+                future<boost::optional<std::tuple<In...>>> operator()() override;
             };
 
             class client : public rpc::connection, public weakly_referencable<client> {
@@ -438,14 +438,14 @@ namespace nil {
                 std::unordered_map<id_type, std::unique_ptr<reply_handler_base>> _outstanding;
                 socket_address _server_addr;
                 client_options _options;
-                std::optional<shared_promise<>> _client_negotiated = shared_promise<>();
+                boost::optional<shared_promise<>> _client_negotiated = shared_promise<>();
                 weak_ptr<client> _parent;    // for stream clients
 
             private:
                 future<> negotiate_protocol(input_stream<char> &in);
                 void negotiate(feature_map server_features);
-                future<std::tuple<int64_t, std::optional<rcv_buf>>> read_response_frame(input_stream<char> &in);
-                future<std::tuple<int64_t, std::optional<rcv_buf>>>
+                future<std::tuple<int64_t, boost::optional<rcv_buf>>> read_response_frame(input_stream<char> &in);
+                future<std::tuple<int64_t, boost::optional<rcv_buf>>>
                     read_response_frame_compressed(input_stream<char> &in);
                 void send_loop() {
                     if (is_stream()) {
@@ -491,7 +491,7 @@ namespace nil {
                     return _message_id++;
                 }
                 void wait_for_reply(id_type id, std::unique_ptr<reply_handler_base> &&h,
-                                    std::optional<rpc_clock_type::time_point> timeout, cancellable *cancel);
+                                    boost::optional<rpc_clock_type::time_point> timeout, cancellable *cancel);
                 void wait_timed_out(id_type id);
                 future<> stop();
                 void abort_all_streams();
@@ -544,11 +544,11 @@ namespace nil {
                     server &_server;
                     client_info _info;
                     connection_id _parent_id = invalid_connection_id;
-                    std::optional<isolation_config> _isolation_config;
+                    boost::optional<isolation_config> _isolation_config;
 
                 private:
                     future<> negotiate_protocol(input_stream<char> &in);
-                    future<std::tuple<std::optional<uint64_t>, uint64_t, int64_t, std::optional<rcv_buf>>>
+                    future<std::tuple<boost::optional<uint64_t>, uint64_t, int64_t, boost::optional<rcv_buf>>>
                         read_request_frame_compressed(input_stream<char> &in);
                     future<feature_map> negotiate(feature_map requested);
                     void send_loop() {
@@ -558,14 +558,14 @@ namespace nil {
                             rpc::connection::send_loop<rpc::connection::outgoing_queue_type::response>();
                         }
                     }
-                    future<> send_unknown_verb_reply(std::optional<rpc_clock_type::time_point> timeout, int64_t msg_id,
+                    future<> send_unknown_verb_reply(boost::optional<rpc_clock_type::time_point> timeout, int64_t msg_id,
                                                      uint64_t type);
 
                 public:
                     connection(server &s, connected_socket &&fd, socket_address &&addr, const logger &l,
                                void *seralizer, connection_id id);
                     future<> process();
-                    future<> respond(int64_t msg_id, snd_buf &&data, std::optional<rpc_clock_type::time_point> timeout);
+                    future<> respond(int64_t msg_id, snd_buf &&data, boost::optional<rpc_clock_type::time_point> timeout);
                     client_info &info() {
                         return _info;
                     }
@@ -586,7 +586,7 @@ namespace nil {
                     }
                     // Resources will be released when this goes out of scope
                     future<resource_permit> wait_for_resources(size_t memory_consumed,
-                                                               std::optional<rpc_clock_type::time_point> timeout) {
+                                                               boost::optional<rpc_clock_type::time_point> timeout) {
                         if (timeout) {
                             return get_units(_server._resources_available, memory_consumed, *timeout);
                         } else {
@@ -642,7 +642,7 @@ namespace nil {
 
             using rpc_handler_func =
                 std::function<future<>(shared_ptr<server::connection>,
-                                       std::optional<rpc_clock_type::time_point> timeout, int64_t msgid, rcv_buf data)>;
+                                       boost::optional<rpc_clock_type::time_point> timeout, int64_t msgid, rcv_buf data)>;
 
             struct rpc_handler {
                 scheduling_group sg;

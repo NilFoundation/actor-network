@@ -244,7 +244,7 @@ namespace nil {
             }
 
             future<>
-                connection::send(snd_buf buf, std::optional<rpc_clock_type::time_point> timeout, cancellable *cancel) {
+                connection::send(snd_buf buf, boost::optional<rpc_clock_type::time_point> timeout, cancellable *cancel) {
                 if (!_error) {
                     if (timeout && *timeout <= rpc_clock_type::now()) {
                         return make_ready_future<>();
@@ -457,7 +457,7 @@ namespace nil {
             }
 
             struct stream_frame {
-                using opt_buf_type = std::optional<rcv_buf>;
+                using opt_buf_type = boost::optional<rcv_buf>;
                 using return_type = future<opt_buf_type>;
                 struct header_type {
                     uint32_t size;
@@ -470,7 +470,7 @@ namespace nil {
                     return "stream";
                 }
                 static future<opt_buf_type> empty_value() {
-                    return make_ready_future<opt_buf_type>(std::nullopt);
+                    return make_ready_future<opt_buf_type>(boost::none);
                 }
                 static header_type decode_header(const char *ptr) {
                     header_type h {read_le<uint32_t>(ptr), false};
@@ -491,7 +491,7 @@ namespace nil {
                 }
             };
 
-            future<std::optional<rcv_buf>> connection::read_stream_frame_compressed(input_stream<char> &in) {
+            future<boost::optional<rcv_buf>> connection::read_stream_frame_compressed(input_stream<char> &in) {
                 return read_frame_compressed<stream_frame>(peer_address(), _compressor, in);
             }
 
@@ -518,7 +518,7 @@ namespace nil {
             }
 
             future<> connection::handle_stream_frame() {
-                return read_stream_frame_compressed(_read_buf).then([this](std::optional<rcv_buf> data) {
+                return read_stream_frame_compressed(_read_buf).then([this](boost::optional<rcv_buf> data) {
                     if (!data) {
                         _error = true;
                         return make_ready_future<>();
@@ -604,7 +604,7 @@ namespace nil {
             }
 
             struct response_frame {
-                using opt_buf_type = std::optional<rcv_buf>;
+                using opt_buf_type = boost::optional<rcv_buf>;
                 using header_and_buffer_type = std::tuple<int64_t, opt_buf_type>;
                 using return_type = future<header_and_buffer_type>;
                 using header_type = std::tuple<int64_t, uint32_t>;
@@ -615,7 +615,7 @@ namespace nil {
                     return "client";
                 }
                 static auto empty_value() {
-                    return make_ready_future<header_and_buffer_type>(header_and_buffer_type(0, std::nullopt));
+                    return make_ready_future<header_and_buffer_type>(header_and_buffer_type(0, boost::none));
                 }
                 static header_type decode_header(const char *ptr) {
                     auto msgid = read_le<int64_t>(ptr);
@@ -649,7 +649,7 @@ namespace nil {
 
             void client::wait_for_reply(id_type id,
                                         std::unique_ptr<reply_handler_base> &&h,
-                                        std::optional<rpc_clock_type::time_point>
+                                        boost::optional<rpc_clock_type::time_point>
                                             timeout,
                                         cancellable *cancel) {
                 if (timeout) {
@@ -740,7 +740,7 @@ namespace nil {
                             .then([this] { return negotiate_protocol(_read_buf); })
                             .then([this]() {
                                 _client_negotiated->set_value();
-                                _client_negotiated = std::nullopt;
+                                _client_negotiated = boost::none;
                                 send_loop();
                                 return do_until(
                                     [this] { return _read_buf.eof() || _error; },
@@ -749,7 +749,7 @@ namespace nil {
                                             return handle_stream_frame();
                                         }
                                         return read_response_frame_compressed(_read_buf).then(
-                                            [this](std::tuple<int64_t, std::optional<rcv_buf>> msg_id_and_data) {
+                                            [this](std::tuple<int64_t, boost::optional<rcv_buf>> msg_id_and_data) {
                                                 auto &msg_id = std::get<0>(msg_id_and_data);
                                                 auto &data = std::get<1>(msg_id_and_data);
                                                 auto it = _outstanding.find(std::abs(msg_id));
@@ -927,10 +927,10 @@ namespace nil {
             }
 
             struct request_frame {
-                using opt_buf_type = std::optional<rcv_buf>;
-                using header_and_buffer_type = std::tuple<std::optional<uint64_t>, uint64_t, int64_t, opt_buf_type>;
+                using opt_buf_type = boost::optional<rcv_buf>;
+                using header_and_buffer_type = std::tuple<boost::optional<uint64_t>, uint64_t, int64_t, opt_buf_type>;
                 using return_type = future<header_and_buffer_type>;
-                using header_type = std::tuple<std::optional<uint64_t>, uint64_t, int64_t, uint32_t>;
+                using header_type = std::tuple<boost::optional<uint64_t>, uint64_t, int64_t, uint32_t>;
                 static size_t header_size() {
                     return 20;
                 }
@@ -939,13 +939,13 @@ namespace nil {
                 }
                 static auto empty_value() {
                     return make_ready_future<header_and_buffer_type>(
-                        header_and_buffer_type(std::nullopt, uint64_t(0), 0, std::nullopt));
+                        header_and_buffer_type(boost::none, uint64_t(0), 0, boost::none));
                 }
                 static header_type decode_header(const char *ptr) {
                     auto type = read_le<uint64_t>(ptr);
                     auto msgid = read_le<int64_t>(ptr + 8);
                     auto size = read_le<uint32_t>(ptr + 16);
-                    return std::make_tuple(std::nullopt, type, msgid, size);
+                    return std::make_tuple(boost::none, type, msgid, size);
                 }
                 static uint32_t get_size(const header_type &t) {
                     return std::get<3>(t);
@@ -979,7 +979,7 @@ namespace nil {
 
             future<> server::connection::respond(int64_t msg_id,
                                                  snd_buf &&data,
-                                                 std::optional<rpc_clock_type::time_point>
+                                                 boost::optional<rpc_clock_type::time_point>
                                                      timeout) {
                 static_assert(snd_buf::chunk_size >= 12, "send buffer chunk size is too small");
                 auto p = data.front().get_write();
@@ -988,7 +988,7 @@ namespace nil {
                 return send(std::move(data), timeout);
             }
 
-            future<> server::connection::send_unknown_verb_reply(std::optional<rpc_clock_type::time_point> timeout,
+            future<> server::connection::send_unknown_verb_reply(boost::optional<rpc_clock_type::time_point> timeout,
                                                                  int64_t msg_id,
                                                                  uint64_t type) {
                 return wait_for_resources(28, timeout).then([this, timeout, msg_id, type](auto permit) {
@@ -1037,7 +1037,7 @@ namespace nil {
                                                 _error = true;
                                                 return make_ready_future<>();
                                             } else {
-                                                std::optional<rpc_clock_type::time_point> timeout;
+                                                boost::optional<rpc_clock_type::time_point> timeout;
                                                 if (expire && *expire) {
                                                     timeout = relative_timeout_to_absolute(
                                                         std::chrono::milliseconds(*expire));

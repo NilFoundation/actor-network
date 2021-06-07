@@ -357,14 +357,14 @@ namespace nil {
                 return make_ready_future<>();
             }
 
-            future<std::optional<lease>> run(const lease &l, const steady_clock_type::duration &timeout) {
+            future<boost::optional<lease>> run(const lease &l, const steady_clock_type::duration &timeout) {
 
                 _state = state::NONE;
                 _timer.set_callback([this]() {
                     _state = state::FAIL;
                     log() << "timeout" << std::endl;
                     _retry_timer.cancel();
-                    _result.set_value(std::nullopt);
+                    _result.set_value(boost::none);
                 });
 
                 log() << "sending discover" << std::endl;
@@ -436,7 +436,7 @@ namespace nil {
             }
 
         private:
-            promise<std::optional<lease>> _result;
+            promise<boost::optional<lease>> _result;
             state _state = state::NONE;
             timer<> _timer;
             timer<> _retry_timer;

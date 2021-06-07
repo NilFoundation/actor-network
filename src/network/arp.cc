@@ -46,8 +46,8 @@ namespace nil {
                                      });
             }
 
-            std::optional<l3_protocol::l3packet> arp::get_packet() {
-                std::optional<l3_protocol::l3packet> p;
+            boost::optional<l3_protocol::l3packet> arp::get_packet() {
+                boost::optional<l3_protocol::l3packet> p;
                 if (!_packetq.empty()) {
                     p = std::move(_packetq.front());
                     _packetq.pop_front();

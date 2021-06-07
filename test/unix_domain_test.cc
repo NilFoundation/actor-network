@@ -41,10 +41,10 @@ static logger iplog("unix_domain");
 
 class ud_server_client {
 public:
-    ud_server_client(string server_path, std::optional<string> client_path, int rounds) :
+    ud_server_client(string server_path, boost::optional<string> client_path, int rounds) :
         ud_server_client(server_path, client_path, rounds, 0) {};
 
-    ud_server_client(string server_path, std::optional<string> client_path, int rounds, int abort_run) :
+    ud_server_client(string server_path, boost::optional<string> client_path, int rounds, int abort_run) :
         server_addr {unix_domain_addr {server_path}}, client_path {client_path}, rounds {rounds}, rounds_left {rounds},
         abort_after {abort_run} {
     }
@@ -59,7 +59,7 @@ private:
     future<> client_round();
     const socket_address server_addr;
 
-    const std::optional<string> client_path;
+    const boost::optional<string> client_path;
     server_socket server;
     const int rounds;
     int rounds_left;
@@ -160,7 +160,7 @@ future<> ud_server_client::run() {
 
 ACTOR_TEST_CASE(unixdomain_server) {
     system("rm -f /tmp/ry");
-    ud_server_client uds("/tmp/ry", std::nullopt, 3);
+    ud_server_client uds("/tmp/ry", boost::none, 3);
     return do_with(std::move(uds), [](auto &uds) { return uds.run(); });
     return make_ready_future<>();
 }
@@ -168,7 +168,7 @@ ACTOR_TEST_CASE(unixdomain_server) {
 ACTOR_TEST_CASE(unixdomain_abs) {
     char sv_name[] {'\0', '1', '1', '1'};
     // ud_server_client uds(string{"\0111",4}, string{"\0112",4}, 1);
-    ud_server_client uds(string {sv_name, 4}, std::nullopt, 4);
+    ud_server_client uds(string {sv_name, 4}, boost::none, 4);
     return do_with(std::move(uds), [](auto &uds) { return uds.run(); });
     // return make_ready_future<>();
 }
@@ -205,7 +205,7 @@ ACTOR_TEST_CASE(unixdomain_bind) {
 
 ACTOR_TEST_CASE(unixdomain_short) {
     system("rm -f 3");
-    ud_server_client uds("3"s, std::nullopt, 10);
+    ud_server_client uds("3"s, boost::none, 10);
     return do_with(std::move(uds), [](auto &uds) { return uds.run(); });
 }
 
@@ -214,7 +214,7 @@ ACTOR_TEST_CASE(unixdomain_short) {
 ACTOR_TEST_CASE(unixdomain_abort) {
     std::string sockname {"7"s};    // note: no portable & warnings-free option
     std::ignore = ::unlink(sockname.c_str());
-    ud_server_client uds(sockname, std::nullopt, 10, 4);
+    ud_server_client uds(sockname, boost::none, 10, 4);
     return do_with(std::move(uds), [sockname](auto &uds) {
         return uds.run().finally([sockname]() {
             std::ignore = ::unlink(sockname.c_str());

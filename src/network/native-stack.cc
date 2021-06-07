@@ -154,7 +154,7 @@ namespace nil {
                 timer<> _timer;
 
                 future<> run_dhcp(bool is_renew = false, const dhcp::lease &res = dhcp::lease());
-                void on_dhcp(std::optional<dhcp::lease> lease, bool is_renew);
+                void on_dhcp(boost::optional<dhcp::lease> lease, bool is_renew);
                 void set_ipv4_packet_filter(ip_packet_filter *filter) {
                     _inet.set_packet_filter(filter);
                 }
@@ -236,7 +236,7 @@ namespace nil {
                     .then([this, d = std::move(d), is_renew, res = res]() mutable {
                         net::dhcp::result_type fut = is_renew ? d.renew(res) : d.discover();
                         return fut
-                            .then([this, is_renew](std::optional<dhcp::lease> lease) {
+                            .then([this, is_renew](boost::optional<dhcp::lease> lease) {
                                 return smp::invoke_on_all([] {
                                            auto &ns = static_cast<native_network_stack &>(engine().net());
                                            ns.set_ipv4_packet_filter(nullptr);
@@ -247,7 +247,7 @@ namespace nil {
                     });
             }
 
-            void native_network_stack::on_dhcp(std::optional<dhcp::lease> lease, bool is_renew) {
+            void native_network_stack::on_dhcp(boost::optional<dhcp::lease> lease, bool is_renew) {
                 if (lease) {
                     auto &res = *lease;
                     _inet.set_host_address(res.ip);

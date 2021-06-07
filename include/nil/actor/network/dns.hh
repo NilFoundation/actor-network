@@ -61,7 +61,7 @@ namespace nil {
                 std::vector<inet_address> addr_list;
             };
 
-            typedef std::optional<inet_address::family> opt_family;
+            typedef boost::optional<inet_address::family> opt_family;
 
             struct srv_record {
                 unsigned short priority;
@@ -81,11 +81,11 @@ namespace nil {
             class dns_resolver {
             public:
                 struct options {
-                    std::optional<bool> use_tcp_query;
-                    std::optional<std::vector<inet_address>> servers;
-                    std::optional<std::chrono::milliseconds> timeout;
-                    std::optional<uint16_t> tcp_port, udp_port;
-                    std::optional<std::vector<sstring>> domains;
+                    boost::optional<bool> use_tcp_query;
+                    boost::optional<std::vector<inet_address>> servers;
+                    boost::optional<std::chrono::milliseconds> timeout;
+                    boost::optional<uint16_t> tcp_port, udp_port;
+                    boost::optional<std::vector<sstring>> domains;
                 };
 
                 enum class srv_proto { tcp, udp };
