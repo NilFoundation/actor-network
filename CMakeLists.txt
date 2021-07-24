@@ -479,8 +479,10 @@ else()
     list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_LIBRARIES Threads::Threads ${CMAKE_DL_LIBS})
 endif()
 
-list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES crypto3::block
-     crypto3::hash)
+list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES
+     crypto3::block
+     crypto3::hash
+     crypto3::multiprecision)
 
 set(BUILD_WITH_SANITIZE_MODES "Debug" "Sanitize")
 if((BUILD_WITH_SANITIZE STREQUAL "TRUE") OR

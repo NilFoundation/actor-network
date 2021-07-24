@@ -31,9 +31,7 @@
 
 namespace nil {
     namespace actor {
-
         namespace net {
-
             void tcp_option::parse(uint8_t *beg1, uint8_t *end1) {
                 const char *beg = reinterpret_cast<const char *>(beg1);
                 const char *end = reinterpret_cast<const char *>(end1);
@@ -162,8 +160,6 @@ namespace nil {
             ::nil::actor::socket tcpv4_socket(tcp<ipv4_traits> &tcpv4) {
                 return ::nil::actor::socket(std::make_unique<native_socket_impl<tcp<ipv4_traits>>>(tcpv4));
             }
-
         }    // namespace net
-
     }    // namespace actor
 }    // namespace nil
