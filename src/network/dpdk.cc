@@ -1489,7 +1489,7 @@ namespace nil {
 
                 printf("Port %d: using %d %s\n", _port_idx, _num_queues, (_num_queues > 1) ? "queues" : "queue");
 
-                // Set RSS mode: enable RSS if seastar is configured with more than 1 CPU.
+                // Set RSS mode: enable RSS if actor is configured with more than 1 CPU.
                 // Even if port has a single queue we still want the RSS feature to be
                 // available in order to make HW calculate RSS hash for us.
                 if (smp::count > 1) {
@@ -1930,7 +1930,7 @@ namespace nil {
                             _queue_name + "_rx_no_memory_errors", _stats.rx.bad.no_mem,
                             sm::description("Counts a number of ingress packets received by this HW queue but dropped "
                                             "by the SW due to low memory. "
-                                            "A non-zero value indicates that seastar doesn't have enough memory to "
+                                            "A non-zero value indicates that actor doesn't have enough memory to "
                                             "handle the packet reception or the memory is too fragmented.")),
                     });
             }

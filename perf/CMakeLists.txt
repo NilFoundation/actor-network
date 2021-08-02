@@ -26,41 +26,43 @@
 add_custom_target(perf_tests)
 
 macro(actor_add_test name)
-  set(args ${ARGN})
+    set(args ${ARGN})
 
-  cmake_parse_arguments(
-    parsed_args
-    "NO_ACTOR_PERF_TESTING_LIBRARY"
-    ""
-    "SOURCES"
-    ${args})
+    cmake_parse_arguments(
+            parsed_args
+            "NO_ACTOR_PERF_TESTING_LIBRARY"
+            ""
+            "SOURCES"
+            ${args})
 
-  set(target test_perf_${name})
-  add_executable(${target} ${parsed_args_SOURCES})
+    set(target test_perf_${name})
+    add_executable(${target} ${parsed_args_SOURCES})
 
-  if(parsed_args_NO_ACTOR_PERF_TESTING_LIBRARY)
-    set(libraries seastar_private)
-  else()
-    set(libraries
-      seastar_private
-      seastar_perf_testing)
-  endif()
+    if(parsed_args_NO_ACTOR_PERF_TESTING_LIBRARY)
+        set(libraries
+            ${CMAKE_WORKSPACE_NAME}::core
+            ${CMAKE_WORKSPACE_NAME}::network)
+    else()
+        set(libraries
+            ${CMAKE_WORKSPACE_NAME}::core
+            ${CMAKE_WORKSPACE_NAME}::network
+            ${CMAKE_WORKSPACE_NAME}::testing)
+    endif()
 
-  target_link_libraries(${target}
-    PRIVATE ${libraries})
+    target_link_libraries(${target}
+                          PRIVATE ${libraries})
 
-  target_include_directories(${target}
-    PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      ${ACTOR_SOURCE_DIR}/src)
+    target_include_directories(${target}
+                               PRIVATE
+                               ${CMAKE_CURRENT_SOURCE_DIR}
+                               ${ACTOR_SOURCE_DIR}/src)
 
-  set_target_properties(${target}
-    PROPERTIES
-      OUTPUT_NAME ${name}_perf)
+    set_target_properties(${target}
+                          PROPERTIES
+                          OUTPUT_NAME ${name}_perf)
 
-  add_dependencies(perf_tests ${target})
-  set(${name}_test ${target})
-endmacro ()
+    add_dependencies(perf_tests ${target})
+    set(${name}_test ${target})
+endmacro()
 
-actor_add_test(rpc
-  SOURCES rpc_perf.cc)
+actor_add_test(rpc SOURCES rpc_perf.cc)

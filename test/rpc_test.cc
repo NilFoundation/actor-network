@@ -458,7 +458,7 @@ future<stream_test_result>
                                  auto sink = source.make_sink<serializer, sstring>();
                                  auto sink_loop = nil::actor::async([sink]() mutable {
                                                       for (auto i = 0; i < 100; i++) {
-                                                          sink("seastar").get();
+                                                          sink("actor").get();
                                                           sleep(std::chrono::milliseconds(1)).get();
                                                       }
                                                   })
@@ -505,7 +505,7 @@ future<stream_test_result>
             while (!r.client_source_closed) {
                 auto data = source().get0();
                 if (data) {
-                    BOOST_REQUIRE_EQUAL(std::get<0>(*data), "seastar");
+                    BOOST_REQUIRE_EQUAL(std::get<0>(*data), "actor");
                 } else {
                     r.client_source_closed = true;
                 }

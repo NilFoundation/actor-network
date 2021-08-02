@@ -164,7 +164,7 @@ namespace nil {
                  *
                  * To use the https, create server credentials and pass it to the server before it starts.
                  *
-                 * Use case example using seastar threads for clarity:
+                 * Use case example using actor threads for clarity:
 
                     distributed<http_server> server; // typical server
 

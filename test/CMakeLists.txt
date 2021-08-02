@@ -153,7 +153,7 @@ endfunction()
 #
 # These kinds of tests are structured like Actor applications.
 #
-# These tests always link against `seastar_private` and are always invoked with
+# These tests always link against `actor_private` and are always invoked with
 # `-c ${BUILD_WITH_UNIT_TEST_SMP}`.
 #
 function(actor_add_app_test name)
@@ -238,7 +238,7 @@ actor_add_test(rpc
 actor_add_app_test(socket
                    SOURCES socket_test.cc)
 
-function(seastar_add_certgen name)
+function(actor_add_certgen name)
     cmake_parse_arguments(CERT
                           ""
                           "SUBJECT;SERVER;NAME;DOMAIN;COMMON;LOCALITY;ORG;WIDTH;STATE;COUNTRY;UNIT;EMAIL;DAYS;ALG"
@@ -335,8 +335,8 @@ function(seastar_add_certgen name)
     add_custom_target(${name} DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CERT_CERT}")
 endfunction()
 
-seastar_add_certgen(testcrt DOMAIN nil.foundation SERVER test)
-seastar_add_certgen(othercrt DOMAIN apa.org SERVER other)
+actor_add_certgen(testcrt DOMAIN nil.foundation SERVER test)
+actor_add_certgen(othercrt DOMAIN apa.org SERVER other)
 
 set(tls_certificate_files tls-ca-bundle.pem)
 

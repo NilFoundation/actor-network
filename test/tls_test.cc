@@ -702,7 +702,7 @@ ACTOR_THREAD_TEST_CASE(test_close_timout) {
 //    namespace fs = boost::filesystem;
 //
 //    // copy the wrong certs. We don't trust these
-//    // blocking calls, but this is a test and seastar does not have a copy
+//    // blocking calls, but this is a test and actor does not have a copy
 //    // util and I am lazy...
 //    boost::filesystem::copy_file(certfile("other.crt"), tmp.path() / "test.crt");
 //    boost::filesystem::copy_file(certfile("other.key"), tmp.path() / "test.key");

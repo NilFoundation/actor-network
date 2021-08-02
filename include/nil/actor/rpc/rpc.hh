@@ -184,23 +184,23 @@ namespace nil {
 
             class logger {
                 std::function<void(const sstring &)> _logger;
-                ::nil::actor::logger *_seastar_logger = nullptr;
+                ::nil::actor::logger *_actor_logger = nullptr;
 
-                // _seastar_logger will always be used first if it's available
+                // _actor_logger will always be used first if it's available
                 void log(const sstring &str) const {
-                    if (_seastar_logger) {
+                    if (_actor_logger) {
                         // default level for log messages is `info`
-                        _seastar_logger->info("{}", str);
+                        _actor_logger->info("{}", str);
                     } else if (_logger) {
                         _logger(str);
                     }
                 }
 
-                // _seastar_logger will always be used first if it's available
+                // _actor_logger will always be used first if it's available
                 template<typename... Args>
                 void log(log_level level, const char *fmt, Args &&...args) const {
-                    if (_seastar_logger) {
-                        _seastar_logger->log(level, fmt, std::forward<Args>(args)...);
+                    if (_actor_logger) {
+                        _actor_logger->log(level, fmt, std::forward<Args>(args)...);
                         // If the log level is at least `info`, fall back to legacy logging without explicit level.
                         // Ignore less severe levels in order not to spam user's log with messages during transition,
                         // i.e. when the user still only defines a level-less logger.
@@ -215,7 +215,7 @@ namespace nil {
                 }
 
                 void set(::nil::actor::logger *logger) {
-                    _seastar_logger = logger;
+                    _actor_logger = logger;
                 }
 
                 void operator()(const client_info &info, id_type msg_id, const sstring &str) const;

@@ -242,7 +242,7 @@ namespace nil {
         /// \addtogroup networking-module
         /// @{
 
-        /// The seastar socket.
+        /// The actor socket.
         ///
         /// A \c socket that allows a connection to be established between
         /// two endpoints.

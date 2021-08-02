@@ -36,11 +36,11 @@
 using namespace nil::actor;
 using namespace nil::actor::net;
 
-static const sstring seastar_name = "seastar.io";
+static const sstring actor_name = "actor.io";
 
 static future<> test_resolve(dns_resolver::options opts) {
     auto d = ::make_lw_shared<dns_resolver>(std::move(opts));
-    return d->get_host_by_name(seastar_name, inet_address::family::INET)
+    return d->get_host_by_name(actor_name, inet_address::family::INET)
         .then([d](hostent e) {
             return d->get_host_by_addr(e.addr_list.front()).then([d, a = e.addr_list.front()](hostent e) {
                 return d->get_host_by_name(e.names.front(), inet_address::family::INET).then([a](hostent e) {
@@ -80,7 +80,7 @@ ACTOR_TEST_CASE(test_timeout_udp) {
     opts.timeout = std::chrono::milliseconds(500);
 
     auto d = ::make_lw_shared<dns_resolver>(engine().net(), opts);
-    return d->get_host_by_name(seastar_name, inet_address::family::INET)
+    return d->get_host_by_name(actor_name, inet_address::family::INET)
         .then_wrapped([d](future<hostent> f) {
             try {
                 f.get();

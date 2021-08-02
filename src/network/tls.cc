@@ -1293,7 +1293,7 @@ namespace nil {
             // Note: source/sink, and by extension, the in/out streams
             // produced, cannot exist outside the direct life span of
             // the connected_socket itself. This is consistent with
-            // other sockets in seastar, though I am than less fond of it...
+            // other sockets in actor, though I am than less fond of it...
             class tls_connected_socket_impl::sink_impl : public data_sink_impl, public session::session_ref {
             public:
                 using session_ref::session_ref;

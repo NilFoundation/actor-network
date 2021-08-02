@@ -82,13 +82,13 @@ namespace nil {
 
             private:
                 uint64_t setup_features() {
-                    int64_t seastar_supported_features = VIRTIO_RING_F_INDIRECT_DESC | VIRTIO_NET_F_MRG_RXBUF;
+                    int64_t actor_supported_features = VIRTIO_RING_F_INDIRECT_DESC | VIRTIO_NET_F_MRG_RXBUF;
 
                     if (!(_opts.count("event-index") && _opts["event-index"].as<std::string>() == "off")) {
-                        seastar_supported_features |= VIRTIO_RING_F_EVENT_IDX;
+                        actor_supported_features |= VIRTIO_RING_F_EVENT_IDX;
                     }
                     if (!(_opts.count("csum-offload") && _opts["csum-offload"].as<std::string>() == "off")) {
-                        seastar_supported_features |= VIRTIO_NET_F_CSUM | VIRTIO_NET_F_GUEST_CSUM;
+                        actor_supported_features |= VIRTIO_NET_F_CSUM | VIRTIO_NET_F_GUEST_CSUM;
                         _hw_features.tx_csum_l4_offload = true;
                         _hw_features.rx_csum_offload = true;
                     } else {
@@ -96,29 +96,29 @@ namespace nil {
                         _hw_features.rx_csum_offload = false;
                     }
                     if (!(_opts.count("tso") && _opts["tso"].as<std::string>() == "off")) {
-                        seastar_supported_features |= VIRTIO_NET_F_HOST_TSO4;
+                        actor_supported_features |= VIRTIO_NET_F_HOST_TSO4;
                         _hw_features.tx_tso = true;
                     } else {
                         _hw_features.tx_tso = false;
                     }
 
                     if (!(_opts.count("lro") && _opts["lro"].as<std::string>() == "off")) {
-                        seastar_supported_features |= VIRTIO_NET_F_GUEST_TSO4;
+                        actor_supported_features |= VIRTIO_NET_F_GUEST_TSO4;
                         _hw_features.rx_lro = true;
                     } else {
                         _hw_features.rx_lro = false;
                     }
 
                     if (!(_opts.count("ufo") && _opts["ufo"].as<std::string>() == "off")) {
-                        seastar_supported_features |= VIRTIO_NET_F_HOST_UFO;
-                        seastar_supported_features |= VIRTIO_NET_F_GUEST_UFO;
+                        actor_supported_features |= VIRTIO_NET_F_HOST_UFO;
+                        actor_supported_features |= VIRTIO_NET_F_GUEST_UFO;
                         _hw_features.tx_ufo = true;
                     } else {
                         _hw_features.tx_ufo = false;
                     }
 
-                    seastar_supported_features |= VIRTIO_NET_F_MAC;
-                    return seastar_supported_features;
+                    actor_supported_features |= VIRTIO_NET_F_MAC;
+                    return actor_supported_features;
                 }
 
             public:
@@ -962,7 +962,7 @@ namespace nil {
 
                 // Set up interrupts
                 // FIXME: in OSv, the first thing we do in the handler is to call
-                // _rqx.disable_interrupts(). Here in seastar, we only do it much later
+                // _rqx.disable_interrupts(). Here in actor, we only do it much later
                 // in the main engine(). Probably needs to do it like in osv - in the beginning of the handler.
                 _virtio.enable_interrupt(0, [&] { _rxq.wake_notifier_wait(); });
                 _virtio.enable_interrupt(1, [&] { _txq.wake_notifier_wait(); });
