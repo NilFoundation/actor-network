@@ -33,7 +33,7 @@
 #include <nil/actor/network/api.hh>
 #include <nil/actor/core/iostream.hh>
 #include <nil/actor/core/shared_ptr.hh>
-#include <nil/actor/core/condition-variable.hh>
+#include <nil/actor/core/condition_variable.hh>
 #include <nil/actor/core/gate.hh>
 #include <nil/actor/rpc/rpc_types.hh>
 #include <nil/actor/core/byteorder.hh>
