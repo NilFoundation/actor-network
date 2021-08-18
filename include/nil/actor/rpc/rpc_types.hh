@@ -33,7 +33,7 @@
 #include <nil/actor/detail/variant_utils.hh>
 #include <nil/actor/core/timer.hh>
 #include <nil/actor/core/circular_buffer.hh>
-#include <nil/actor/core/simple-stream.hh>
+#include <nil/actor/core/simple_stream.hh>
 #include <nil/actor/core/lowres_clock.hh>
 #include <boost/functional/hash.hpp>
 #include <nil/actor/core/sharded.hh>

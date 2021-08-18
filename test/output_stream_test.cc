@@ -22,7 +22,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------//
 
-#include <nil/actor/core/app-template.hh>
+#include <nil/actor/core/app_template.hh>
 #include <nil/actor/core/shared_ptr.hh>
 #include <nil/actor/core/vector-data-sink.hh>
 #include <nil/actor/core/loop.hh>

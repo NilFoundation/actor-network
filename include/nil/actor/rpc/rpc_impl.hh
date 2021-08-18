@@ -29,7 +29,7 @@
 #include <nil/actor/core/sstring.hh>
 #include <nil/actor/core/when_all.hh>
 #include <nil/actor/detail/is_smart_ptr.hh>
-#include <nil/actor/core/simple-stream.hh>
+#include <nil/actor/core/simple_stream.hh>
 #include <boost/endian/conversion.hpp>
 #include <boost/range/numeric.hpp>
 #include <boost/range/adaptor/transformed.hpp>

@@ -24,7 +24,7 @@
 
 #include <nil/actor/core/reactor.hh>
 #include <nil/actor/core/core.hh>
-#include <nil/actor/core/app-template.hh>
+#include <nil/actor/core/app_template.hh>
 #include <nil/actor/core/print.hh>
 #include <nil/actor/core/memory.hh>
 #include <nil/actor/detail/std-compat.hh>

@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------//
 
 #include <nil/actor/core/sstring.hh>
-#include <nil/actor/core/app-template.hh>
+#include <nil/actor/core/app_template.hh>
 #include <nil/actor/core/circular_buffer.hh>
 #include <nil/actor/core/distributed.hh>
 #include <nil/actor/core/queue.hh>
