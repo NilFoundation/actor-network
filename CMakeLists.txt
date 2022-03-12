@@ -173,12 +173,11 @@ if(BUILD_WITH_CXX_DIALECT)
     set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 endif()
 
-set(BUILD_WITH_CXX_FLAGS "" CACHE STRING "Semicolon-separated list of extra compilation flags for Actor itself.")
+set(BUILD_WITH_CXX_FLAGS "" CACHE STRING
+    "Semicolon-separated list of extra compilation flags for Actor itself.")
 
 option(BUILD_WITH_DPDK "Enable DPDK support." FALSE)
-
 option(BUILD_WITH_HWLOC "Enable hwloc support." TRUE)
-
 option(BUILD_WITH_EXCEPTION_SCALABILITY_WORKAROUND
        "Override the dl_iterate_phdr symbol to workaround C++ exception scalability issues."
        TRUE)
@@ -189,18 +188,9 @@ set(BUILD_WITH_LD_FLAGS
     STRING
     "Semicolon-separated list of extra linking flags for Actor itself.")
 
-option(BUILD_WITH_NUMA
-       "Enable NUMA support."
-       TRUE)
-
-option(BUILD_WITH_COMPRESS_DEBUG
-       "Compress debug info."
-       TRUE)
-
-option(BUILD_WITH_SPLIT_DWARF
-       "Use split dwarf."
-       FALSE)
-
+option(BUILD_WITH_NUMA "Enable NUMA support." TRUE)
+option(BUILD_WITH_COMPRESS_DEBUG "Compress debug info." TRUE)
+option(BUILD_WITH_SPLIT_DWARF "Use split dwarf." FALSE)
 option(BUILD_WITH_HEAP_PROFILING
        "Enable heap profiling. No effect when Actor is compiled with the default allocator."
        FALSE)
@@ -293,7 +283,7 @@ if(BUILD_WITH_DPDK AND NOT dpdk_FOUND AND NOT TARGET dpdk)
     set(actor_dpdk_obj actor-dpdk.o)
 endif()
 
-find_package(Valgrind REQUIRED)
+find_package(Valgrind)
 if(VALGRIND_FOUND)
     list(APPEND ${CURRENT_PROJECT_NAME}_PUBLIC_COMPILE_DEFINITIONS ACTOR_HAS_VALGRIND)
 endif()
