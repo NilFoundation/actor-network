@@ -55,7 +55,7 @@ namespace nil {
                     return 0;
                 }
 
-                for (size_t i = 0; !p.empty() && _send_depth < _send_queue_length; i++, _send_depth++) {
+                for (; !p.empty() && _send_depth < _send_queue_length; _send_depth++) {
                     _moving.push_back(std::move(p.front()));
                     p.pop_front();
                 }
