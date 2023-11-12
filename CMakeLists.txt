@@ -446,9 +446,7 @@ else()
 endif()
 
 list(APPEND ${CURRENT_PROJECT_NAME}_INTERFACE_LIBRARIES
-     crypto3::block
-     crypto3::hash
-     crypto3::multiprecision)
+     crypto3::block)
 
 set(BUILD_WITH_SANITIZE_MODES "Debug" "Sanitize")
 if((BUILD_WITH_SANITIZE STREQUAL "TRUE") OR
